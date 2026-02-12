@@ -1,14 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import Results from "@/components/Results";
+import Services from "@/components/Services";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import Testimonials from "@/components/Testimonials";
+import ServiceAreas from "@/components/ServiceAreas";
+import FAQ from "@/components/FAQ";
+import FinalCTA from "@/components/FinalCTA";
+import Footer from "@/components/Footer";
+import MobileCTA from "@/components/MobileCTA";
 
-const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
-};
+const Index = () => (
+  <div className="min-h-screen bg-background pb-16 lg:pb-0">
+    <Header />
+    <main>
+      <Hero />
+      <Results />
+      <Services />
+      <WhyChooseUs />
+      <Testimonials />
+      <ServiceAreas />
+      <FAQ />
+      <FinalCTA />
+    </main>
+    <Footer />
+    <MobileCTA />
+  </div>
+);
 
 export default Index;

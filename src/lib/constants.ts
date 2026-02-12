@@ -7,4 +7,4 @@ export const COMPANY = {
 };
 
 // Replace with your GoHighLevel webhook URL
-export const GHL_WEBHOOK_URL = "https://hooks.example.com/your-ghl-webhook";
+export const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/bnmo2H6CkK9L4cUOXrpa/webhook-trigger/988f0ebc-5b34-4b0c-8fb7-252d1b3a4874";

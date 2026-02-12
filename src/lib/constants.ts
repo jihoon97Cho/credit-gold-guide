@@ -7,4 +7,4 @@ export const COMPANY = {
 };
 
 // Replace with your GoHighLevel webhook URL
-export const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/bnmo2H6CkK9L4cUOXrpa/webhook-trigger/874c5618-464e-45f2-a216-1153129301ea";
+export const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/bnmo2H6CkK9L4cUOXrpa/webhook-trigger/709947a3-1476-4c2c-8f10-d4d57aeac5b2";

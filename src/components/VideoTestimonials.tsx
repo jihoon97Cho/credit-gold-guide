@@ -20,7 +20,7 @@ const VideoCard = ({
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className="overflow-hidden rounded-xl border border-border bg-secondary shadow-sm"
     >
-      <video controls loop preload="auto" className="aspect-video w-full bg-muted object-cover">
+      <video controls loop playsInline preload="auto" className="aspect-video w-full bg-muted object-cover">
         {sources.map((source) => (
           <source key={`${source.src}-${source.type}`} src={source.src} type={source.type} />
         ))}

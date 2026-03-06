@@ -12,13 +12,6 @@ const MobileCTA = () => {
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 p-3 backdrop-blur lg:hidden">
       <div className="flex gap-2">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="flex-1">
-          <Button asChild variant="outline" className="w-full rounded-full border-border">
-            <a href={`tel:${COMPANY.phone}`}>
-              <Phone className="mr-1 h-4 w-4" /> Call Now
-            </a>
-          </Button>
-        </motion.div>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="flex-1">
           <Button onClick={scrollTo} className="w-full rounded-full font-bold">
             Get Started
           </Button>

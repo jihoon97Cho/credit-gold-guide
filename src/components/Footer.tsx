@@ -12,9 +12,6 @@ const Footer = () => (
         <div>
           <h4 className="mb-3 font-bold">Contact</h4>
           <p className="text-sm opacity-70">
-            <a href={`tel:${COMPANY.phone}`} className="hover:text-primary">{COMPANY.phoneFormatted}</a>
-          </p>
-          <p className="text-sm opacity-70">
             <a href={`mailto:${COMPANY.email}`} className="hover:text-primary">{COMPANY.email}</a>
           </p>
         </div>

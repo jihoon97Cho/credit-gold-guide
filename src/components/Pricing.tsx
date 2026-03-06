@@ -19,8 +19,8 @@ const features = [
 ];
 
 const plans = [
-  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false },
-  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true },
+  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/l2Yo1" },
+  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/5RyER" },
 ];
 
 const Pricing = () => {

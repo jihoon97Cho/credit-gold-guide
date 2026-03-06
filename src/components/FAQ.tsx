@@ -1,4 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const faqs = [
   { q: "How fast will I see results?", a: "Most clients begin seeing changes within 30–45 days. Some negative items can be removed in as little as 2 weeks. We provide a personalized timeline based on your unique situation." },
@@ -10,28 +11,32 @@ const faqs = [
 ];
 
 const FAQ = () => (
-  <section id="faq" className="py-16 lg:py-24">
+  <ScrollReveal as="section" id="faq" className="py-16 lg:py-24">
     <div className="container mx-auto max-w-3xl px-4">
       <div className="mb-12 text-center">
-        <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-          Frequently Asked <span className="text-primary text-glow">Questions</span>
-        </h2>
+        <RevealItem>
+          <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+            Frequently Asked <span className="text-primary text-glow">Questions</span>
+          </h2>
+        </RevealItem>
       </div>
 
-      <Accordion type="single" collapsible className="space-y-3">
-        {faqs.map((faq, i) => (
-          <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl border border-border bg-card px-6">
-            <AccordionTrigger className="text-left text-foreground hover:no-underline">
-              {faq.q}
-            </AccordionTrigger>
-            <AccordionContent className="text-muted-foreground">
-              {faq.a}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <RevealItem>
+        <Accordion type="single" collapsible className="space-y-3">
+          {faqs.map((faq, i) => (
+            <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl border border-border bg-card px-6">
+              <AccordionTrigger className="text-left text-foreground hover:no-underline">
+                {faq.q}
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                {faq.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </RevealItem>
     </div>
-  </section>
+  </ScrollReveal>
 );
 
 export default FAQ;

@@ -1,25 +1,32 @@
 import usaMap from "@/assets/usa-map.png";
+import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const ServiceAreas = () => (
-  <section className="relative overflow-hidden bg-background py-16 lg:py-24">
+  <ScrollReveal as="section" className="relative overflow-hidden bg-background py-16 lg:py-24">
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       <img src={usaMap} alt="" className="w-[90%] max-w-[800px] opacity-[0.06]" aria-hidden="true" />
     </div>
 
     <div className="container relative z-10 mx-auto px-4 text-center">
-      <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-        Serving Clients <span className="text-primary">Nationwide</span>
-      </h2>
-      <p className="mx-auto mb-6 max-w-2xl text-muted-foreground">
-        We work with clients in all 50 states. Everything is handled remotely — from consultation to results — so you can get started no matter where you live.
-      </p>
-      <div className="mx-auto flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
-        <span className="rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 font-semibold text-primary">All 50 States</span>
-        <span className="rounded-full border border-border bg-secondary px-4 py-1.5">100% Remote</span>
-        <span className="rounded-full border border-border bg-secondary px-4 py-1.5">Phone & Video Consultations</span>
-      </div>
+      <RevealItem>
+        <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+          Serving Clients <span className="text-primary">Nationwide</span>
+        </h2>
+      </RevealItem>
+      <RevealItem>
+        <p className="mx-auto mb-6 max-w-2xl text-muted-foreground">
+          We work with clients in all 50 states. Everything is handled remotely — from consultation to results — so you can get started no matter where you live.
+        </p>
+      </RevealItem>
+      <RevealItem>
+        <div className="mx-auto flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
+          <span className="rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 font-semibold text-primary">All 50 States</span>
+          <span className="rounded-full border border-border bg-secondary px-4 py-1.5">100% Remote</span>
+          <span className="rounded-full border border-border bg-secondary px-4 py-1.5">Phone & Video Consultations</span>
+        </div>
+      </RevealItem>
     </div>
-  </section>
+  </ScrollReveal>
 );
 
 export default ServiceAreas;

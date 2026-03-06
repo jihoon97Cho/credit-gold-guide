@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 type VideoSource = {
   src: string;
@@ -35,31 +36,37 @@ const VideoCard = ({
 };
 
 const VideoTestimonials = () => (
-  <section className="bg-background py-16 lg:py-24">
+  <ScrollReveal as="section" className="bg-background py-16 lg:py-24">
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
-        <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-          Hear It From <span className="text-primary text-glow">Our Clients</span>
-        </h2>
-        <p className="mx-auto max-w-2xl text-muted-foreground">
-          Watch real client stories and see how we've helped transform their credit.
-        </p>
+        <RevealItem>
+          <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+            Hear It From <span className="text-primary text-glow">Our Clients</span>
+          </h2>
+        </RevealItem>
+        <RevealItem>
+          <p className="mx-auto max-w-2xl text-muted-foreground">
+            Watch real client stories and see how we've helped transform their credit.
+          </p>
+        </RevealItem>
       </div>
 
-      <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
-        <VideoCard
-          sources={[{ src: "/videos/testimonial-1.mp4", type: "video/mp4" }]}
-          title="Cory's Testimonial"
-          description="Helping veterans like Cory means a lot to us. We were honored to help repair his credit and put him in a stronger position financially."
-        />
-        <VideoCard
-          sources={[{ src: "/videos/testimonial-2-v2.mp4", type: "video/mp4" }]}
-          title="Anthony's Testimonial"
-          description="Anthony came to us with credit scores in the low 400s. After working with our team, he was able to improve his profile into the 700s and get approved for 2 credit cards."
-        />
-      </div>
+      <RevealItem>
+        <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
+          <VideoCard
+            sources={[{ src: "/videos/testimonial-1.mp4", type: "video/mp4" }]}
+            title="Cory's Testimonial"
+            description="Helping veterans like Cory means a lot to us. We were honored to help repair his credit and put him in a stronger position financially."
+          />
+          <VideoCard
+            sources={[{ src: "/videos/testimonial-2-v2.mp4", type: "video/mp4" }]}
+            title="Anthony's Testimonial"
+            description="Anthony came to us with credit scores in the low 400s. After working with our team, he was able to improve his profile into the 700s and get approved for 2 credit cards."
+          />
+        </div>
+      </RevealItem>
     </div>
-  </section>
+  </ScrollReveal>
 );
 
 export default VideoTestimonials;

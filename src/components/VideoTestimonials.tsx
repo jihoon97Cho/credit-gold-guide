@@ -25,12 +25,12 @@ const VideoTestimonials = () => (
             className="aspect-video w-full bg-muted object-cover"
             playsInline
           >
-            <source src="/videos/testimonial-1.3gp" type="video/3gpp" />
+            <source src="/videos/testimonial-1.mp4" type="video/mp4" />
             Your browser does not support this video format.
           </video>
           <div className="p-4">
-            <p className="font-semibold text-foreground">Client Testimonial</p>
-            <p className="text-sm text-muted-foreground">Real client, real results</p>
+            <p className="font-semibold text-foreground">Cory's Testimonial</p>
+            <p className="text-sm text-muted-foreground">Helping veterans like Cory means a lot to us. We were honored to help repair his credit and put him in a stronger position financially.</p>
           </div>
         </motion.div>
 

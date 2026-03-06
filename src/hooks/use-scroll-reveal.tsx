@@ -62,7 +62,7 @@ export const staggerItem = {
     filter: "blur(0px)",
     transition: {
       duration: 0.7,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
     },
   },
 };
@@ -75,7 +75,7 @@ export const mobileStaggerItem = {
     filter: "blur(0px)",
     transition: {
       duration: 0.5,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
     },
   },
 };
@@ -83,12 +83,12 @@ export const mobileStaggerItem = {
 // Reusable transition config
 export const revealTransition = {
   duration: 0.8,
-  ease: [0.25, 0.46, 0.45, 0.94] as number[],
+  ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
 };
 
 export const mobileRevealTransition = {
   duration: 0.5,
-  ease: [0.25, 0.46, 0.45, 0.94] as number[],
+  ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
 };
 
 export function useRevealVariants() {

@@ -16,7 +16,6 @@ const VideoCard = ({
       className="overflow-hidden rounded-xl border border-border bg-secondary shadow-sm"
     >
       <video
-        ref={videoRef}
         controls
         loop
         preload="auto"

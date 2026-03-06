@@ -1,13 +1,6 @@
-import { Phone, ShieldCheck, Globe, Award } from "lucide-react";
+import { Phone, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/constants";
-import LeadForm from "./LeadForm";
-
-const badges = [
-  { icon: ShieldCheck, text: "Money Back Guarantee" },
-  { icon: Award, text: "We Work With Bankruptcies" },
-  { icon: Globe, text: "Nationwide Service" },
-];
 
 const Hero = () => {
   const scrollTo = (href: string) => {
@@ -15,46 +8,50 @@ const Hero = () => {
   };
 
   return (
-    <section id="home" className="hero-gradient relative overflow-hidden">
-      <div className="container mx-auto px-4 py-16 lg:py-24">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Left */}
-          <div className="text-center lg:text-left">
-            <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Take Control of Your Credit.{" "}
-              <span className="text-primary">Unlock Real Funding.</span>
-            </h1>
-            <p className="mb-8 text-lg text-muted-foreground sm:text-xl">
-              Fast results. Proven process. Money-back guarantee. We help clients nationwide repair their credit and access business funding — even with bankruptcies on file.
-            </p>
+    <section id="home" className="bg-background py-20 lg:py-32">
+      <div className="container mx-auto px-4 text-center">
+        {/* Pill badge */}
+        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
+          Credit Repair Specialists
+        </span>
 
-            {/* Trust badges */}
-            <div className="mb-8 flex flex-wrap justify-center gap-4 lg:justify-start">
-              {badges.map((b) => (
-                <span key={b.text} className="flex items-center gap-2 rounded-full border border-primary/20 bg-secondary px-4 py-2 text-sm font-medium text-foreground">
-                  <b.icon className="h-4 w-4 text-primary" />
-                  {b.text}
-                </span>
-              ))}
-            </div>
+        {/* Star rating */}
+        <div className="mb-6 flex items-center justify-center gap-1">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+          ))}
+          <span className="ml-2 text-sm text-muted-foreground">
+            Rated <strong className="text-foreground">4.8</strong> · 500+ Clients Helped
+          </span>
+        </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
-              <Button onClick={() => scrollTo("#contact")} size="lg" className="rounded-full bg-primary px-8 py-6 text-lg font-bold text-primary-foreground hover:bg-primary/90">
-                Get Your Free Strategy Call
-              </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-full border-primary/40 px-8 py-6 text-lg text-primary hover:bg-primary/10">
-                <a href={`tel:${COMPANY.phone}`}>
-                  <Phone className="mr-2 h-5 w-5" /> Call Now
-                </a>
-              </Button>
-            </div>
-          </div>
+        <h1 className="mx-auto mb-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          Take Control of Your Credit.{" "}
+          <span className="text-primary">Build the Future You Deserve.</span>
+        </h1>
 
-          {/* Right — Form */}
-          <div>
-            <LeadForm />
-          </div>
+        <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+          We help remove negative items, improve your credit profile, and unlock real funding opportunities — backed by a money-back guarantee.
+        </p>
+
+        {/* CTAs */}
+        <div className="mb-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Button onClick={() => scrollTo("#contact")} size="lg" className="rounded-full px-10 py-6 text-lg font-bold">
+            Get Your Free Strategy Call
+          </Button>
+          <Button asChild variant="outline" size="lg" className="rounded-full border-border px-8 py-6 text-lg text-foreground hover:bg-secondary">
+            <a href={`tel:${COMPANY.phone}`}>
+              <Phone className="mr-2 h-5 w-5" /> Call Now
+            </a>
+          </Button>
+        </div>
+
+        {/* Trust bullets */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          <span>✓ No obligation</span>
+          <span>✓ Free consultation</span>
+          <span>✓ Money-back guarantee</span>
+          <span>✓ We never share your info</span>
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import LeadForm from "./LeadForm";
 
 const FinalCTA = () => (
-  <section id="contact" className="hero-gradient py-16 lg:py-24">
+  <section id="contact" className="bg-secondary py-16 lg:py-24">
     <div className="container mx-auto max-w-2xl px-4">
       <div className="mb-10 text-center">
         <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">

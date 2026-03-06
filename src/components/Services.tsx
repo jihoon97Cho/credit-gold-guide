@@ -1,60 +1,47 @@
-import { ShieldCheck, Landmark, TrendingUp, DollarSign } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const services = [
+const steps = [
   {
-    icon: ShieldCheck,
-    title: "Credit Repair",
-    bullets: ["Collections removal", "Charge-offs", "Late payments", "Inaccurate reporting", "Bankruptcies"],
+    num: "01",
+    title: "Free Strategy Call",
+    desc: "We review your credit reports, identify negative items, and build a personalized game plan — all at no cost.",
   },
   {
-    icon: Landmark,
-    title: "Bankruptcy Assistance",
-    bullets: ["Active & discharged bankruptcies", "Strategic rebuilding plan", "Score recovery roadmap"],
+    num: "02",
+    title: "Dispute & Remove",
+    desc: "We aggressively dispute inaccurate, unfair, and unverifiable items across all 3 bureaus using proven legal strategies.",
   },
   {
-    icon: TrendingUp,
-    title: "Credit Building Strategy",
-    bullets: ["Personalized roadmap", "Utilization optimization", "Profile strengthening"],
+    num: "03",
+    title: "Build & Optimize",
+    desc: "We help you add positive tradelines, optimize utilization, and strengthen your overall credit profile.",
   },
   {
-    icon: DollarSign,
-    title: "Business Funding",
-    bullets: ["Access capital with strong credit", "0% interest options when qualified", "Structured funding strategy"],
+    num: "04",
+    title: "Unlock Funding",
+    desc: "With improved credit, we connect you to business funding opportunities — including 0% interest options when qualified.",
   },
 ];
 
 const Services = () => (
-  <section id="services" className="py-16 lg:py-24">
+  <section id="services" className="bg-secondary py-16 lg:py-24">
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-          How We <span className="text-primary">Help You Win</span>
+          How It <span className="text-primary">Works</span>
         </h2>
         <p className="mx-auto max-w-2xl text-muted-foreground">
-          Comprehensive credit repair and funding solutions designed for real results.
+          A simple, proven process to repair your credit and unlock new opportunities.
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {services.map((s) => (
-          <Card key={s.title} className="border-border bg-card transition-shadow hover:shadow-lg hover:shadow-primary/5">
-            <CardHeader>
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                <s.icon className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle className="text-lg text-foreground">{s.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {s.bullets.map((b) => (
-                  <li key={b} className="flex items-start gap-2">
-                    <span className="mt-1 text-primary">✓</span> {b}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+      <div className="mx-auto max-w-3xl space-y-6">
+        {steps.map((s) => (
+          <div key={s.num} className="flex gap-5 rounded-xl border border-border bg-card p-6 shadow-sm">
+            <span className="shrink-0 text-3xl font-extrabold text-primary">{s.num}</span>
+            <div>
+              <h3 className="mb-1 text-lg font-bold text-foreground">{s.title}</h3>
+              <p className="text-muted-foreground">{s.desc}</p>
+            </div>
+          </div>
         ))}
       </div>
     </div>

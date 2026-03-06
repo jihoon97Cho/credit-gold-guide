@@ -1,4 +1,5 @@
 import { Zap, DollarSign, MessageCircle, CheckCircle, ClipboardList, Globe } from "lucide-react";
+import { motion } from "framer-motion";
 
 const items = [
   { icon: Zap, title: "Fast Action Plan", desc: "Your personalized strategy within 24–48 hours." },
@@ -14,13 +15,18 @@ const WhyChooseUs = () => (
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-          Why Clients <span className="text-primary">Choose Us</span>
+          Why Clients <span className="text-primary text-glow">Choose Us</span>
         </h2>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
-          <div key={item.title} className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 shadow-sm">
+          <motion.div
+            key={item.title}
+            whileHover={{ scale: 1.04, y: -10, boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.2)" }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 shadow-sm"
+          >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
               <item.icon className="h-5 w-5 text-primary" />
             </div>
@@ -28,7 +34,7 @@ const WhyChooseUs = () => (
               <h3 className="mb-1 font-bold text-foreground">{item.title}</h3>
               <p className="text-sm text-muted-foreground">{item.desc}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

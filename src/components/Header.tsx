@@ -38,10 +38,6 @@ const Header = () => {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <a href={`tel:${COMPANY.phone}`} className="flex items-center gap-1.5 text-sm font-medium text-primary">
-            <Phone className="h-4 w-4" />
-            {COMPANY.phoneFormatted}
-          </a>
           <Button onClick={() => scrollTo("#pricing")} className="rounded-full">
             Get Started
           </Button>
@@ -59,9 +55,6 @@ const Header = () => {
               {l.label}
             </button>
           ))}
-          <a href={`tel:${COMPANY.phone}`} className="mt-2 flex items-center gap-2 py-2 text-primary">
-            <Phone className="h-4 w-4" /> {COMPANY.phoneFormatted}
-          </a>
           <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
             Get Started
           </Button>

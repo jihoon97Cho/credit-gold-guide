@@ -57,7 +57,7 @@ const Results = () => {
         {/* 3D Carousel */}
         <div
           className="relative mx-auto flex items-center justify-center"
-          style={{ height: "420px", maxWidth: "900px" }}
+          style={{ height: "580px", maxWidth: "1100px" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -82,7 +82,7 @@ const Results = () => {
                   key={i}
                   className="absolute cursor-pointer"
                   style={{
-                    width: "300px",
+                    width: "450px",
                     zIndex: 10 - absOffset,
                   }}
                   animate={{

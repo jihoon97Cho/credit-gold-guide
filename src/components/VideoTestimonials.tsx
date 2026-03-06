@@ -1,4 +1,59 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+
+const VideoCard = ({
+  src,
+  title,
+  description,
+}: {
+  src: string;
+  title: string;
+  description: string;
+}) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <motion.div
+      whileHover={{ scale: 1.04, y: -10, boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.25)" }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="overflow-hidden rounded-xl border border-border bg-secondary shadow-sm"
+    >
+      <video
+        ref={videoRef}
+        controls
+        loop
+        preload="auto"
+        className="aspect-video w-full bg-muted object-cover"
+      >
+        <source src={src} type="video/mp4" />
+        Your browser does not support this video format.
+      </video>
+      <div className="p-4">
+        <p className="font-semibold text-foreground">{title}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+    </motion.div>
+  );
+};
 
 const VideoTestimonials = () => (
   <section className="bg-background py-16 lg:py-24">
@@ -13,45 +68,16 @@ const VideoTestimonials = () => (
       </div>
 
       <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
-        {/* Video 1 — real testimonial */}
-        <motion.div
-          whileHover={{ scale: 1.04, y: -10, boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.25)" }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="overflow-hidden rounded-xl border border-border bg-secondary shadow-sm"
-        >
-          <video
-            controls
-            preload="auto"
-            className="aspect-video w-full bg-muted object-cover"
-          >
-            <source src="/videos/testimonial-1.mp4" type="video/mp4" />
-            Your browser does not support this video format.
-          </video>
-          <div className="p-4">
-            <p className="font-semibold text-foreground">Cory's Testimonial</p>
-            <p className="text-sm text-muted-foreground">Helping veterans like Cory means a lot to us. We were honored to help repair his credit and put him in a stronger position financially.</p>
-          </div>
-        </motion.div>
-
-        {/* Video 2 — Anthony's Testimonial */}
-        <motion.div
-          whileHover={{ scale: 1.04, y: -10, boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.25)" }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="overflow-hidden rounded-xl border border-border bg-secondary shadow-sm"
-        >
-          <video
-            controls
-            preload="auto"
-            className="aspect-video w-full bg-muted object-cover"
-          >
-            <source src="/videos/testimonial-2.mp4" type="video/mp4" />
-            Your browser does not support this video format.
-          </video>
-          <div className="p-4">
-            <p className="font-semibold text-foreground">Anthony's Testimonial</p>
-            <p className="text-sm text-muted-foreground">Anthony's credit transformation is a testament to our comprehensive approach. From dispute resolution to strategic financial guidance, we helped him rebuild his credit profile and regain financial confidence.</p>
-          </div>
-        </motion.div>
+        <VideoCard
+          src="/videos/testimonial-1.mp4"
+          title="Cory's Testimonial"
+          description="Helping veterans like Cory means a lot to us. We were honored to help repair his credit and put him in a stronger position financially."
+        />
+        <VideoCard
+          src="/videos/testimonial-2.mp4"
+          title="Anthony's Testimonial"
+          description="Anthony came to us with credit scores in the 500s. After working with our team, he was able to improve his profile into the 700s and get approved for 2 credit cards."
+        />
       </div>
     </div>
   </section>

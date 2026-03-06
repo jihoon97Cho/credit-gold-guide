@@ -68,9 +68,11 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button className="w-full rounded-full py-6 text-lg font-bold">
-                    Fix My Credit
-                  </Button>
+                  <a href={plan.link} target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full rounded-full py-6 text-lg font-bold">
+                      Fix My Credit
+                    </Button>
+                  </a>
                 </motion.div>
               </motion.div>
             ))}

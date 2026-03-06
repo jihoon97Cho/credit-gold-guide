@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 const VideoCard = ({
@@ -10,27 +9,6 @@ const VideoCard = ({
   title: string;
   description: string;
 }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <motion.div
       whileHover={{ scale: 1.04, y: -10, boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.25)" }}
@@ -38,7 +16,6 @@ const VideoCard = ({
       className="overflow-hidden rounded-xl border border-border bg-secondary shadow-sm"
     >
       <video
-        ref={videoRef}
         controls
         loop
         preload="auto"

@@ -4,15 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const features = [
-  "Full credit repair service",
-  "All 3 credit bureaus (Equifax, Experian, TransUnion)",
-  "Multiple rounds of disputes",
-  "Collections, charge-offs & late payments",
-  "Bankruptcy assistance included",
-  "Credit building strategy",
-  "Business funding guidance",
-  "Direct communication with your team",
-  "Money-back guarantee",
+  "Full service credit repair",
+  "Disputes across all 3 bureaus",
+  "Multiple dispute rounds as needed",
+  "Help with collections, charge offs, and late payments",
+  "Inquiry audit and targeting",
+  "Identity theft and inaccurate account review",
+  "Utilization and profile optimization",
+  "Ongoing progress updates",
+  "Negative item audit",
+  "Direct access to our team",
+  "Money back guarantee",
 ];
 
 const plans = [
@@ -62,7 +64,7 @@ const Pricing = () => {
               </ul>
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Button className="w-full rounded-full py-6 text-lg font-bold">
-                  Get Started
+                  Fix My Credit
                 </Button>
               </motion.div>
             </motion.div>

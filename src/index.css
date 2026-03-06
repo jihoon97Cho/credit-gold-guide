@@ -59,12 +59,51 @@
   }
 }
 
+/* Gold glow for cards */
+.gold-glow {
+  box-shadow: 0 4px 24px hsla(42, 52%, 53%, 0.12), 0 1px 4px hsla(42, 52%, 53%, 0.08);
+}
+
+/* Text glow for primary accent words */
+.text-glow {
+  text-shadow: 0 0 12px hsla(42, 52%, 53%, 0.45), 0 0 32px hsla(42, 52%, 53%, 0.2);
+}
+
+/* 3D Carousel */
+.carousel-3d {
+  perspective: 1200px;
+  perspective-origin: center;
+}
+
+.carousel-3d-card {
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.carousel-float {
+  animation: float 4s ease-in-out infinite;
+}
+
 @keyframes shimmer {
   0% { opacity: 0.5; }
   50% { opacity: 1; }
   100% { opacity: 0.5; }
 }
 
-.gold-glow {
-  box-shadow: 0 4px 24px hsla(42, 52%, 53%, 0.12), 0 1px 4px hsla(42, 52%, 53%, 0.08);
+@media (prefers-reduced-motion: reduce) {
+  .carousel-3d-card {
+    transition: none;
+  }
+  .carousel-float {
+    animation: none;
+  }
 }

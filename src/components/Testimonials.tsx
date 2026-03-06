@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 
 const testimonials = [
@@ -22,7 +23,7 @@ const Testimonials = () => (
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-          Hear From Our <span className="text-primary">Clients</span>
+          Hear From Our <span className="text-primary text-glow">Clients</span>
         </h2>
         <div className="mx-auto flex flex-col items-center gap-2">
           <div className="flex items-center gap-1.5">
@@ -48,23 +49,29 @@ const Testimonials = () => (
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((t) => (
-          <Card key={t.name} className="border-border bg-card shadow-sm">
-            <CardContent className="p-6">
-              <Stars />
-              <p className="my-4 text-foreground">"{t.text}"</p>
-              <div className="flex items-center justify-between text-sm">
-                <div>
-                  <p className="font-bold text-foreground">{t.name}</p>
-                  <p className="text-muted-foreground">{t.location}</p>
+          <motion.div
+            key={t.name}
+            whileHover={{ scale: 1.04, y: -10, boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.2)" }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            <Card className="border-border bg-card shadow-sm h-full">
+              <CardContent className="p-6">
+                <Stars />
+                <p className="my-4 text-foreground">"{t.text}"</p>
+                <div className="flex items-center justify-between text-sm">
+                  <div>
+                    <p className="font-bold text-foreground">{t.name}</p>
+                    <p className="text-muted-foreground">{t.location}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-muted-foreground">
+                      <span className="text-destructive">{t.before}</span> → <span className="font-bold text-primary">{t.after}</span>
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-muted-foreground">
-                    <span className="text-destructive">{t.before}</span> → <span className="font-bold text-primary">{t.after}</span>
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
       </div>
     </div>

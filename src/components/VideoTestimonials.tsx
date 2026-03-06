@@ -53,7 +53,7 @@ const VideoTestimonials = () => (
           description="Helping veterans like Cory means a lot to us. We were honored to help repair his credit and put him in a stronger position financially."
         />
         <VideoCard
-          sources={[{ src: "/videos/testimonial-2.mp4", type: "video/mp4" }]}
+          sources={[{ src: "/videos/testimonial-2.3gp", type: "video/3gpp" }, { src: "/videos/testimonial-2.mp4", type: "video/mp4" }]}
           title="Anthony's Testimonial"
           description="Anthony came to us with credit scores in the 500s. After working with our team, he was able to improve his profile into the 700s and get approved for 2 credit cards."
         />

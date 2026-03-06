@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Pricing", href: "#pricing" },
   { label: "Testimonials", href: "#testimonials" },
   { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
+  
 ];
 
 const Header = () => {
@@ -42,8 +42,8 @@ const Header = () => {
             <Phone className="h-4 w-4" />
             {COMPANY.phoneFormatted}
           </a>
-          <Button onClick={() => scrollTo("#contact")} className="rounded-full">
-            Get Your Free Strategy Call
+          <Button onClick={() => scrollTo("#pricing")} className="rounded-full">
+            Get Started
           </Button>
         </div>
 
@@ -62,8 +62,8 @@ const Header = () => {
           <a href={`tel:${COMPANY.phone}`} className="mt-2 flex items-center gap-2 py-2 text-primary">
             <Phone className="h-4 w-4" /> {COMPANY.phoneFormatted}
           </a>
-          <Button onClick={() => scrollTo("#contact")} className="mt-2 w-full rounded-full">
-            Get Your Free Strategy Call
+          <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
+            Get Started
           </Button>
         </div>
       )}

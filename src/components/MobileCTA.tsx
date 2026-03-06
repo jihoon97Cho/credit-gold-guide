@@ -5,7 +5,7 @@ import { COMPANY } from "@/lib/constants";
 
 const MobileCTA = () => {
   const scrollTo = () => {
-    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector("#pricing")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -20,7 +20,7 @@ const MobileCTA = () => {
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="flex-1">
           <Button onClick={scrollTo} className="w-full rounded-full font-bold">
-            Free Strategy Call
+            Get Started
           </Button>
         </motion.div>
       </div>

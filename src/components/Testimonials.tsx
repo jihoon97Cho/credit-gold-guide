@@ -4,9 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 const testimonials = [
   { name: "Marcus T.", location: "Atlanta, GA", before: 512, after: 695, text: "They removed 19 negatives in under 90 days. I was able to qualify for a mortgage!" },
   { name: "Jasmine W.", location: "Houston, TX", before: 478, after: 641, text: "Went from getting denied everywhere to getting approved for business funding. Life-changing." },
-  { name: "Derek S.", location: "Chicago, IL", before: 530, after: 710, text: "Even with a bankruptcy on my file, they got my score up 180 points. Incredible team." },
+  { name: "Derek S.", location: "Chicago, IL", before: 530, after: 710, text: "Even with a bankruptcy on my file, they got my score up significantly. Incredible team." },
   { name: "Nicole R.", location: "Miami, FL", before: 498, after: 672, text: "Professional, honest, and they actually deliver. Best decision I made for my credit." },
-  { name: "Carlos M.", location: "Los Angeles, CA", before: 545, after: 738, text: "I was skeptical, but the results speak for themselves. 23 items removed and a 193-point jump." },
+  { name: "Carlos M.", location: "Los Angeles, CA", before: 545, after: 738, text: "I was skeptical, but the results speak for themselves. Multiple items removed and a major score jump." },
 ];
 
 const Stars = () => (
@@ -18,7 +18,7 @@ const Stars = () => (
 );
 
 const Testimonials = () => (
-  <section id="testimonials" className="py-16 lg:py-24">
+  <section id="testimonials" className="bg-secondary py-16 lg:py-24">
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
@@ -27,17 +27,14 @@ const Testimonials = () => (
         <div className="mx-auto flex flex-col items-center gap-2">
           <div className="flex items-center gap-1.5">
             {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-6 w-6 ${i < 5 ? (i === 4 ? "fill-primary/60 text-primary/60" : "fill-primary text-primary") : "text-muted-foreground"}`}
-              />
+              <Star key={i} className={`h-6 w-6 ${i < 5 ? (i === 4 ? "fill-primary/60 text-primary/60" : "fill-primary text-primary") : "text-muted-foreground"}`} />
             ))}
             <span className="ml-1 text-xl font-bold text-foreground">4.8</span>
           </div>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             Rated <span className="font-semibold text-foreground">4.8 out of 5</span> on Google · <span className="font-semibold text-foreground">500+ Reviews</span>
           </p>
-          <div className="mt-1 flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-1.5 text-xs text-muted-foreground">
+          <div className="mt-1 flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs text-muted-foreground">
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -51,7 +48,7 @@ const Testimonials = () => (
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((t) => (
-          <Card key={t.name} className="border-border bg-card">
+          <Card key={t.name} className="border-border bg-card shadow-sm">
             <CardContent className="p-6">
               <Stars />
               <p className="my-4 text-foreground">"{t.text}"</p>
@@ -62,7 +59,7 @@ const Testimonials = () => (
                 </div>
                 <div className="text-right">
                   <p className="text-muted-foreground">
-                    <span className="text-destructive">{t.before}</span> → <span className="text-primary font-bold">{t.after}</span>
+                    <span className="text-destructive">{t.before}</span> → <span className="font-bold text-primary">{t.after}</span>
                   </p>
                 </div>
               </div>

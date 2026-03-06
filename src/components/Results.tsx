@@ -15,13 +15,13 @@ const Results = () => (
           Real Clients. <span className="text-primary">Real Results.</span>
         </h2>
         <p className="mx-auto max-w-2xl text-muted-foreground">
-          130+ point score increases. 23+ negative items deleted per client on average. See what's possible.
+          See real improvements from real clients. Negative items removed, scores improved, funding unlocked.
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {images.map((src, i) => (
-          <div key={i} className="overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-transform hover:scale-[1.02]">
+          <div key={i} className="overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-transform hover:scale-[1.02]">
             <img src={src} alt={`Client result ${i + 1}`} className="h-auto w-full object-cover" loading="lazy" />
           </div>
         ))}

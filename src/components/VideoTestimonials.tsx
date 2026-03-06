@@ -1,0 +1,38 @@
+import { Play } from "lucide-react";
+
+const VideoTestimonials = () => (
+  <section className="bg-background py-16 lg:py-24">
+    <div className="container mx-auto px-4">
+      <div className="mb-12 text-center">
+        <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+          Hear It From <span className="text-primary">Our Clients</span>
+        </h2>
+        <p className="mx-auto max-w-2xl text-muted-foreground">
+          Watch real client stories and see how we've helped transform their credit.
+        </p>
+      </div>
+
+      <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
+        {[1, 2].map((n) => (
+          <div key={n} className="group overflow-hidden rounded-xl border border-border bg-secondary shadow-sm">
+            {/* Video placeholder */}
+            <div className="relative flex aspect-video items-center justify-center bg-muted">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/90 text-primary-foreground shadow-lg transition-transform group-hover:scale-110">
+                <Play className="h-7 w-7 ml-1" />
+              </div>
+              <span className="absolute bottom-3 left-3 rounded-md bg-foreground/70 px-2 py-1 text-xs text-background">
+                Video {n}
+              </span>
+            </div>
+            <div className="p-4">
+              <p className="font-semibold text-foreground">Client Testimonial {n}</p>
+              <p className="text-sm text-muted-foreground">Video coming soon</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+export default VideoTestimonials;

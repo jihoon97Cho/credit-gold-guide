@@ -70,8 +70,8 @@ const Results = () => {
 
               if (!visible) return null;
 
-              const x = offset * 220;
-              const z = -absOffset * 180;
+              const x = offset * 300;
+              const z = -absOffset * 220;
               const rotateY = offset * -15;
               const scale = 1 - absOffset * 0.15;
               const opacity = 1 - absOffset * 0.35;

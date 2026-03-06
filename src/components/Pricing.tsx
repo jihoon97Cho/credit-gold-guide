@@ -21,9 +21,6 @@ const plans = [
 ];
 
 const Pricing = () => {
-  const scrollTo = () => {
-    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <section id="pricing" className="bg-background py-16 lg:py-24">
@@ -64,13 +61,17 @@ const Pricing = () => {
                 ))}
               </ul>
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Button onClick={scrollTo} className="w-full rounded-full py-6 text-lg font-bold">
+                <Button className="w-full rounded-full py-6 text-lg font-bold">
                   Get Started
                 </Button>
               </motion.div>
             </motion.div>
           ))}
         </div>
+
+        <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-muted-foreground">
+          Credit monitoring is required for enrollment and is billed separately at $29.99/month.
+        </p>
       </div>
     </section>
   );

@@ -64,7 +64,7 @@ const Pricing = () => {
               </ul>
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Button className="w-full rounded-full py-6 text-lg font-bold">
-                  Get Started
+                  Fix My Credit
                 </Button>
               </motion.div>
             </motion.div>

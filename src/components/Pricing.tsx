@@ -19,8 +19,8 @@ const features = [
 ];
 
 const plans = [
-  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false },
-  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true },
+  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/l2Yo1" },
+  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/5RyER" },
 ];
 
 const Pricing = () => {
@@ -68,9 +68,11 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button className="w-full rounded-full py-6 text-lg font-bold">
-                    Fix My Credit
-                  </Button>
+                  <a href={plan.link} target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full rounded-full py-6 text-lg font-bold">
+                      Fix My Credit
+                    </Button>
+                  </a>
                 </motion.div>
               </motion.div>
             ))}

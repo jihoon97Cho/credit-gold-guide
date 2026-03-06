@@ -21,9 +21,8 @@ const VideoTestimonials = () => (
         >
           <video
             controls
-            preload="metadata"
+            preload="auto"
             className="aspect-video w-full bg-muted object-cover"
-            playsInline
           >
             <source src="/videos/testimonial-1.mp4" type="video/mp4" />
             Your browser does not support this video format.

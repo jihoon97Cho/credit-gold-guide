@@ -1,44 +1,83 @@
 import { Phone, Star } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/constants";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useRef } from "react";
 
 const Hero = () => {
+  const isMobile = useIsMobile();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Subtle parallax on hero — only desktop
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", isMobile ? "0%" : "8%"]);
+
   const scrollTo = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const ease = [0.25, 0.46, 0.45, 0.94] as [number, number, number, number];
+  const dur = isMobile ? 0.5 : 0.7;
+
   return (
-    <section id="home" className="bg-background py-20 lg:py-32">
-      <div className="container mx-auto px-4 text-center">
+    <section ref={sectionRef} id="home" className="bg-background py-20 lg:py-32 overflow-hidden">
+      <motion.div
+        className="container mx-auto px-4 text-center"
+        style={{ y: bgY }}
+      >
         <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: dur, ease, delay: 0.1 }}
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary"
         >
           Credit Repair Specialists
         </motion.span>
 
-        <div className="mb-6 flex items-center justify-center gap-1">
+        <motion.div
+          initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: dur, ease, delay: 0.2 }}
+          className="mb-6 flex items-center justify-center gap-1"
+        >
           {[...Array(5)].map((_, i) => (
             <Star key={i} className="h-5 w-5 fill-primary text-primary" />
           ))}
           <span className="ml-2 text-sm text-muted-foreground">
             Rated <strong className="text-foreground">4.8</strong> · 500+ Clients Helped
           </span>
-        </div>
+        </motion.div>
 
-        <h1 className="mx-auto mb-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+        <motion.h1
+          initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: isMobile ? 0.6 : 0.8, ease, delay: 0.3 }}
+          className="mx-auto mb-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+        >
           Take Control of Your Credit.{" "}
           <span className="text-primary text-glow">Build the Future You Deserve.</span>
-        </h1>
+        </motion.h1>
 
-        <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+        <motion.p
+          initial={{ opacity: 0, y: 20, filter: "blur(3px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: dur, ease, delay: 0.45 }}
+          className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl"
+        >
           We help remove negative items, improve your credit profile, and unlock real funding opportunities — backed by a money-back guarantee.
-        </p>
+        </motion.p>
 
-        <div className="mb-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20, filter: "blur(3px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: dur, ease, delay: 0.6 }}
+          className="mb-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
+        >
           <motion.div whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
             <Button onClick={() => scrollTo("#pricing")} size="lg" className="rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-shadow">
               Get Started
@@ -51,15 +90,20 @@ const Hero = () => {
               </a>
             </Button>
           </motion.div>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: dur, ease, delay: 0.75 }}
+          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+        >
           <span>✓ No obligation</span>
           <span>✓ Free consultation</span>
           <span>✓ Money-back guarantee</span>
           <span>✓ We never share your info</span>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

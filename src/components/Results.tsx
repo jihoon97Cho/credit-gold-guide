@@ -57,7 +57,7 @@ const Results = () => {
         {/* 3D Carousel */}
         <div
           className="relative mx-auto flex items-center justify-center"
-          style={{ height: "420px", maxWidth: "900px" }}
+          style={{ height: "580px", maxWidth: "1100px" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -70,8 +70,8 @@ const Results = () => {
 
               if (!visible) return null;
 
-              const x = offset * 220;
-              const z = -absOffset * 180;
+              const x = offset * 300;
+              const z = -absOffset * 220;
               const rotateY = offset * -15;
               const scale = 1 - absOffset * 0.15;
               const opacity = 1 - absOffset * 0.35;
@@ -82,7 +82,7 @@ const Results = () => {
                   key={i}
                   className="absolute cursor-pointer"
                   style={{
-                    width: "300px",
+                    width: "450px",
                     zIndex: 10 - absOffset,
                   }}
                   animate={{

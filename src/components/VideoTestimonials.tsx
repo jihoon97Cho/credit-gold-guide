@@ -55,7 +55,7 @@ const VideoTestimonials = () => (
         <VideoCard
           sources={[{ src: "/videos/testimonial-2-v2.mp4", type: "video/mp4" }]}
           title="Anthony's Testimonial"
-          description="Anthony came to us with credit scores in the 500s. After working with our team, he was able to improve his profile into the 700s and get approved for 2 credit cards."
+          description="Anthony came to us with credit scores in the low 400s. After working with our team, he was able to improve his profile into the 700s and get approved for 2 credit cards."
         />
       </div>
     </div>

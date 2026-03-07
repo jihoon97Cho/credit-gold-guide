@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { COMPANY } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useRef } from "react";
@@ -79,8 +80,8 @@ const Hero = () => {
           className="mb-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
         >
           <motion.div whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
-            <Button onClick={() => scrollTo("#pricing")} size="lg" className="rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-shadow">
-              Get Started
+            <Button asChild size="lg" className="rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-shadow">
+              <Link to="/book">Get Started</Link>
             </Button>
           </motion.div>
         </motion.div>

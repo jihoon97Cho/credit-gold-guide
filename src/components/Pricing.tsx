@@ -15,7 +15,7 @@ const features = [
   "Ongoing progress updates",
   "Negative item audit",
   "Direct access to our team",
-  "Money back guarantee",
+  "Money back guarantee if we can't get a single negative removed in 30–120 days",
 ];
 
 const plans = [
@@ -67,6 +67,11 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
+                {plan.popular && (
+                  <p className="mb-4 text-xs text-muted-foreground italic">
+                    First month is $150 ($25 one-time setup fee)
+                  </p>
+                )}
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                   <a href={plan.link} target="_blank" rel="noopener noreferrer">
                     <Button className="w-full rounded-full py-6 text-lg font-bold">

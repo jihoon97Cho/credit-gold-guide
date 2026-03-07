@@ -24,7 +24,6 @@ const BookingPage = () => {
             Book Your Call to Start{" "}
             <span className="text-primary text-glow">Improving Your Credit Now</span>
           </h1>
-          </h1>
 
           <div className="mt-12 mb-12">
             <h2 className="mb-4 text-xl font-bold text-foreground sm:text-2xl">

@@ -1,4 +1,4 @@
-import { Phone, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/constants";
@@ -81,13 +81,6 @@ const Hero = () => {
           <motion.div whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
             <Button onClick={() => scrollTo("#pricing")} size="lg" className="rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-shadow">
               Get Started
-            </Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
-            <Button asChild variant="outline" size="lg" className="rounded-full border-border px-8 py-6 text-lg text-foreground hover:bg-secondary">
-              <a href={`tel:${COMPANY.phone}`}>
-                <Phone className="mr-2 h-5 w-5" /> Call Now
-              </a>
             </Button>
           </motion.div>
         </motion.div>

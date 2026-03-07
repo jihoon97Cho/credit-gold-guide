@@ -32,7 +32,7 @@ const Testimonials = () => (
         </RevealItem>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 max-w-7xl mx-auto">
         {testimonials.map((t) => (
           <RevealItem key={t.name}>
             <motion.div
@@ -40,7 +40,7 @@ const Testimonials = () => (
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <Card className="border-border bg-card shadow-sm h-full">
-                <CardContent className="p-4">
+                <CardContent className="p-5">
                   <img
                     src={t.image}
                     alt={`${t.name} credit score results`}

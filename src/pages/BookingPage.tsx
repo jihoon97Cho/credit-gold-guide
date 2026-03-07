@@ -22,7 +22,8 @@ const BookingPage = () => {
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl lg:text-5xl">
             Book Your Call to Start{" "}
-            <span className="text-primary text-glow">Improving Your Credit</span>
+            <span className="text-primary text-glow">Improving Your Credit Now</span>
+          </h1>
           </h1>
 
           <div className="mt-12 mb-12">
@@ -46,7 +47,7 @@ const BookingPage = () => {
           <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-lg">
             <iframe
               src="https://api.leadconnectorhq.com/widget/booking/9VZH788lmQEMSxUnaJYq"
-              style={{ width: "100%", border: "none", overflow: "hidden", minHeight: "600px" }}
+              style={{ width: "100%", border: "none", overflow: "hidden", minHeight: "1000px" }}
               scrolling="no"
               title="Book a Call"
             />

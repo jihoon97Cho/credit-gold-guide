@@ -29,6 +29,42 @@ const ThankYouPage = () => {
               </p>
             </RevealItem>
             <RevealItem>
+              <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-sm">
+                <p className="mb-3 text-sm font-medium text-foreground flex items-center justify-center gap-2">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  Add To Your Calendar
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <a
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Credit+Repair+Consultation&details=Credit+repair+consultation+call"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="sm" className="text-xs gap-1.5">
+                      Google Calendar
+                    </Button>
+                  </a>
+                  <a
+                    href="https://outlook.live.com/calendar/0/action/compose?subject=Credit+Repair+Consultation&body=Credit+repair+consultation+call"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="sm" className="text-xs gap-1.5">
+                      Outlook
+                    </Button>
+                  </a>
+                  <a
+                    href="data:text/calendar;charset=utf-8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Credit Repair Consultation%0ADESCRIPTION:Credit repair consultation call%0AEND:VEVENT%0AEND:VCALENDAR"
+                    download="consultation.ics"
+                  >
+                    <Button variant="outline" size="sm" className="text-xs gap-1.5">
+                      Apple / iCal
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </RevealItem>
+            <RevealItem>
               <ChevronDown className="mx-auto mt-4 h-5 w-5 text-muted-foreground/50 animate-bounce" />
             </RevealItem>
           </ScrollReveal>

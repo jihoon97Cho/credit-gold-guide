@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CheckCircle, ChevronDown, ExternalLink } from "lucide-react";
+import { CheckCircle, ChevronDown, ExternalLink, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 

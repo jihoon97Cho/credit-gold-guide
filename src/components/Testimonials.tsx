@@ -11,7 +11,7 @@ import clientTrevin from "@/assets/client-trevin.png";
 const testimonials = [
   { name: "Adeyinka R.", text: "I never thought my credit could recover this fast. The team was professional and kept me updated every step of the way.", image: clientAdeyinka },
   { name: "Jackie R.", text: "They helped me go from being denied to getting approved for my dream home. Truly life-changing results.", image: clientJackie },
-  { name: "Stacy W.", text: "Over 100 points gained across all three bureaus. I'm so grateful I trusted them with my credit journey.", image: clientStacy },
+  { name: "Stacy W.", text: "Over 80 points gained across all three bureaus. I'm so grateful I trusted them with my credit journey.", image: clientStacy },
   { name: "Connie S.", text: "Fast, transparent, and effective. They removed multiple negatives and my score jumped significantly.", image: clientConnie },
   { name: "Trevin C.", text: "I was skeptical at first, but the results speak for themselves. Best investment I've made in my financial future.", image: clientTrevin },
 ];

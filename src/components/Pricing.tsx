@@ -20,9 +20,9 @@ const features = [
 ];
 
 const plans = [
-  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/l2Yo1", type: "payment" },
-  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/5RyER", type: "payment" },
-  { name: "Bankruptcy Rebuilding", price: "Custom", period: "pricing", desc: "Personalized strategy and pricing for active or discharged bankruptcies.", popular: false, link: `tel:${COMPANY.phone}`, type: "call" },
+  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "/book", type: "call" },
+  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "/book", type: "call" },
+  { name: "Bankruptcy Rebuilding", price: "Custom", period: "pricing", desc: "Personalized strategy and pricing for active or discharged bankruptcies.", popular: false, link: "/book", type: "call" },
 ];
 
 const Pricing = () => {
@@ -75,16 +75,10 @@ const Pricing = () => {
                   </p>
                 )}
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <a href={plan.link} target={plan.type === "payment" ? "_blank" : undefined} rel={plan.type === "payment" ? "noopener noreferrer" : undefined}>
+                  <a href={plan.link}>
                     <Button className="w-full rounded-full py-6 text-lg font-bold gap-2">
-                      {plan.type === "call" ? (
-                        <>
-                          <Phone className="h-5 w-5" />
-                          Book a Call
-                        </>
-                      ) : (
-                        "Fix My Credit"
-                      )}
+                      <Phone className="h-5 w-5" />
+                      Book a Call Now
                     </Button>
                   </a>
                 </motion.div>

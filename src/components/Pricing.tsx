@@ -1,8 +1,9 @@
-import { Check } from "lucide-react";
+import { Check, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
+import { COMPANY } from "@/lib/constants";
 
 const features = [
   "Full service credit repair",
@@ -19,8 +20,9 @@ const features = [
 ];
 
 const plans = [
-  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/l2Yo1" },
-  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/5RyER" },
+  { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/l2Yo1", type: "payment" },
+  { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "https://www.fanbasis.com/agency-checkout/ascend-solutions/5RyER", type: "payment" },
+  { name: "Bankruptcy Rebuilding", price: "Custom", period: "pricing", desc: "Personalized strategy and pricing for active or discharged bankruptcies.", popular: false, link: `tel:${COMPANY.phone}`, type: "call" },
 ];
 
 const Pricing = () => {
@@ -41,7 +43,7 @@ const Pricing = () => {
         </div>
 
         <RevealItem>
-          <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {plans.map((plan) => (
               <motion.div
                 key={plan.name}
@@ -68,14 +70,21 @@ const Pricing = () => {
                   ))}
                 </ul>
                 {plan.popular && (
-                  <p className="mb-4 text-xs text-muted-foreground italic">
+                  <p className="mb-4 text-center text-xs text-muted-foreground italic">
                     First month is $150 ($25 one-time setup fee)
                   </p>
                 )}
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <a href={plan.link} target="_blank" rel="noopener noreferrer">
-                    <Button className="w-full rounded-full py-6 text-lg font-bold">
-                      Fix My Credit
+                  <a href={plan.link} target={plan.type === "payment" ? "_blank" : undefined} rel={plan.type === "payment" ? "noopener noreferrer" : undefined}>
+                    <Button className="w-full rounded-full py-6 text-lg font-bold gap-2">
+                      {plan.type === "call" ? (
+                        <>
+                          <Phone className="h-5 w-5" />
+                          Book a Call
+                        </>
+                      ) : (
+                        "Fix My Credit"
+                      )}
                     </Button>
                   </a>
                 </motion.div>

@@ -4,7 +4,7 @@ import Results from "@/components/Results";
 import VideoTestimonials from "@/components/VideoTestimonials";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
-import BankruptcySection from "@/components/BankruptcySection";
+
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Testimonials from "@/components/Testimonials";
 import ServiceAreas from "@/components/ServiceAreas";
@@ -22,7 +22,7 @@ const Index = () => (
       <VideoTestimonials />
       <Services />
       <Pricing />
-      <BankruptcySection />
+      
       <WhyChooseUs />
       <Testimonials />
       <ServiceAreas />

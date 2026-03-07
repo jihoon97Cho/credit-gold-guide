@@ -1,23 +1,20 @@
-import { Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
-const testimonials = [
-  { name: "Marcus T.", location: "Atlanta, GA", before: 512, after: 695, text: "They removed 19 negatives in under 90 days. I was able to qualify for a mortgage!" },
-  { name: "Jasmine W.", location: "Houston, TX", before: 478, after: 641, text: "Went from getting denied everywhere to getting approved for business funding. Life-changing." },
-  { name: "Derek S.", location: "Chicago, IL", before: 530, after: 710, text: "Even with a bankruptcy on my file, they got my score up significantly. Incredible team." },
-  { name: "Nicole R.", location: "Miami, FL", before: 498, after: 672, text: "Professional, honest, and they actually deliver. Best decision I made for my credit." },
-  { name: "Carlos M.", location: "Los Angeles, CA", before: 545, after: 738, text: "I was skeptical, but the results speak for themselves. Multiple items removed and a major score jump." },
-];
+import clientAdeyinka from "@/assets/client-adeyinka.png";
+import clientJackie from "@/assets/client-jackie.png";
+import clientStacy from "@/assets/client-stacy.png";
+import clientConnie from "@/assets/client-connie.png";
+import clientTrevin from "@/assets/client-trevin.png";
 
-const Stars = () => (
-  <div className="flex gap-0.5">
-    {[...Array(5)].map((_, i) => (
-      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
-    ))}
-  </div>
-);
+const testimonials = [
+  { name: "Adeyinka R.", text: "I never thought my credit could recover this fast. The team was professional and kept me updated every step of the way.", image: clientAdeyinka },
+  { name: "Jackie R.", text: "They helped me go from being denied to getting approved for my dream home. Truly life-changing results.", image: clientJackie },
+  { name: "Stacy W.", text: "Over 100 points gained across all three bureaus. I'm so grateful I trusted them with my credit journey.", image: clientStacy },
+  { name: "Connie S.", text: "Fast, transparent, and effective. They removed multiple negatives and my score jumped significantly.", image: clientConnie },
+  { name: "Trevin C.", text: "I was skeptical at first, but the results speak for themselves. Best investment I've made in my financial future.", image: clientTrevin },
+];
 
 const Testimonials = () => (
   <ScrollReveal as="section" id="testimonials" className="bg-secondary py-16 lg:py-24">
@@ -35,7 +32,7 @@ const Testimonials = () => (
         </RevealItem>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {testimonials.map((t) => (
           <RevealItem key={t.name}>
             <motion.div
@@ -43,20 +40,15 @@ const Testimonials = () => (
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <Card className="border-border bg-card shadow-sm h-full">
-                <CardContent className="p-6">
-                  <Stars />
-                  <p className="my-4 text-foreground">"{t.text}"</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <div>
-                      <p className="font-bold text-foreground">{t.name}</p>
-                      <p className="text-muted-foreground">{t.location}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-muted-foreground">
-                        <span className="text-destructive">{t.before}</span> → <span className="font-bold text-primary">{t.after}</span>
-                      </p>
-                    </div>
-                  </div>
+                <CardContent className="p-4">
+                  <img
+                    src={t.image}
+                    alt={`${t.name} credit score results`}
+                    className="mb-4 w-full rounded-lg"
+                    loading="lazy"
+                  />
+                  <p className="mb-3 text-sm text-foreground">"{t.text}"</p>
+                  <p className="font-bold text-foreground">{t.name}</p>
                 </CardContent>
               </Card>
             </motion.div>

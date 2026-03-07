@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { ShieldAlert, Phone } from "lucide-react";
-import { PHONE } from "@/lib/constants";
+import { COMPANY } from "@/lib/constants";
 
 const BankruptcySection = () => (
   <ScrollReveal as="section" id="bankruptcy" className="bg-secondary py-16 lg:py-24">
@@ -31,7 +31,7 @@ const BankruptcySection = () => (
         </RevealItem>
         <RevealItem>
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-block">
-            <a href={`tel:${PHONE}`}>
+            <a href={`tel:${COMPANY.phone}`}>
               <Button size="lg" className="rounded-full px-8 py-6 text-lg font-bold gap-2">
                 <Phone className="h-5 w-5" />
                 Book a Free Call

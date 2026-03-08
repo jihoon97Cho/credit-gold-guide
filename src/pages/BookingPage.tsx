@@ -61,7 +61,7 @@ const BookingPage = () => {
             </motion.div>
           </div>
 
-          <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-lg">
+          <div id="booking" className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-lg">
             <iframe
               src="https://api.leadconnectorhq.com/widget/booking/9VZH788lmQEMSxUnaJYq"
               style={{ width: "100%", border: "none", overflow: "hidden", minHeight: "1000px" }}

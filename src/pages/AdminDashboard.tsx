@@ -231,6 +231,32 @@ const AdminDashboard = () => {
     .slice(0, 10)
     .map(([page, views]) => ({ page, views }));
 
+  // Unique visitors per page (by session_id in metadata)
+  const pageSessionMap = events
+    .filter((e) => e.event_type === "page_view")
+    .reduce<Record<string, Set<string>>>((acc, e) => {
+      const page = e.page || "/";
+      const sessionId = (e.metadata as any)?.session_id || e.id;
+      if (!acc[page]) acc[page] = new Set();
+      acc[page].add(sessionId);
+      return acc;
+    }, {});
+
+  // Funnel: ordered pages visitors typically flow through
+  const funnelPages = [
+    { path: "/", label: "Home" },
+    { path: "/book", label: "Book a Call" },
+    { path: "/contact", label: "Contact" },
+    { path: "/thank-you", label: "Thank You" },
+  ];
+  const funnelData = funnelPages
+    .map(({ path, label }, i) => ({
+      name: label,
+      value: pageSessionMap[path]?.size || 0,
+      fill: COLORS[i % COLORS.length],
+    }))
+    .filter((_, i, arr) => i === 0 || arr.slice(0, i).some((d) => d.value > 0));
+
   // Leads by hour of day
   const hourDist = new Array(24).fill(0);
   leads.forEach((l) => {

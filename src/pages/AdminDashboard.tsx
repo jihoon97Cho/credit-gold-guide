@@ -7,13 +7,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell,
   RadialBarChart, RadialBar, Legend, FunnelChart, Funnel, LabelList,
 } from "recharts";
 import {
   LogOut, Users, TrendingUp, FileText, Activity, ExternalLink,
-  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter,
+  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter, Trash2,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -131,6 +135,46 @@ const AdminDashboard = () => {
     await supabase.auth.signOut();
     navigate("/admin");
   };
+
+  const resetEvents = async (filter?: { event_type?: string }) => {
+    let query = supabase.from("site_events").delete();
+    if (filter?.event_type) {
+      query = query.eq("event_type", filter.event_type);
+    } else {
+      query = query.neq("id", "00000000-0000-0000-0000-000000000000"); // delete all
+    }
+    await query;
+    fetchData();
+  };
+
+  const resetLeads = async () => {
+    await supabase.from("leads").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    fetchData();
+  };
+
+  const ResetButton = ({ onConfirm, label }: { onConfirm: () => void; label: string }) => (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-destructive hover:text-destructive hover:bg-destructive/10">
+          <Trash2 className="h-3 w-3" /> Reset
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Reset {label}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete all {label.toLowerCase()} data. This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            Delete All
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 
   // --- Analytics computations ---
   const now = new Date();
@@ -390,9 +434,12 @@ const AdminDashboard = () => {
           <TabsContent value="overview" className="space-y-6">
             {/* Leads Trend — Area Chart */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Lead Volume — Last 30 Days</CardTitle>
-                <CardDescription>Daily lead submissions with trend line</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">Lead Volume — Last 30 Days</CardTitle>
+                  <CardDescription>Daily lead submissions with trend line</CardDescription>
+                </div>
+                <ResetButton onConfirm={resetLeads} label="Leads" />
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -454,9 +501,12 @@ const AdminDashboard = () => {
 
               {/* Peak Hours */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Lead Activity by Hour (EST)</CardTitle>
-                  <CardDescription>When visitors submit forms (Eastern Time)</CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-base">Lead Activity by Hour (EST)</CardTitle>
+                    <CardDescription>When visitors submit forms (Eastern Time)</CardDescription>
+                  </div>
+                  <ResetButton onConfirm={resetLeads} label="Leads" />
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={280}>
@@ -473,11 +523,14 @@ const AdminDashboard = () => {
 
               {/* Traffic Heatmap */}
               <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-base">
-                    <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
-                  </CardTitle>
-                  <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
+                    </CardTitle>
+                    <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
+                  </div>
+                  <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
                 </CardHeader>
                 <CardContent className="overflow-x-auto">
                   <div className="min-w-[640px]">
@@ -798,9 +851,12 @@ const AdminDashboard = () => {
           {/* LEADS TABLE TAB */}
           <TabsContent value="leads">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base">All Lead Submissions</CardTitle>
-                <CardDescription>{leads.length} total leads captured</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">All Lead Submissions</CardTitle>
+                  <CardDescription>{leads.length} total leads captured</CardDescription>
+                </div>
+                <ResetButton onConfirm={resetLeads} label="Leads" />
               </CardHeader>
               <CardContent className="overflow-x-auto">
                 <Table>
@@ -853,9 +909,12 @@ const AdminDashboard = () => {
           {/* EVENTS TABLE TAB */}
           <TabsContent value="events">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Site Events</CardTitle>
-                <CardDescription>{events.length} events tracked</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">Site Events</CardTitle>
+                  <CardDescription>{events.length} events tracked</CardDescription>
+                </div>
+                <ResetButton onConfirm={() => resetEvents()} label="Events" />
               </CardHeader>
               <CardContent className="overflow-x-auto">
                 <Table>

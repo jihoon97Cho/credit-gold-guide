@@ -256,16 +256,33 @@ const AdminDashboard = () => {
     }))
     .filter((_, i, arr) => i === 0 || arr.slice(0, i).some((d) => d.value > 0));
 
-  // Leads by hour of day
+  // Leads by hour of day (EST)
   const hourDist = new Array(24).fill(0);
   leads.forEach((l) => {
-    const hour = new Date(l.created_at).getHours();
-    hourDist[hour]++;
+    const estHour = parseInt(
+      new Date(l.created_at).toLocaleString("en-US", { hour: "2-digit", hour12: false, timeZone: "America/New_York" })
+    );
+    hourDist[estHour]++;
   });
   const hourData = hourDist.map((count, hour) => ({
     hour: `${hour.toString().padStart(2, "0")}:00`,
     count,
   }));
+
+  // Heatmap: day-of-week × hour from page_view events (EST)
+  const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const heatmapGrid: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0));
+  events
+    .filter((e) => e.event_type === "page_view")
+    .forEach((e) => {
+      const d = new Date(e.created_at);
+      const estStr = d.toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short", hour: "2-digit", hour12: false });
+      const parts = estStr.split(", ");
+      const dayIdx = DAYS.indexOf(parts[0]);
+      const hr = parseInt(parts[1]);
+      if (dayIdx >= 0 && !isNaN(hr)) heatmapGrid[dayIdx][hr]++;
+    });
+  const heatmapMax = Math.max(1, ...heatmapGrid.flat());
 
   // Recent leads (last 5)
   const recentLeads = leads.slice(0, 5);

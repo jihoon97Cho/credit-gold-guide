@@ -470,6 +470,62 @@ const AdminDashboard = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
+
+              {/* Traffic Heatmap */}
+              <Card className="lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
+                  </CardTitle>
+                  <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
+                </CardHeader>
+                <CardContent className="overflow-x-auto">
+                  <div className="min-w-[640px]">
+                    {/* Hour labels */}
+                    <div className="mb-1 flex">
+                      <div className="w-12 shrink-0" />
+                      {Array.from({ length: 24 }, (_, h) => (
+                        <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
+                          {h.toString().padStart(2, "0")}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Grid rows */}
+                    {DAYS.map((day, di) => (
+                      <div key={day} className="flex items-center gap-0">
+                        <div className="w-12 shrink-0 text-right pr-2 text-xs font-medium text-muted-foreground">{day}</div>
+                        {heatmapGrid[di].map((val, hi) => {
+                          const intensity = val / heatmapMax;
+                          return (
+                            <div
+                              key={hi}
+                              className="flex-1 aspect-square rounded-sm border border-border/30 transition-colors"
+                              style={{
+                                backgroundColor: intensity > 0
+                                  ? `hsl(42, 52%, 53%, ${0.1 + intensity * 0.85})`
+                                  : "hsl(var(--muted) / 0.3)",
+                              }}
+                              title={`${day} ${hi.toString().padStart(2, "0")}:00 EST — ${val} view${val !== 1 ? "s" : ""}`}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))}
+                    {/* Legend */}
+                    <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground">
+                      <span>Less</span>
+                      {[0, 0.25, 0.5, 0.75, 1].map((v) => (
+                        <div
+                          key={v}
+                          className="h-3 w-3 rounded-sm border border-border/30"
+                          style={{ backgroundColor: v > 0 ? `hsl(42, 52%, 53%, ${0.1 + v * 0.85})` : "hsl(var(--muted) / 0.3)" }}
+                        />
+                      ))}
+                      <span>More</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Top Pages */}

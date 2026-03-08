@@ -35,9 +35,7 @@ const BookingPage = () => {
       <Header />
       <main className="container mx-auto px-4 py-16 lg:py-24">
         <div className="relative mx-auto max-w-3xl text-center">
-          {/* Curved red arrows */}
-          <CurvedArrow />
-          <CurvedArrowMobile />
+          <ScrollIndicator />
 
           <h1 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl lg:text-5xl">
             Book Your Call to Start{" "}

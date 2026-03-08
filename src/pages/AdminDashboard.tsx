@@ -480,7 +480,123 @@ const AdminDashboard = () => {
             )}
           </TabsContent>
 
-          {/* AUDIENCE TAB */}
+          {/* FUNNEL TAB */}
+          <TabsContent value="funnel" className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Funnel Chart */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Filter className="h-4 w-4 text-primary" /> Visitor Funnel
+                  </CardTitle>
+                  <CardDescription>Unique visitors at each stage (by session)</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {funnelData.length > 0 && funnelData[0].value > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <FunnelChart>
+                        <RechartsTooltip content={<CustomTooltip />} />
+                        <Funnel dataKey="value" data={funnelData} isAnimationActive>
+                          <LabelList position="right" fill="hsl(var(--foreground))" fontSize={12} fontWeight={600} dataKey="name" />
+                          <LabelList position="center" fill="white" fontSize={14} fontWeight={700} dataKey="value" />
+                        </Funnel>
+                      </FunnelChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p className="py-8 text-center text-sm text-muted-foreground">
+                      No page view data yet. Visit your site pages to start tracking the funnel.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Drop-off Table */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Page Drop-off Analysis</CardTitle>
+                  <CardDescription>Where visitors leave your site</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Page</TableHead>
+                        <TableHead className="text-right">Unique Visitors</TableHead>
+                        <TableHead className="text-right">Drop-off</TableHead>
+                        <TableHead className="text-right">Rate</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {funnelData.map((step, i) => {
+                        const prev = i === 0 ? step.value : funnelData[i - 1].value;
+                        const dropoff = prev - step.value;
+                        const rate = prev > 0 ? ((dropoff / prev) * 100).toFixed(1) : "0";
+                        return (
+                          <TableRow key={step.name}>
+                            <TableCell className="font-medium text-foreground">{step.name}</TableCell>
+                            <TableCell className="text-right text-sm">{step.value}</TableCell>
+                            <TableCell className="text-right text-sm">
+                              {i === 0 ? "—" : dropoff}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {i === 0 ? (
+                                <Badge variant="secondary" className="text-xs">Entry</Badge>
+                              ) : (
+                                <Badge
+                                  variant={parseFloat(rate) > 50 ? "destructive" : "secondary"}
+                                  className="text-xs"
+                                >
+                                  {rate}%
+                                </Badge>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                      {funnelData.length === 0 && (
+                        <TableRow>
+                          <TableCell colSpan={4} className="py-8 text-center text-muted-foreground">
+                            No funnel data yet.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* All Pages Unique Visitors */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Eye className="h-4 w-4 text-primary" /> All Pages — Unique Visitors
+                </CardTitle>
+                <CardDescription>Unique sessions per page across all tracked pages</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {Object.keys(pageSessionMap).length > 0 ? (
+                  <ResponsiveContainer width="100%" height={280}>
+                    <BarChart
+                      data={Object.entries(pageSessionMap)
+                        .map(([page, sessions]) => ({ page, unique: sessions.size }))
+                        .sort((a, b) => b.unique - a.unique)}
+                      layout="vertical"
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" horizontal={false} />
+                      <XAxis type="number" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} allowDecimals={false} />
+                      <YAxis dataKey="page" type="category" tick={{ fontSize: 11 }} width={120} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                      <RechartsTooltip content={<CustomTooltip />} />
+                      <Bar dataKey="unique" name="Unique Visitors" fill="hsl(160, 50%, 45%)" radius={[0, 6, 6, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <p className="py-8 text-center text-sm text-muted-foreground">No page view data yet.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="audience" className="space-y-6">
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Credit Range Pie */}

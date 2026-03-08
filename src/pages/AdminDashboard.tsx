@@ -262,6 +262,12 @@ const AdminDashboard = () => {
     .sort((a, b) => b[1] - a[1])
     .map(([name, count]) => ({ name, count }));
 
+  // Helper function to format page paths for display
+  const formatPageName = (page: string) => {
+    if (page === "/") return "Home";
+    return page;
+  };
+
   // Page views from events
   const pageViews = events
     .filter((e) => e.event_type === "page_view")
@@ -273,7 +279,7 @@ const AdminDashboard = () => {
   const pageViewData = Object.entries(pageViews)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
-    .map(([page, views]) => ({ page, views }));
+    .map(([page, views]) => ({ page: formatPageName(page), views }));
 
   // Unique visitors per page (by session_id in metadata)
   const pageSessionMap = events

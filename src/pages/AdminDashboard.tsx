@@ -364,6 +364,7 @@ const AdminDashboard = () => {
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList className="bg-muted/50">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="funnel">Funnel</TabsTrigger>
             <TabsTrigger value="audience">Audience</TabsTrigger>
             <TabsTrigger value="leads">Lead Data</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>

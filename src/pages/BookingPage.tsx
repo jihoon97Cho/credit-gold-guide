@@ -18,9 +18,8 @@ const CurvedArrow = () => (
       xmlns="http://www.w3.org/2000/svg"
       className="h-full w-full overflow-visible"
     >
-      {/* Stays on the far right side, swoops out and back, ends angled inward */}
       <motion.path
-        d="M 50 10 C 90 80, 95 200, 70 320 C 45 440, 80 560, 60 650 L 30 700"
+        d="M 50 10 C 85 100, 80 250, 60 370 C 40 490, 70 580, 50 660"
         stroke="hsl(0, 84%, 60%)"
         strokeWidth="2.5"
         strokeLinecap="round"
@@ -29,14 +28,10 @@ const CurvedArrow = () => (
         animate={{ pathLength: 1 }}
         transition={{ delay: 1, duration: 1.8, ease: "easeInOut" }}
       />
-      {/* Arrowhead attached at end, angled inward-left */}
-      <motion.path
-        d="M 42,686 L 28,704 L 46,706"
-        stroke="hsl(0, 84%, 60%)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
+      {/* Clean triangular arrowhead, centered on path end */}
+      <motion.polygon
+        points="38,650 50,675 62,650"
+        fill="hsl(0, 84%, 60%)"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.7, duration: 0.3 }}
@@ -60,7 +55,7 @@ const CurvedArrowMobile = () => (
       className="h-full w-full overflow-visible"
     >
       <motion.path
-        d="M 20 5 C 38 40, 38 110, 30 170 C 22 230, 35 290, 25 330 L 12 350"
+        d="M 20 5 C 36 50, 34 130, 25 190 C 16 250, 30 300, 20 335"
         stroke="hsl(0, 84%, 60%)"
         strokeWidth="2"
         strokeLinecap="round"
@@ -69,13 +64,9 @@ const CurvedArrowMobile = () => (
         animate={{ pathLength: 1 }}
         transition={{ delay: 1, duration: 1.8, ease: "easeInOut" }}
       />
-      <motion.path
-        d="M 18,340 L 11,353 L 22,352"
-        stroke="hsl(0, 84%, 60%)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
+      <motion.polygon
+        points="14,328 20,345 26,328"
+        fill="hsl(0, 84%, 60%)"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.7, duration: 0.3 }}

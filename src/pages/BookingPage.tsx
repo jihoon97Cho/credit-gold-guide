@@ -9,17 +9,18 @@ const CurvedArrow = () => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay: 0.8, duration: 0.6 }}
-    className="pointer-events-none absolute right-[-3.5rem] top-[2rem] hidden lg:block"
-    style={{ width: 160, height: 720 }}
+    className="pointer-events-none absolute right-[-5rem] top-[1rem] hidden lg:block"
+    style={{ width: 100, height: 720 }}
   >
     <svg
-      viewBox="0 0 160 720"
+      viewBox="0 0 100 720"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="h-full w-full"
+      className="h-full w-full overflow-visible"
     >
+      {/* Stays on the far right side, swoops out and back, ends angled inward */}
       <motion.path
-        d="M 40 10 C 140 60, 140 180, 60 300 C -20 420, 20 540, 100 600 C 130 620, 110 680, 80 700"
+        d="M 50 10 C 90 80, 95 200, 70 320 C 45 440, 80 560, 60 650 L 30 700"
         stroke="hsl(0, 84%, 60%)"
         strokeWidth="2.5"
         strokeLinecap="round"
@@ -28,9 +29,9 @@ const CurvedArrow = () => (
         animate={{ pathLength: 1 }}
         transition={{ delay: 1, duration: 1.8, ease: "easeInOut" }}
       />
-      {/* Arrowhead pointing inward toward calendar */}
+      {/* Arrowhead attached at end, angled inward-left */}
       <motion.path
-        d="M 68,694 L 80,714 L 92,694"
+        d="M 42,686 L 28,704 L 46,706"
         stroke="hsl(0, 84%, 60%)"
         strokeWidth="2.5"
         strokeLinecap="round"
@@ -49,17 +50,17 @@ const CurvedArrowMobile = () => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay: 0.8, duration: 0.6 }}
-    className="pointer-events-none absolute right-[-0.25rem] top-[0.5rem] block lg:hidden"
-    style={{ width: 45, height: 360 }}
+    className="pointer-events-none absolute right-[-1rem] top-[0.5rem] block lg:hidden"
+    style={{ width: 40, height: 360 }}
   >
     <svg
-      viewBox="0 0 45 360"
+      viewBox="0 0 40 360"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="h-full w-full"
+      className="h-full w-full overflow-visible"
     >
       <motion.path
-        d="M 12 5 C 42 30, 42 100, 15 155 C -10 210, 10 270, 30 305 C 35 315, 30 340, 22 350"
+        d="M 20 5 C 38 40, 38 110, 30 170 C 22 230, 35 290, 25 330 L 12 350"
         stroke="hsl(0, 84%, 60%)"
         strokeWidth="2"
         strokeLinecap="round"
@@ -69,7 +70,7 @@ const CurvedArrowMobile = () => (
         transition={{ delay: 1, duration: 1.8, ease: "easeInOut" }}
       />
       <motion.path
-        d="M 16,345 L 22,358 L 28,345"
+        d="M 18,340 L 11,353 L 22,352"
         stroke="hsl(0, 84%, 60%)"
         strokeWidth="2"
         strokeLinecap="round"

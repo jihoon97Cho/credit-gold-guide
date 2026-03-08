@@ -9,33 +9,36 @@ const CurvedArrow = () => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay: 0.8, duration: 0.6 }}
-    className="pointer-events-none absolute right-[-3rem] top-[3rem] hidden lg:block"
-    style={{ width: 140, height: 700 }}
+    className="pointer-events-none absolute right-[-3.5rem] top-[2rem] hidden lg:block"
+    style={{ width: 160, height: 720 }}
   >
     <svg
-      viewBox="0 0 140 700"
+      viewBox="0 0 160 720"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="h-full w-full"
     >
-      {/* Smooth round arc from headline area down past video to calendar */}
       <motion.path
-        d="M 30 10 C 130 80, 130 250, 70 400 C 10 550, 40 640, 70 680"
+        d="M 40 10 C 140 60, 140 180, 60 300 C -20 420, 20 540, 100 600 C 130 620, 110 680, 80 700"
         stroke="hsl(0, 84%, 60%)"
-        strokeWidth="3"
+        strokeWidth="2.5"
         strokeLinecap="round"
         fill="none"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ delay: 1, duration: 1.6, ease: "easeInOut" }}
+        transition={{ delay: 1, duration: 1.8, ease: "easeInOut" }}
       />
-      {/* Arrowhead pointing down */}
-      <motion.polygon
-        points="58,672 70,695 82,672"
-        fill="hsl(0, 84%, 60%)"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 2.5, duration: 0.3 }}
+      {/* Arrowhead pointing inward toward calendar */}
+      <motion.path
+        d="M 68,694 L 80,714 L 92,694"
+        stroke="hsl(0, 84%, 60%)"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.7, duration: 0.3 }}
       />
     </svg>
   </motion.div>
@@ -46,31 +49,35 @@ const CurvedArrowMobile = () => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay: 0.8, duration: 0.6 }}
-    className="pointer-events-none absolute right-[-0.25rem] top-[1rem] block lg:hidden"
-    style={{ width: 50, height: 350 }}
+    className="pointer-events-none absolute right-[-0.25rem] top-[0.5rem] block lg:hidden"
+    style={{ width: 45, height: 360 }}
   >
     <svg
-      viewBox="0 0 50 350"
+      viewBox="0 0 45 360"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="h-full w-full"
     >
       <motion.path
-        d="M 10 5 C 45 40, 45 130, 25 200 C 5 270, 15 320, 25 340"
+        d="M 12 5 C 42 30, 42 100, 15 155 C -10 210, 10 270, 30 305 C 35 315, 30 340, 22 350"
         stroke="hsl(0, 84%, 60%)"
-        strokeWidth="2.5"
+        strokeWidth="2"
         strokeLinecap="round"
         fill="none"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ delay: 1, duration: 1.6, ease: "easeInOut" }}
+        transition={{ delay: 1, duration: 1.8, ease: "easeInOut" }}
       />
-      <motion.polygon
-        points="18,334 25,348 32,334"
-        fill="hsl(0, 84%, 60%)"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 2.5, duration: 0.3 }}
+      <motion.path
+        d="M 16,345 L 22,358 L 28,345"
+        stroke="hsl(0, 84%, 60%)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.7, duration: 0.3 }}
       />
     </svg>
   </motion.div>

@@ -434,9 +434,12 @@ const AdminDashboard = () => {
           <TabsContent value="overview" className="space-y-6">
             {/* Leads Trend — Area Chart */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Lead Volume — Last 30 Days</CardTitle>
-                <CardDescription>Daily lead submissions with trend line</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">Lead Volume — Last 30 Days</CardTitle>
+                  <CardDescription>Daily lead submissions with trend line</CardDescription>
+                </div>
+                <ResetButton onConfirm={resetLeads} label="Leads" />
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>

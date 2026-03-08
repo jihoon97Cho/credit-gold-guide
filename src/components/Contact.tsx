@@ -6,6 +6,7 @@ import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { GHL_WEBHOOK_URL } from "@/lib/constants";
 import { getUtmParams } from "@/lib/utm";
 import { useToast } from "@/hooks/use-toast";
+import { saveLead } from "@/lib/tracking";
 
 const Contact = () => {
   const [submitting, setSubmitting] = useState(false);

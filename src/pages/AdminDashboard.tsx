@@ -455,8 +455,8 @@ const AdminDashboard = () => {
               {/* Peak Hours */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Lead Activity by Hour</CardTitle>
-                  <CardDescription>When visitors submit forms</CardDescription>
+                  <CardTitle className="text-base">Lead Activity by Hour (EST)</CardTitle>
+                  <CardDescription>When visitors submit forms (Eastern Time)</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={280}>

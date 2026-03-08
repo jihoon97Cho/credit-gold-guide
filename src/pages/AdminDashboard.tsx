@@ -7,13 +7,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell,
   RadialBarChart, RadialBar, Legend, FunnelChart, Funnel, LabelList,
 } from "recharts";
 import {
   LogOut, Users, TrendingUp, FileText, Activity, ExternalLink,
-  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter,
+  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter, Trash2,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 

@@ -43,6 +43,22 @@ const BookingPage = () => {
                 Your browser does not support the video tag.
               </video>
             </div>
+
+            {/* Scroll Indicator Arrow */}
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="mt-8 flex justify-center"
+            >
+              <button
+                onClick={() => document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" })}
+                className="flex flex-col items-center gap-2 text-destructive hover:opacity-80 transition-opacity"
+                aria-label="Scroll to booking section"
+              >
+                <span className="text-sm font-medium">Book Your Call</span>
+                <ChevronDown size={28} strokeWidth={3} />
+              </button>
+            </motion.div>
           </div>
 
           <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-lg">

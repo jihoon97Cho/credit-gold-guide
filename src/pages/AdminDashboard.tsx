@@ -851,9 +851,12 @@ const AdminDashboard = () => {
           {/* LEADS TABLE TAB */}
           <TabsContent value="leads">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base">All Lead Submissions</CardTitle>
-                <CardDescription>{leads.length} total leads captured</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">All Lead Submissions</CardTitle>
+                  <CardDescription>{leads.length} total leads captured</CardDescription>
+                </div>
+                <ResetButton onConfirm={resetLeads} label="Leads" />
               </CardHeader>
               <CardContent className="overflow-x-auto">
                 <Table>

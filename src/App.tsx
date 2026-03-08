@@ -11,6 +11,7 @@ import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import PageViewTracker from "./components/PageViewTracker";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <PageViewTracker />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/contact" element={<ContactPage />} />

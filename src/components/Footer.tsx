@@ -28,7 +28,7 @@ const Footer = () => (
 
       <div className="mt-10 border-t border-background/20 pt-6">
         <p className="text-xs opacity-60">
-          © {new Date().getFullYear()} {COMPANY.name}. All rights reserved. Credit repair services are provided in accordance with the Credit Repair Organizations Act (CROA). Results may vary. No guarantee of specific outcomes is implied.
+          © 2025 {COMPANY.name}. All rights reserved. Credit repair services are provided in accordance with the Credit Repair Organizations Act (CROA). Results may vary. No guarantee of specific outcomes is implied.
         </p>
       </div>
     </div>

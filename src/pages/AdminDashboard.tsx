@@ -495,20 +495,22 @@ const AdminDashboard = () => {
                       <div key={day} className="flex items-center gap-0">
                         <div className="w-12 shrink-0 text-right pr-2 text-xs font-medium text-muted-foreground">{day}</div>
                         {heatmapGrid[di].map((val, hi) => {
-                          const intensity = val / heatmapMax;
-                          return (
-                            <div
-                              key={hi}
-                              className="flex-1 aspect-square rounded-sm border border-border/30 transition-colors"
-                              style={{
-                                backgroundColor: intensity > 0
-                                  ? `hsl(42, 52%, 53%, ${0.1 + intensity * 0.85})`
-                                  : "hsl(var(--muted) / 0.3)",
-                              }}
-                              title={`${day} ${hi.toString().padStart(2, "0")}:00 EST — ${val} view${val !== 1 ? "s" : ""}`}
-                            />
-                          );
-                        })}
+                           const intensity = val / heatmapMax;
+                           // Green to red gradient: hue interpolation from 120 (green) to 0 (red)
+                           const hue = 120 * (1 - intensity);
+                           return (
+                             <div
+                               key={hi}
+                               className="flex-1 aspect-square rounded-sm border border-border/30 transition-colors"
+                               style={{
+                                 backgroundColor: intensity > 0
+                                   ? `hsl(${hue}, 70%, 45%, ${0.2 + intensity * 0.8})`
+                                   : "hsl(var(--muted) / 0.3)",
+                               }}
+                               title={`${day} ${hi.toString().padStart(2, "0")}:00 EST — ${val} view${val !== 1 ? "s" : ""}`}
+                             />
+                           );
+                         })}
                       </div>
                     ))}
                     {/* Legend */}

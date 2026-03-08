@@ -523,11 +523,14 @@ const AdminDashboard = () => {
 
               {/* Traffic Heatmap */}
               <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-base">
-                    <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
-                  </CardTitle>
-                  <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
+                    </CardTitle>
+                    <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
+                  </div>
+                  <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
                 </CardHeader>
                 <CardContent className="overflow-x-auto">
                   <div className="min-w-[640px]">

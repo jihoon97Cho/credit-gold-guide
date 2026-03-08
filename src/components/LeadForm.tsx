@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { getUtmParams } from "@/lib/utm";
 import { GHL_WEBHOOK_URL } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
+import { saveLead } from "@/lib/tracking";
 
 const LeadForm = ({ id }: { id?: string }) => {
   const [step, setStep] = useState(1);
@@ -32,11 +33,24 @@ const LeadForm = ({ id }: { id?: string }) => {
     setSubmitting(true);
     try {
       const utm = getUtmParams();
-      await fetch(GHL_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, ...utm }),
-      });
+      await Promise.all([
+        fetch(GHL_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, ...utm }),
+        }),
+        saveLead({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          credit_range: form.creditRange,
+          has_negatives: form.hasNegatives,
+          wants_funding: form.wantsFunding,
+          credit_goal: form.creditGoal,
+          source: "lead_form",
+          ...utm,
+        }),
+      ]);
       setSubmitted(true);
     } catch {
       toast({ title: "Something went wrong. Please call us directly.", variant: "destructive" });

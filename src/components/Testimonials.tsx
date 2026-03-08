@@ -1,9 +1,7 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 import clientAdeyinka from "@/assets/client-adeyinka.png";
 import clientJackie from "@/assets/client-jackie.png";
@@ -21,19 +19,29 @@ const testimonials = [
 
 const Testimonials = () => {
   const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const total = testimonials.length;
 
-  const prev = useCallback(() => setCurrent((c) => (c === 0 ? testimonials.length - 1 : c - 1)), []);
-  const next = useCallback(() => setCurrent((c) => (c === testimonials.length - 1 ? 0 : c + 1)), []);
+  const go = useCallback(
+    (dir: 1 | -1) => setCurrent((c) => (c + dir + total) % total),
+    [total]
+  );
 
   useEffect(() => {
-    const timer = setInterval(next, 5000);
-    return () => clearInterval(timer);
-  }, [next]);
+    if (paused) return;
+    const id = setInterval(() => go(1), 5000);
+    return () => clearInterval(id);
+  }, [paused, go]);
 
-  const t = testimonials[current];
+  const getOffset = (index: number) => {
+    let diff = index - current;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    return diff;
+  };
 
   return (
-    <ScrollReveal as="section" id="testimonials" className="bg-secondary py-16 lg:py-24">
+    <ScrollReveal as="section" id="testimonials" className="bg-secondary py-16 lg:py-24 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="mb-12 text-center">
           <RevealItem>
@@ -49,60 +57,118 @@ const Testimonials = () => {
         </div>
 
         <RevealItem>
-          <div className="mx-auto max-w-lg">
-            <div className="relative">
-              <motion.div
-                key={current}
-                initial={{ opacity: 0, x: 60 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -60 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-              >
-                <Card className="border-border bg-card shadow-sm">
-                  <CardContent className="p-6">
-                    <img
-                      src={t.image}
-                      alt={`${t.name} credit score results`}
-                      className="mb-5 w-full rounded-xl"
-                    />
-                    <p className="mb-3 text-base text-foreground">"{t.text}"</p>
-                    <p className="font-bold text-foreground">{t.name}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
+          <div
+            className="relative mx-auto flex items-center justify-center"
+            style={{ height: "620px", maxWidth: "1100px" }}
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            <div className="carousel-3d relative w-full h-full flex items-center justify-center">
+              {testimonials.map((t, i) => {
+                const offset = getOffset(i);
+                const absOffset = Math.abs(offset);
+                const isActive = offset === 0;
+                const visible = absOffset <= 2;
 
-              <Button
-                variant="outline"
-                size="icon"
-                className="absolute -left-4 top-1/2 -translate-y-1/2 rounded-full border-border bg-card shadow-md sm:-left-14"
-                onClick={prev}
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="absolute -right-4 top-1/2 -translate-y-1/2 rounded-full border-border bg-card shadow-md sm:-right-14"
-                onClick={next}
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </Button>
+                if (!visible) return null;
+
+                const x = offset * 300;
+                const z = -absOffset * 220;
+                const rotateY = offset * -15;
+                const scale = 1 - absOffset * 0.15;
+                const opacity = 1 - absOffset * 0.35;
+                const blur = absOffset * 3;
+
+                return (
+                  <motion.div
+                    key={i}
+                    className="absolute cursor-pointer"
+                    style={{
+                      width: "480px",
+                      zIndex: 10 - absOffset,
+                    }}
+                    animate={{
+                      x,
+                      z,
+                      rotateY,
+                      scale,
+                      opacity,
+                      filter: `blur(${blur}px)`,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    }}
+                    whileHover={
+                      isActive
+                        ? {
+                            scale: scale * 1.05,
+                            y: -8,
+                            boxShadow: "0 25px 60px -12px hsla(42, 52%, 53%, 0.35)",
+                          }
+                        : undefined
+                    }
+                    onClick={() => !isActive && setCurrent(i)}
+                  >
+                    <div
+                      className={`overflow-hidden rounded-2xl border bg-card shadow-xl ${
+                        isActive ? "border-primary/30 carousel-float" : "border-border"
+                      }`}
+                      style={
+                        isActive
+                          ? {
+                              boxShadow: "0 20px 50px -12px hsla(42, 52%, 53%, 0.25), 0 0 40px hsla(42, 52%, 53%, 0.08)",
+                            }
+                          : {
+                              boxShadow: "0 10px 30px -10px hsla(0, 0%, 0%, 0.15)",
+                            }
+                      }
+                    >
+                      <img
+                        src={t.image}
+                        alt={`${t.name} credit score results`}
+                        className="h-auto w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="p-5">
+                        <p className="mb-2 text-sm text-foreground">"{t.text}"</p>
+                        <p className="font-bold text-foreground">{t.name}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
 
-            <div className="mt-6 flex justify-center gap-2">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    i === current ? "w-8 bg-primary" : "w-2.5 bg-muted-foreground/30"
-                  }`}
-                  aria-label={`Go to testimonial ${i + 1}`}
-                />
-              ))}
-            </div>
+            <button
+              onClick={() => go(-1)}
+              className="absolute left-2 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/80 text-foreground shadow-md backdrop-blur transition-colors hover:bg-primary hover:text-primary-foreground"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => go(1)}
+              className="absolute right-2 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/80 text-foreground shadow-md backdrop-blur transition-colors hover:bg-primary hover:text-primary-foreground"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+
+          <div className="mt-8 flex items-center justify-center gap-2">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`h-2 rounded-full transition-all duration-500 ${
+                  i === current
+                    ? "w-8 bg-primary"
+                    : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                }`}
+                aria-label={`Go to testimonial ${i + 1}`}
+              />
+            ))}
           </div>
         </RevealItem>
       </div>

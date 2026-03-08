@@ -136,6 +136,46 @@ const AdminDashboard = () => {
     navigate("/admin");
   };
 
+  const resetEvents = async (filter?: { event_type?: string }) => {
+    let query = supabase.from("site_events").delete();
+    if (filter?.event_type) {
+      query = query.eq("event_type", filter.event_type);
+    } else {
+      query = query.neq("id", "00000000-0000-0000-0000-000000000000"); // delete all
+    }
+    await query;
+    fetchData();
+  };
+
+  const resetLeads = async () => {
+    await supabase.from("leads").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    fetchData();
+  };
+
+  const ResetButton = ({ onConfirm, label }: { onConfirm: () => void; label: string }) => (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-destructive hover:text-destructive hover:bg-destructive/10">
+          <Trash2 className="h-3 w-3" /> Reset
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Reset {label}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete all {label.toLowerCase()} data. This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            Delete All
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+
   // --- Analytics computations ---
   const now = new Date();
   const today = now.toISOString().split("T")[0];

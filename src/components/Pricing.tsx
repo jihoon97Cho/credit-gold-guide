@@ -22,7 +22,7 @@ const features = [
 const plans = [
   { name: "One-Time Payment", price: "$799", period: "one-time", desc: "Pay once — we handle everything.", popular: false, link: "/book", type: "call" },
   { name: "Monthly Plan", price: "$125", period: "/month", desc: "Flexible monthly payments while we work on your credit.", popular: true, link: "/book", type: "call" },
-  { name: "Bankruptcy Rebuilding", price: "Custom", period: "pricing", desc: "Personalized strategy and pricing for active or discharged bankruptcies.", popular: false, link: "/book", type: "call" },
+  { name: "Bankruptcy Rebuilding", price: "Call For Pricing", period: "", desc: "Personalized strategy and pricing for active or discharged bankruptcies.", popular: false, link: "/book", type: "call" },
 ];
 
 const Pricing = () => {

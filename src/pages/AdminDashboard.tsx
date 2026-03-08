@@ -909,9 +909,12 @@ const AdminDashboard = () => {
           {/* EVENTS TABLE TAB */}
           <TabsContent value="events">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Site Events</CardTitle>
-                <CardDescription>{events.length} events tracked</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">Site Events</CardTitle>
+                  <CardDescription>{events.length} events tracked</CardDescription>
+                </div>
+                <ResetButton onConfirm={() => resetEvents()} label="Events" />
               </CardHeader>
               <CardContent className="overflow-x-auto">
                 <Table>

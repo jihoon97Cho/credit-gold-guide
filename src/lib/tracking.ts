@@ -2,11 +2,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 export async function trackEvent(eventType: string, page?: string, metadata?: Record<string, unknown>) {
   try {
-    await supabase.from("site_events").insert({
+    await supabase.from("site_events").insert([{
       event_type: eventType,
       page: page || window.location.pathname,
-      metadata: metadata || {},
-    });
+      metadata: (metadata || {}) as any,
+    }]);
   } catch {
     // Silent fail — don't break UX for analytics
   }

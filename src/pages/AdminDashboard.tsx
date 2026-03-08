@@ -31,7 +31,7 @@ interface SiteEvent {
   id: string;
   event_type: string;
   page: string | null;
-  metadata: Record<string, unknown> | null;
+  metadata: any;
   created_at: string;
 }
 

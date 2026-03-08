@@ -516,14 +516,17 @@ const AdminDashboard = () => {
                     {/* Legend */}
                     <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground">
                       <span>Less</span>
-                      {[0, 0.25, 0.5, 0.75, 1].map((v) => (
-                        <div
-                          key={v}
-                          className="h-3 w-3 rounded-sm border border-border/30"
-                          style={{ backgroundColor: v > 0 ? `hsl(42, 52%, 53%, ${0.1 + v * 0.85})` : "hsl(var(--muted) / 0.3)" }}
-                        />
-                      ))}
-                      <span>More</span>
+                       {[0, 0.25, 0.5, 0.75, 1].map((v) => {
+                         const hue = 120 * (1 - v);
+                         return (
+                           <div
+                             key={v}
+                             className="h-3 w-3 rounded-sm border border-border/30"
+                             style={{ backgroundColor: v > 0 ? `hsl(${hue}, 70%, 45%, ${0.2 + v * 0.8})` : "hsl(var(--muted) / 0.3)" }}
+                           />
+                         );
+                       })}
+                       <span>More</span>
                     </div>
                   </div>
                 </CardContent>

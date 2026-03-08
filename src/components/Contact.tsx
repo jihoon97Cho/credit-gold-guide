@@ -28,11 +28,21 @@ const Contact = () => {
     setSubmitting(true);
     try {
       const utm = getUtmParams();
-      await fetch(GHL_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, ...utm }),
-      });
+      await Promise.all([
+        fetch(GHL_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, ...utm }),
+        }),
+        saveLead({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          message: form.message,
+          source: "contact_form",
+          ...utm,
+        }),
+      ]);
       setSubmitted(true);
     } catch {
       toast({

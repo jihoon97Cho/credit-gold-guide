@@ -6,16 +6,18 @@ import { ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ScrollIndicator = () => (
-  <motion.div
-    animate={{ y: [0, 10, 0] }}
-    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-    className="fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-2 lg:flex"
+  <motion.button
+    onClick={() => document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" })}
+    animate={{ y: [0, 8, 0] }}
+    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+    className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-3 rounded-full border border-primary/20 bg-background/80 px-3 py-5 shadow-lg backdrop-blur-sm lg:flex hover:border-primary/40 transition-colors"
+    aria-label="Scroll to booking"
   >
-    <span className="text-sm font-bold text-destructive [writing-mode:vertical-lr] tracking-widest uppercase">
-      Book Below
+    <span className="text-xs font-semibold text-primary uppercase tracking-[0.2em] [writing-mode:vertical-lr]">
+      Book Now
     </span>
-    <ArrowDown className="h-7 w-7 text-destructive" strokeWidth={3} />
-  </motion.div>
+    <ArrowDown className="h-5 w-5 text-primary" strokeWidth={2.5} />
+  </motion.button>
 );
 
 const BookingPage = () => {

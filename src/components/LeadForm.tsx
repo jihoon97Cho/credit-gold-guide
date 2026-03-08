@@ -8,6 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { getUtmParams } from "@/lib/utm";
 import { GHL_WEBHOOK_URL } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
+import { saveLead } from "@/lib/tracking";
+import { useToast } from "@/hooks/use-toast";
 
 const LeadForm = ({ id }: { id?: string }) => {
   const [step, setStep] = useState(1);

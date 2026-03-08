@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CheckCircle, ChevronDown, ExternalLink, Calendar } from "lucide-react";
+import { CheckCircle, ChevronDown, ExternalLink, Calendar, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
@@ -83,10 +83,15 @@ const ThankYouPage = () => {
                   <p className="text-muted-foreground text-sm">Loom video coming soon</p>
                 </div>
               </div>
-            </RevealItem>
-          </ScrollReveal>
+             </RevealItem>
+             <RevealItem>
+               <div className="flex justify-center">
+                 <ArrowDown className="h-8 w-8 text-muted-foreground/50 animate-bounce" />
+               </div>
+             </RevealItem>
+           </ScrollReveal>
 
-          {/* 3. Testimonial Video */}
+           {/* 3. Testimonial Video */}
           <ScrollReveal className="space-y-4">
             <RevealItem>
               <div className="rounded-2xl border border-border bg-card p-5 sm:p-8 shadow-sm">
@@ -103,10 +108,15 @@ const ThankYouPage = () => {
                   </video>
                 </div>
               </div>
-            </RevealItem>
-          </ScrollReveal>
+             </RevealItem>
+             <RevealItem>
+               <div className="flex justify-center">
+                 <ArrowDown className="h-8 w-8 text-muted-foreground/50 animate-bounce" />
+               </div>
+             </RevealItem>
+           </ScrollReveal>
 
-          {/* 4. Final Step — Credit Monitoring */}
+           {/* 4. Final Step — Credit Monitoring */}
           <ScrollReveal className="space-y-4 pb-4">
             <RevealItem>
               <div className="rounded-2xl border border-border bg-card p-5 sm:p-8 shadow-sm">

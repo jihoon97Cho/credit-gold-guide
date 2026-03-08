@@ -256,16 +256,33 @@ const AdminDashboard = () => {
     }))
     .filter((_, i, arr) => i === 0 || arr.slice(0, i).some((d) => d.value > 0));
 
-  // Leads by hour of day
+  // Leads by hour of day (EST)
   const hourDist = new Array(24).fill(0);
   leads.forEach((l) => {
-    const hour = new Date(l.created_at).getHours();
-    hourDist[hour]++;
+    const estHour = parseInt(
+      new Date(l.created_at).toLocaleString("en-US", { hour: "2-digit", hour12: false, timeZone: "America/New_York" })
+    );
+    hourDist[estHour]++;
   });
   const hourData = hourDist.map((count, hour) => ({
     hour: `${hour.toString().padStart(2, "0")}:00`,
     count,
   }));
+
+  // Heatmap: day-of-week × hour from page_view events (EST)
+  const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const heatmapGrid: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0));
+  events
+    .filter((e) => e.event_type === "page_view")
+    .forEach((e) => {
+      const d = new Date(e.created_at);
+      const estStr = d.toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short", hour: "2-digit", hour12: false });
+      const parts = estStr.split(", ");
+      const dayIdx = DAYS.indexOf(parts[0]);
+      const hr = parseInt(parts[1]);
+      if (dayIdx >= 0 && !isNaN(hr)) heatmapGrid[dayIdx][hr]++;
+    });
+  const heatmapMax = Math.max(1, ...heatmapGrid.flat());
 
   // Recent leads (last 5)
   const recentLeads = leads.slice(0, 5);
@@ -438,8 +455,8 @@ const AdminDashboard = () => {
               {/* Peak Hours */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Lead Activity by Hour</CardTitle>
-                  <CardDescription>When visitors submit forms</CardDescription>
+                  <CardTitle className="text-base">Lead Activity by Hour (EST)</CardTitle>
+                  <CardDescription>When visitors submit forms (Eastern Time)</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={280}>
@@ -451,6 +468,62 @@ const AdminDashboard = () => {
                       <Bar dataKey="count" name="Leads" fill="hsl(220, 60%, 55%)" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Traffic Heatmap */}
+              <Card className="lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
+                  </CardTitle>
+                  <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
+                </CardHeader>
+                <CardContent className="overflow-x-auto">
+                  <div className="min-w-[640px]">
+                    {/* Hour labels */}
+                    <div className="mb-1 flex">
+                      <div className="w-12 shrink-0" />
+                      {Array.from({ length: 24 }, (_, h) => (
+                        <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
+                          {h.toString().padStart(2, "0")}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Grid rows */}
+                    {DAYS.map((day, di) => (
+                      <div key={day} className="flex items-center gap-0">
+                        <div className="w-12 shrink-0 text-right pr-2 text-xs font-medium text-muted-foreground">{day}</div>
+                        {heatmapGrid[di].map((val, hi) => {
+                          const intensity = val / heatmapMax;
+                          return (
+                            <div
+                              key={hi}
+                              className="flex-1 aspect-square rounded-sm border border-border/30 transition-colors"
+                              style={{
+                                backgroundColor: intensity > 0
+                                  ? `hsl(42, 52%, 53%, ${0.1 + intensity * 0.85})`
+                                  : "hsl(var(--muted) / 0.3)",
+                              }}
+                              title={`${day} ${hi.toString().padStart(2, "0")}:00 EST — ${val} view${val !== 1 ? "s" : ""}`}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))}
+                    {/* Legend */}
+                    <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground">
+                      <span>Less</span>
+                      {[0, 0.25, 0.5, 0.75, 1].map((v) => (
+                        <div
+                          key={v}
+                          className="h-3 w-3 rounded-sm border border-border/30"
+                          style={{ backgroundColor: v > 0 ? `hsl(42, 52%, 53%, ${0.1 + v * 0.85})` : "hsl(var(--muted) / 0.3)" }}
+                        />
+                      ))}
+                      <span>More</span>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>

@@ -246,8 +246,7 @@ const AdminDashboard = () => {
   const funnelPages = [
     { path: "/", label: "Home" },
     { path: "/book", label: "Book a Call" },
-    { path: "/contact", label: "Contact" },
-    { path: "/thank-you", label: "Thank You" },
+    { path: "/thank-you", label: "Thank You Page" },
   ];
   const funnelData = funnelPages
     .map(({ path, label }, i) => ({

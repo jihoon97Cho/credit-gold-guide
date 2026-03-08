@@ -9,11 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell,
-  RadialBarChart, RadialBar, Legend,
+  RadialBarChart, RadialBar, Legend, FunnelChart, Funnel, LabelList,
 } from "recharts";
 import {
   LogOut, Users, TrendingUp, FileText, Activity, ExternalLink,
-  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye,
+  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 

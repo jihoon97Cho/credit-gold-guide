@@ -17,8 +17,14 @@ import {
 } from "recharts";
 import {
   LogOut, Users, TrendingUp, FileText, Activity, ExternalLink,
-  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter, Trash2,
+  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter, Trash2, CalendarIcon,
 } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import logo from "@/assets/logo.png";
 
 interface Lead {

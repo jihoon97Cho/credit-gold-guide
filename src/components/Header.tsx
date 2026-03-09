@@ -83,9 +83,6 @@ const Header = () => {
               {l.label}
             </button>
           ))}
-          <button onClick={goToContact} className="block w-full py-3 text-left text-foreground">
-            Contact
-          </button>
           <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
             Get Started
           </Button>

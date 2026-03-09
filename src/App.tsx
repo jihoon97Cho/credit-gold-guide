@@ -25,7 +25,7 @@ const App = () => (
           <PageViewTracker />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/contact" element={<ContactPage />} />
+            
             <Route path="/book" element={<BookingPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/admin" element={<AdminLogin />} />

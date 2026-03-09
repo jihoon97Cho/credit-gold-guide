@@ -709,12 +709,14 @@ const AdminDashboard = () => {
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Funnel Chart */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-base">
-                    <Filter className="h-4 w-4 text-primary" /> Visitor Funnel
-                  </CardTitle>
-                  <CardDescription>Unique visitors at each stage (by session)</CardDescription>
-                </CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Filter className="h-4 w-4 text-primary" /> Visitor Funnel
+                    </CardTitle>
+                    <CardDescription>Unique visitors at each stage (by session)</CardDescription>
+                  </div>
+                  <DateRangeFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDateChange={setFunnelCustomDate} />
                 <CardContent>
                   {funnelData.length > 0 && funnelData[0].value > 0 ? (
                     <ResponsiveContainer width="100%" height={300}>

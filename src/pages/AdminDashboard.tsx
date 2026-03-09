@@ -616,6 +616,7 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-2">
                     <DateRangeFilter value={heatmapRange} onChange={setHeatmapRange} customDate={heatmapCustomDate} onCustomDateChange={setHeatmapCustomDate} />
                     <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
+                  </div>
                 </CardHeader>
                 <CardContent className="overflow-x-auto">
                   <div className="min-w-[640px]">

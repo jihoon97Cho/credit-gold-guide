@@ -17,8 +17,14 @@ import {
 } from "recharts";
 import {
   LogOut, Users, TrendingUp, FileText, Activity, ExternalLink,
-  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter, Trash2,
+  ArrowUpRight, ArrowDownRight, Clock, Target, Zap, Eye, Filter, Trash2, CalendarIcon,
 } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import logo from "@/assets/logo.png";
 
 interface Lead {
@@ -102,6 +108,10 @@ const AdminDashboard = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [events, setEvents] = useState<SiteEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [heatmapRange, setHeatmapRange] = useState<string>("all");
+  const [heatmapCustomDate, setHeatmapCustomDate] = useState<Date | undefined>();
+  const [funnelRange, setFunnelRange] = useState<string>("all");
+  const [funnelCustomDate, setFunnelCustomDate] = useState<Date | undefined>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -268,6 +278,73 @@ const AdminDashboard = () => {
     return page;
   };
 
+  // Date range filter helper
+  const filterByRange = (items: SiteEvent[], range: string, customDate?: Date) => {
+    if (range === "all") return items;
+    const now = new Date();
+    let start: Date;
+    if (range === "today") {
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    } else if (range === "week") {
+      start = new Date(Date.now() - 7 * 86400000);
+    } else if (range === "month") {
+      start = new Date(Date.now() - 30 * 86400000);
+    } else if (range === "custom" && customDate) {
+      start = new Date(customDate.getFullYear(), customDate.getMonth(), customDate.getDate());
+      const end = new Date(start.getTime() + 86400000);
+      return items.filter((e) => {
+        const d = new Date(e.created_at);
+        return d >= start && d < end;
+      });
+    } else {
+      return items;
+    }
+    return items.filter((e) => new Date(e.created_at) >= start);
+  };
+
+  const DateRangeFilter = ({ value, onChange, customDate, onCustomDateChange }: {
+    value: string; onChange: (v: string) => void;
+    customDate?: Date; onCustomDateChange: (d: Date | undefined) => void;
+  }) => (
+    <div className="flex items-center gap-2">
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="h-8 w-[130px] text-xs">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Time</SelectItem>
+          <SelectItem value="today">Today</SelectItem>
+          <SelectItem value="week">Last 7 Days</SelectItem>
+          <SelectItem value="month">Last 30 Days</SelectItem>
+          <SelectItem value="custom">Specific Date</SelectItem>
+        </SelectContent>
+      </Select>
+      {value === "custom" && (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs">
+              <CalendarIcon className="h-3 w-3" />
+              {customDate ? format(customDate, "MMM d, yyyy") : "Pick date"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={customDate}
+              onSelect={onCustomDateChange}
+              initialFocus
+              className="p-3 pointer-events-auto"
+            />
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
+  );
+
+  // Filtered events for heatmap and funnel
+  const heatmapEvents = filterByRange(events, heatmapRange, heatmapCustomDate);
+  const funnelEvents = filterByRange(events, funnelRange, funnelCustomDate);
+
   // Page views from events
   const pageViews = events
     .filter((e) => e.event_type === "page_view")
@@ -281,8 +358,8 @@ const AdminDashboard = () => {
     .slice(0, 10)
     .map(([page, views]) => ({ page: formatPageName(page), views }));
 
-  // Unique visitors per page (by session_id in metadata)
-  const pageSessionMap = events
+  // Unique visitors per page (by session_id in metadata) — for funnel, use filtered events
+  const funnelSessionMap = funnelEvents
     .filter((e) => e.event_type === "page_view")
     .reduce<Record<string, Set<string>>>((acc, e) => {
       const page = e.page || "/";
@@ -301,7 +378,7 @@ const AdminDashboard = () => {
   const funnelData = funnelPages
     .map(({ path, label }, i) => ({
       name: label,
-      value: pageSessionMap[path]?.size || 0,
+      value: funnelSessionMap[path]?.size || 0,
       fill: COLORS[i % COLORS.length],
     }))
     .filter((_, i, arr) => i === 0 || arr.slice(0, i).some((d) => d.value > 0));
@@ -319,10 +396,10 @@ const AdminDashboard = () => {
     count,
   }));
 
-  // Heatmap: day-of-week × hour from page_view events (EST)
+  // Heatmap: day-of-week × hour from page_view events (EST) — use filtered events
   const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const heatmapGrid: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0));
-  events
+  heatmapEvents
     .filter((e) => e.event_type === "page_view")
     .forEach((e) => {
       const d = new Date(e.created_at);
@@ -529,14 +606,17 @@ const AdminDashboard = () => {
 
               {/* Traffic Heatmap */}
               <Card className="lg:col-span-2">
-                <CardHeader className="flex flex-row items-center justify-between">
+                <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
                   <div>
                     <CardTitle className="flex items-center gap-2 text-base">
                       <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
                     </CardTitle>
                     <CardDescription>Page views by day of week &amp; hour — darker = more visitors</CardDescription>
                   </div>
-                  <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
+                  <div className="flex items-center gap-2">
+                    <DateRangeFilter value={heatmapRange} onChange={setHeatmapRange} customDate={heatmapCustomDate} onCustomDateChange={setHeatmapCustomDate} />
+                    <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
+                  </div>
                 </CardHeader>
                 <CardContent className="overflow-x-auto">
                   <div className="min-w-[640px]">
@@ -629,11 +709,14 @@ const AdminDashboard = () => {
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Funnel Chart */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-base">
-                    <Filter className="h-4 w-4 text-primary" /> Visitor Funnel
-                  </CardTitle>
-                  <CardDescription>Unique visitors at each stage (by session)</CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Filter className="h-4 w-4 text-primary" /> Visitor Funnel
+                    </CardTitle>
+                    <CardDescription>Unique visitors at each stage (by session)</CardDescription>
+                  </div>
+                  <DateRangeFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDateChange={setFunnelCustomDate} />
                 </CardHeader>
                 <CardContent>
                   {funnelData.length > 0 && funnelData[0].value > 0 ? (
@@ -719,11 +802,11 @@ const AdminDashboard = () => {
                 <CardDescription>Unique sessions per page across all tracked pages</CardDescription>
               </CardHeader>
               <CardContent>
-                {Object.keys(pageSessionMap).length > 0 ? (
+                {Object.keys(funnelSessionMap).length > 0 ? (
                   <ResponsiveContainer width="100%" height={280}>
                     <BarChart
-                      data={Object.entries(pageSessionMap)
-                        .map(([page, sessions]) => ({ page, unique: sessions.size }))
+                      data={Object.entries(funnelSessionMap)
+                        .map(([page, sessions]) => ({ page, unique: (sessions as Set<string>).size }))
                         .sort((a, b) => b.unique - a.unique)}
                       layout="vertical"
                     >

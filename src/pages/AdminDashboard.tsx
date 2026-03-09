@@ -796,11 +796,11 @@ const AdminDashboard = () => {
                 <CardDescription>Unique sessions per page across all tracked pages</CardDescription>
               </CardHeader>
               <CardContent>
-                {Object.keys(pageSessionMap).length > 0 ? (
+                {Object.keys(funnelSessionMap).length > 0 ? (
                   <ResponsiveContainer width="100%" height={280}>
                     <BarChart
-                      data={Object.entries(pageSessionMap)
-                        .map(([page, sessions]) => ({ page, unique: sessions.size }))
+                      data={Object.entries(funnelSessionMap)
+                        .map(([page, sessions]) => ({ page, unique: (sessions as Set<string>).size }))
                         .sort((a, b) => b.unique - a.unique)}
                       layout="vertical"
                     >

@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Index from "./pages/Index";
-import ContactPage from "./pages/ContactPage";
+
 import ThankYouPage from "./pages/ThankYouPage";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";
@@ -25,7 +25,7 @@ const App = () => (
           <PageViewTracker />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/contact" element={<ContactPage />} />
+            
             <Route path="/book" element={<BookingPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/admin" element={<AdminLogin />} />

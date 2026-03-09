@@ -540,15 +540,19 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent className="overflow-x-auto">
                   <div className="min-w-[640px]">
-                    {/* Hour labels */}
-                    <div className="mb-1 flex">
-                      <div className="w-12 shrink-0" />
-                      {Array.from({ length: 24 }, (_, h) => (
-                        <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
-                          {h.toString().padStart(2, "0")}
-                        </div>
-                      ))}
-                    </div>
+                     {/* Hour labels */}
+                     <div className="mb-1 flex">
+                       <div className="w-12 shrink-0" />
+                       {Array.from({ length: 24 }, (_, h) => {
+                         const isPM = h >= 12;
+                         const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+                         return (
+                           <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
+                             {displayHour}{isPM ? 'p' : 'a'}
+                           </div>
+                         );
+                       })}
+                     </div>
                     {/* Grid rows */}
                     {DAYS.map((day, di) => (
                       <div key={day} className="flex items-center gap-0">
@@ -566,7 +570,11 @@ const AdminDashboard = () => {
                                    ? `hsl(${hue}, 70%, 45%, ${0.2 + intensity * 0.8})`
                                    : "hsl(var(--muted) / 0.3)",
                                }}
-                               title={`${day} ${hi.toString().padStart(2, "0")}:00 EST — ${val} view${val !== 1 ? "s" : ""}`}
+                                title={`${day} ${(() => {
+                                  const isPM = hi >= 12;
+                                  const displayHour = hi === 0 ? 12 : hi > 12 ? hi - 12 : hi;
+                                  return `${displayHour}:00 ${isPM ? "PM" : "AM"}`;
+                                })()} EST — ${val} view${val !== 1 ? "s" : ""}`}
                              />
                            );
                          })}

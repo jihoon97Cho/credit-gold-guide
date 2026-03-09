@@ -278,6 +278,73 @@ const AdminDashboard = () => {
     return page;
   };
 
+  // Date range filter helper
+  const filterByRange = (items: SiteEvent[], range: string, customDate?: Date) => {
+    if (range === "all") return items;
+    const now = new Date();
+    let start: Date;
+    if (range === "today") {
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    } else if (range === "week") {
+      start = new Date(Date.now() - 7 * 86400000);
+    } else if (range === "month") {
+      start = new Date(Date.now() - 30 * 86400000);
+    } else if (range === "custom" && customDate) {
+      start = new Date(customDate.getFullYear(), customDate.getMonth(), customDate.getDate());
+      const end = new Date(start.getTime() + 86400000);
+      return items.filter((e) => {
+        const d = new Date(e.created_at);
+        return d >= start && d < end;
+      });
+    } else {
+      return items;
+    }
+    return items.filter((e) => new Date(e.created_at) >= start);
+  };
+
+  const DateRangeFilter = ({ value, onChange, customDate, onCustomDateChange }: {
+    value: string; onChange: (v: string) => void;
+    customDate?: Date; onCustomDateChange: (d: Date | undefined) => void;
+  }) => (
+    <div className="flex items-center gap-2">
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="h-8 w-[130px] text-xs">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Time</SelectItem>
+          <SelectItem value="today">Today</SelectItem>
+          <SelectItem value="week">Last 7 Days</SelectItem>
+          <SelectItem value="month">Last 30 Days</SelectItem>
+          <SelectItem value="custom">Specific Date</SelectItem>
+        </SelectContent>
+      </Select>
+      {value === "custom" && (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs">
+              <CalendarIcon className="h-3 w-3" />
+              {customDate ? format(customDate, "MMM d, yyyy") : "Pick date"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={customDate}
+              onSelect={onCustomDateChange}
+              initialFocus
+              className="p-3 pointer-events-auto"
+            />
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
+  );
+
+  // Filtered events for heatmap and funnel
+  const heatmapEvents = filterByRange(events, heatmapRange, heatmapCustomDate);
+  const funnelEvents = filterByRange(events, funnelRange, funnelCustomDate);
+
   // Page views from events
   const pageViews = events
     .filter((e) => e.event_type === "page_view")
@@ -291,8 +358,8 @@ const AdminDashboard = () => {
     .slice(0, 10)
     .map(([page, views]) => ({ page: formatPageName(page), views }));
 
-  // Unique visitors per page (by session_id in metadata)
-  const pageSessionMap = events
+  // Unique visitors per page (by session_id in metadata) — for funnel, use filtered events
+  const funnelSessionMap = funnelEvents
     .filter((e) => e.event_type === "page_view")
     .reduce<Record<string, Set<string>>>((acc, e) => {
       const page = e.page || "/";
@@ -311,7 +378,7 @@ const AdminDashboard = () => {
   const funnelData = funnelPages
     .map(({ path, label }, i) => ({
       name: label,
-      value: pageSessionMap[path]?.size || 0,
+      value: funnelSessionMap[path]?.size || 0,
       fill: COLORS[i % COLORS.length],
     }))
     .filter((_, i, arr) => i === 0 || arr.slice(0, i).some((d) => d.value > 0));
@@ -329,10 +396,10 @@ const AdminDashboard = () => {
     count,
   }));
 
-  // Heatmap: day-of-week × hour from page_view events (EST)
+  // Heatmap: day-of-week × hour from page_view events (EST) — use filtered events
   const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const heatmapGrid: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0));
-  events
+  heatmapEvents
     .filter((e) => e.event_type === "page_view")
     .forEach((e) => {
       const d = new Date(e.created_at);

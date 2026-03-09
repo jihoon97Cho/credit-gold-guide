@@ -717,6 +717,7 @@ const AdminDashboard = () => {
                     <CardDescription>Unique visitors at each stage (by session)</CardDescription>
                   </div>
                   <DateRangeFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDateChange={setFunnelCustomDate} />
+                </CardHeader>
                 <CardContent>
                   {funnelData.length > 0 && funnelData[0].value > 0 ? (
                     <ResponsiveContainer width="100%" height={300}>

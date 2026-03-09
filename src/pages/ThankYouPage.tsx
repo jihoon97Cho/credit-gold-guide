@@ -79,8 +79,13 @@ const ThankYouPage = () => {
                 <p className="mb-5 text-sm text-muted-foreground leading-relaxed">
                   Watch this quick video so you know what we'll cover and how to prepare.
                 </p>
-                <div className="aspect-video w-full overflow-hidden rounded-xl bg-muted flex items-center justify-center">
-                  <p className="text-muted-foreground text-sm">Loom video coming soon</p>
+                <div className="aspect-video w-full overflow-hidden rounded-xl bg-muted">
+                  <iframe
+                    src="https://www.loom.com/embed/868f95c290314e5285f29887d63507a3"
+                    frameBorder="0"
+                    allowFullScreen
+                    className="h-full w-full"
+                  />
                 </div>
               </div>
              </RevealItem>

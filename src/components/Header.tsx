@@ -47,9 +47,6 @@ const Header = () => {
               {l.label}
             </button>
           ))}
-          <button onClick={goToContact} className="text-sm text-muted-foreground transition-colors hover:text-primary">
-            Contact
-          </button>
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">

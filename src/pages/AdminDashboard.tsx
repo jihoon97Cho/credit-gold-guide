@@ -570,7 +570,11 @@ const AdminDashboard = () => {
                                    ? `hsl(${hue}, 70%, 45%, ${0.2 + intensity * 0.8})`
                                    : "hsl(var(--muted) / 0.3)",
                                }}
-                               title={`${day} ${hi.toString().padStart(2, "0")}:00 EST — ${val} view${val !== 1 ? "s" : ""}`}
+                                title={`${day} ${(() => {
+                                  const isPM = hi >= 12;
+                                  const displayHour = hi === 0 ? 12 : hi > 12 ? hi - 12 : hi;
+                                  return `${displayHour}:00 ${isPM ? "PM" : "AM"}`;
+                                })()} EST — ${val} view${val !== 1 ? "s" : ""}`}
                              />
                            );
                          })}

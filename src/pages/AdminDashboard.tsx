@@ -540,15 +540,19 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent className="overflow-x-auto">
                   <div className="min-w-[640px]">
-                    {/* Hour labels */}
-                    <div className="mb-1 flex">
-                      <div className="w-12 shrink-0" />
-                      {Array.from({ length: 24 }, (_, h) => (
-                        <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
-                          {h.toString().padStart(2, "0")}
-                        </div>
-                      ))}
-                    </div>
+                     {/* Hour labels */}
+                     <div className="mb-1 flex">
+                       <div className="w-12 shrink-0" />
+                       {Array.from({ length: 24 }, (_, h) => {
+                         const isPM = h >= 12;
+                         const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+                         return (
+                           <div key={h} className="flex-1 text-center text-[9px] text-muted-foreground">
+                             {displayHour}{isPM ? 'p' : 'a'}
+                           </div>
+                         );
+                       })}
+                     </div>
                     {/* Grid rows */}
                     {DAYS.map((day, di) => (
                       <div key={day} className="flex items-center gap-0">

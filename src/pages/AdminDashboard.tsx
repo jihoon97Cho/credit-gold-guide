@@ -108,6 +108,10 @@ const AdminDashboard = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [events, setEvents] = useState<SiteEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [heatmapRange, setHeatmapRange] = useState<string>("all");
+  const [heatmapCustomDate, setHeatmapCustomDate] = useState<Date | undefined>();
+  const [funnelRange, setFunnelRange] = useState<string>("all");
+  const [funnelCustomDate, setFunnelCustomDate] = useState<Date | undefined>();
   const navigate = useNavigate();
 
   useEffect(() => {

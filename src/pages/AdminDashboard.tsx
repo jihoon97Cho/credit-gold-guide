@@ -327,11 +327,13 @@ const AdminDashboard = () => {
               {customDate ? format(customDate, "MMM d, yyyy") : "Pick date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0 z-[9999]" align="start" side="bottom" sideOffset={8} avoidCollisions>
             <Calendar
               mode="single"
               selected={customDate}
-              onSelect={onCustomDateChange}
+              onSelect={(date) => {
+                onCustomDateChange(date);
+              }}
               initialFocus
               className="p-3 pointer-events-auto"
             />

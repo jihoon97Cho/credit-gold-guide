@@ -19,7 +19,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const isThankYouPage = location.pathname === "/thank-you";
+  const hideGetStarted = location.pathname === "/thank-you" || location.pathname === "/book";
 
   const scrollTo = (href: string) => {
     setMobileOpen(false);
@@ -58,7 +58,7 @@ const Header = () => {
           >
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
-          {!isThankYouPage && (
+          {!hideGetStarted && (
             <Button onClick={() => scrollTo("#pricing")} className="rounded-full">
               Get Started
             </Button>
@@ -86,7 +86,7 @@ const Header = () => {
               {l.label}
             </button>
           ))}
-          {!isThankYouPage && (
+          {!hideGetStarted && (
             <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
               Get Started
             </Button>

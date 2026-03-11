@@ -14,13 +14,12 @@ const scrollLinks = [
   { label: "FAQ", href: "#faq" },
 ];
 
-const isThankYouPage = () => location.pathname === "/thank-you";
-
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const isThankYouPage = location.pathname === "/thank-you";
 
   const scrollTo = (href: string) => {
     setMobileOpen(false);

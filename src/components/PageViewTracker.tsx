@@ -10,8 +10,19 @@ const PageViewTracker = () => {
   const prevPath = useRef<string | null>(null);
 
   useEffect(() => {
+    const isAdmin = location.pathname.startsWith("/admin");
+
+    // Disable Meta Pixel on admin pages
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      if (isAdmin) {
+        // Don't fire PageView on admin
+      } else {
+        (window as any).fbq('track', 'PageView');
+      }
+    }
+
     // Don't track admin pages
-    if (location.pathname.startsWith("/admin")) return;
+    if (isAdmin) return;
     // Avoid duplicate fires
     if (prevPath.current === location.pathname) return;
     prevPath.current = location.pathname;

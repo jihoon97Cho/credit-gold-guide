@@ -86,9 +86,11 @@ const Header = () => {
               {l.label}
             </button>
           ))}
-          <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
-            Get Started
-          </Button>
+          {!isThankYouPage && (
+            <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
+              Get Started
+            </Button>
+          )}
         </div>
       )}
     </header>

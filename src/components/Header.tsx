@@ -19,7 +19,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const isThankYouPage = location.pathname === "/thank-you";
+  const hideGetStarted = location.pathname === "/thank-you" || location.pathname === "/book";
 
   const scrollTo = (href: string) => {
     setMobileOpen(false);

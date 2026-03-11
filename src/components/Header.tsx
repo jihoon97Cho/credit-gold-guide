@@ -86,7 +86,7 @@ const Header = () => {
               {l.label}
             </button>
           ))}
-          {!isThankYouPage && (
+          {!hideGetStarted && (
             <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
               Get Started
             </Button>

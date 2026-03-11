@@ -14,6 +14,8 @@ const scrollLinks = [
   { label: "FAQ", href: "#faq" },
 ];
 
+const isThankYouPage = () => location.pathname === "/thank-you";
+
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();

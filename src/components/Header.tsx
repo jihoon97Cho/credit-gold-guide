@@ -58,9 +58,11 @@ const Header = () => {
           >
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
-          <Button onClick={() => scrollTo("#pricing")} className="rounded-full">
-            Get Started
-          </Button>
+          {!isThankYouPage && (
+            <Button onClick={() => scrollTo("#pricing")} className="rounded-full">
+              Get Started
+            </Button>
+          )}
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">

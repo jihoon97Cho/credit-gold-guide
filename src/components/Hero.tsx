@@ -9,6 +9,7 @@ import { useRef } from "react";
 
 const Hero = () => {
   const isMobile = useIsMobile();
+  const { spotsRemaining, spotsMonth } = useSiteSettings();
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({

@@ -493,7 +493,7 @@ const AdminDashboard = () => {
                 </h3>
                 <p className="text-xs text-zinc-500 mt-0.5">Auto-tracked stages</p>
               </div>
-              <DateFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDate={setFunnelCustomDate} />
+              <DateFilter value={funnelRange} onChange={setFunnelRange} dateFrom={funnelDateFrom} dateTo={funnelDateTo} onDateFrom={setFunnelDateFrom} onDateTo={setFunnelDateTo} />
             </div>
             <div className="space-y-2">
               {funnelSteps.map((step, i) => {

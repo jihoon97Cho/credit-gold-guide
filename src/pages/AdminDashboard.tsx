@@ -159,10 +159,11 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   const fetchData = useCallback(async () => {
-    const [eventsRes, metricsRes, pipelineRes] = await Promise.all([
+    const [eventsRes, metricsRes, pipelineRes, settingsRes] = await Promise.all([
       supabase.from("site_events").select("*").order("created_at", { ascending: false }).limit(1000),
       supabase.from("dashboard_metrics").select("*").eq("month_key", monthKey).maybeSingle(),
       supabase.from("client_pipeline").select("*").order("updated_at", { ascending: false }),
+      supabase.from("site_settings").select("key, value").in("key", ["spots_remaining", "spots_month"]),
     ]);
     setEvents(eventsRes.data || []);
     if (metricsRes.data) {
@@ -177,6 +178,11 @@ const AdminDashboard = () => {
       setBecameClientInput("0");
       setRevenueInput("0");
       setAdSpendInput("0");
+    }
+    if (settingsRes.data) {
+      const map = Object.fromEntries(settingsRes.data.map((r: any) => [r.key, r.value]));
+      if (map.spots_remaining) setSpotsRemainingInput(map.spots_remaining);
+      if (map.spots_month) setSpotsMonthInput(map.spots_month);
     }
     setPipeline((pipelineRes.data as any) || []);
     setLoading(false);

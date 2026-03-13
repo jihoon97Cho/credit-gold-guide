@@ -28,6 +28,9 @@ const FinalCTA = () => {
               Book a Call Now
             </Button>
           </motion.div>
+          <p className="mt-4 text-sm font-semibold text-primary">
+            ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{SPOTS_REMAINING} spots remaining</span> for {SPOTS_MONTH}
+          </p>
         </RevealItem>
       </div>
     </ScrollReveal>

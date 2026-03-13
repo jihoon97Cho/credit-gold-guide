@@ -36,6 +36,7 @@ const BookingPage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-16 lg:pb-0">
+      <AnnouncementBanner />
       <Header />
       <main className="container mx-auto px-4 py-16 lg:py-24">
         <div className="relative mx-auto max-w-3xl text-center">

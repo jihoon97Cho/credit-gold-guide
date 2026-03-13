@@ -1,3 +1,7 @@
+// ─── UPDATE THIS NUMBER EACH TIME YOU CLOSE A CLIENT ───
+export const SPOTS_REMAINING = 3;
+export const SPOTS_MONTH = "March";
+
 export const COMPANY = {
   name: "Ascend Solutions LLC",
   phone: "13526236543",

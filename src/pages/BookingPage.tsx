@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import MobileCTA from "@/components/MobileCTA";
 import { ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
-import { SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 const ScrollIndicator = () => (
   <motion.button

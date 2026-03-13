@@ -133,6 +133,10 @@ const AdminDashboard = () => {
   const [adSpendInput, setAdSpendInput] = useState("");
   const [savingMetrics, setSavingMetrics] = useState(false);
 
+  const [spotsRemainingInput, setSpotsRemainingInput] = useState("3");
+  const [spotsMonthInput, setSpotsMonthInput] = useState("March");
+  const [savingSpots, setSavingSpots] = useState(false);
+
   const [showAddClient, setShowAddClient] = useState(false);
   const [newClientName, setNewClientName] = useState("");
   const [newClientPhone, setNewClientPhone] = useState("");

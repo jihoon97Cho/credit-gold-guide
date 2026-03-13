@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileCTA from "@/components/MobileCTA";

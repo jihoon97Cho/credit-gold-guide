@@ -67,7 +67,7 @@ const BookingPage = () => {
           </div>
 
           <p className="mx-auto mb-4 max-w-2xl text-center text-lg font-semibold text-primary">
-            You're one step away — only <span className="font-extrabold">{SPOTS_REMAINING} spots left</span> for {SPOTS_MONTH}. Secure yours now.
+            You're one step away — only <span className="font-extrabold">{spotsRemaining} spots left</span> for {spotsMonth}. Secure yours now.
           </p>
 
           <div id="booking" className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-lg">

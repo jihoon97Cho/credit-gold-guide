@@ -1,5 +1,5 @@
 import { Phone } from "lucide-react";
-import { SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const FinalCTA = () => {
   const navigate = useNavigate();
+  const { spotsRemaining, spotsMonth } = useSiteSettings();
 
   return (
     <ScrollReveal as="section" id="contact" className="bg-secondary py-16 lg:py-24">
@@ -29,7 +30,7 @@ const FinalCTA = () => {
             </Button>
           </motion.div>
           <p className="mt-4 text-sm font-semibold text-primary">
-            ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{SPOTS_REMAINING} spots remaining</span> for {SPOTS_MONTH}
+            ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemaining} spots remaining</span> for {spotsMonth}
           </p>
         </RevealItem>
       </div>

@@ -222,6 +222,7 @@ const AdminDashboard = () => {
     setSavingSpots(false);
   };
 
+  const addClient = async () => {
     if (!newClientName.trim()) return;
     await supabase.from("client_pipeline").insert({
       name: newClientName.trim(),

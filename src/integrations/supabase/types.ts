@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_pipeline: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          stage: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      dashboard_metrics: {
+        Row: {
+          ad_spend: number
+          became_client: number
+          id: string
+          month_key: string
+          revenue_collected: number
+          showed_up: number
+          updated_at: string
+        }
+        Insert: {
+          ad_spend?: number
+          became_client?: number
+          id?: string
+          month_key: string
+          revenue_collected?: number
+          showed_up?: number
+          updated_at?: string
+        }
+        Update: {
+          ad_spend?: number
+          became_client?: number
+          id?: string
+          month_key?: string
+          revenue_collected?: number
+          showed_up?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string

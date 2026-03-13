@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 const AnnouncementBanner = () => {
   const [dismissed, setDismissed] = useState(false);

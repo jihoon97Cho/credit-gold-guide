@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileCTA from "@/components/MobileCTA";
 import { ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
 
 const ScrollIndicator = () => (
   <motion.button
@@ -34,6 +36,7 @@ const BookingPage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-16 lg:pb-0">
+      <AnnouncementBanner />
       <Header />
       <main className="container mx-auto px-4 py-16 lg:py-24">
         <div className="relative mx-auto max-w-3xl text-center">
@@ -61,6 +64,10 @@ const BookingPage = () => {
               </video>
             </div>
           </div>
+
+          <p className="mx-auto mb-4 max-w-2xl text-center text-lg font-semibold text-primary">
+            You're one step away — only <span className="font-extrabold">{SPOTS_REMAINING} spots left</span> for {SPOTS_MONTH}. Secure yours now.
+          </p>
 
           <div id="booking" className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-lg">
             <iframe

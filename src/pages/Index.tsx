@@ -1,3 +1,4 @@
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Results from "@/components/Results";
@@ -16,6 +17,7 @@ import MobileCTA from "@/components/MobileCTA";
 
 const Index = () => (
   <div className="min-h-screen bg-background pb-16 lg:pb-0">
+    <AnnouncementBanner />
     <Header />
     <main>
       <Hero />

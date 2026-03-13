@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { COMPANY } from "@/lib/constants";
+import { COMPANY, SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useRef } from "react";
 
@@ -86,10 +86,19 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: dur, ease, delay: 0.7 }}
+          className="mb-6 text-sm font-semibold text-primary"
+        >
+          ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{SPOTS_REMAINING} spots remaining</span> for {SPOTS_MONTH}
+        </motion.p>
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: dur, ease, delay: 0.75 }}
+          transition={{ duration: dur, ease, delay: 0.85 }}
           className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
         >
           <span>✓ No obligation</span>

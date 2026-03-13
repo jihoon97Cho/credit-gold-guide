@@ -603,7 +603,7 @@ const AdminDashboard = () => {
               <p className="text-xs text-zinc-500 mt-0.5">Page views by day & hour</p>
             </div>
             <div className="flex items-center gap-2">
-              <DateFilter value={heatmapRange} onChange={setHeatmapRange} customDate={heatmapCustomDate} onCustomDate={setHeatmapCustomDate} />
+              <DateFilter value={heatmapRange} onChange={setHeatmapRange} dateFrom={heatmapDateFrom} dateTo={heatmapDateTo} onDateFrom={setHeatmapDateFrom} onDateTo={setHeatmapDateTo} />
               <ResetBtn onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
             </div>
           </div>

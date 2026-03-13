@@ -1,4 +1,5 @@
 import { Phone } from "lucide-react";
+import { SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,9 @@ const FinalCTA = () => {
               Book a Call Now
             </Button>
           </motion.div>
+          <p className="mt-4 text-sm font-semibold text-primary">
+            ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{SPOTS_REMAINING} spots remaining</span> for {SPOTS_MONTH}
+          </p>
         </RevealItem>
       </div>
     </ScrollReveal>

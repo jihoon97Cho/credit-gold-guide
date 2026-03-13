@@ -87,8 +87,8 @@ const Header = () => {
             </button>
           ))}
           {!hideGetStarted && (
-            <Button onClick={() => scrollTo("#pricing")} className="mt-2 w-full rounded-full">
-              Get Started
+            <Button onClick={() => navigate("/book")} className="mt-2 w-full rounded-full">
+              Book a Call Now
             </Button>
           )}
         </div>

@@ -226,23 +226,25 @@ const AdminDashboard = () => {
   };
 
   // ─── Funnel ───────────────────────────────────────────
-  const filterByRange = (items: SiteEvent[], range: string, customDate?: Date) => {
+  const filterByRange = (items: SiteEvent[], range: string, dateFrom?: Date, dateTo?: Date) => {
     if (range === "all") return items;
     const now = new Date();
     let start: Date;
+    let end: Date | undefined;
     if (range === "today") start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     else if (range === "week") start = new Date(Date.now() - 7 * 86400000);
     else if (range === "month") start = new Date(Date.now() - 30 * 86400000);
-    else if (range === "custom" && customDate) {
-      start = new Date(customDate.getFullYear(), customDate.getMonth(), customDate.getDate());
-      const end = new Date(start.getTime() + 86400000);
+    else if (range === "custom" && dateFrom) {
+      start = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate());
+      const to = dateTo || dateFrom;
+      end = new Date(to.getFullYear(), to.getMonth(), to.getDate() + 1);
       return items.filter((e) => { const d = new Date(e.created_at); return d >= start && d < end; });
     } else return items;
     return items.filter((e) => new Date(e.created_at) >= start);
   };
 
-  const funnelEvents = filterByRange(events, funnelRange, funnelCustomDate);
-  const heatmapEvents = filterByRange(events, heatmapRange, heatmapCustomDate);
+  const funnelEvents = filterByRange(events, funnelRange, funnelDateFrom, funnelDateTo);
+  const heatmapEvents = filterByRange(events, heatmapRange, heatmapDateFrom, heatmapDateTo);
 
   const funnelSessionMap = funnelEvents
     .filter((e) => e.event_type === "page_view")

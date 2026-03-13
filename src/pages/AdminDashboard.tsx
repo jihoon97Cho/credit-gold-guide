@@ -495,46 +495,52 @@ const AdminDashboard = () => {
               </div>
               <DateFilter value={funnelRange} onChange={setFunnelRange} dateFrom={funnelDateFrom} dateTo={funnelDateTo} onDateFrom={setFunnelDateFrom} onDateTo={setFunnelDateTo} />
             </div>
-            <div className="space-y-0">
-              {funnelSteps.map((step, i) => {
-                const prev = i === 0 ? step.value : funnelSteps[i - 1].value;
-                const dropoff = i === 0 ? 0 : prev > 0 ? ((prev - step.value) / prev * 100) : 0;
-                const convRate = i === 0 ? 100 : funnelSteps[0].value > 0 ? (step.value / funnelSteps[0].value * 100) : 0;
-                const barWidth = funnelSteps[0].value > 0 ? Math.max((step.value / funnelSteps[0].value * 100), 8) : (i === 0 ? 100 : 50);
-                const colors = ["from-blue-500 to-blue-400", "from-amber-500 to-amber-400", "from-emerald-500 to-emerald-400"];
-
-                return (
-                  <div key={step.name}>
-                    {i > 0 && (
-                      <div className="flex items-center justify-center py-1.5 gap-2">
-                        <div className="h-4 w-px bg-zinc-700" />
-                        <span className="text-[11px] font-medium text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">
-                          ↓ {dropoff.toFixed(1)}% drop-off
-                        </span>
-                        <div className="h-4 w-px bg-zinc-700" />
-                      </div>
-                    )}
-                    <div className="flex flex-col items-center">
+            <div className="flex gap-6">
+              {/* Visual funnel graphic */}
+              <div className="flex flex-col items-center flex-shrink-0 py-2" style={{ width: '40%' }}>
+                {funnelSteps.map((step, i) => {
+                  const barWidth = funnelSteps[0].value > 0 ? Math.max((step.value / funnelSteps[0].value * 100), 20) : (i === 0 ? 100 : 60 - i * 20);
+                  const colors = ["from-blue-500 to-blue-400", "from-amber-500 to-amber-400", "from-emerald-500 to-emerald-400"];
+                  return (
+                    <div key={step.name} className="flex flex-col items-center w-full">
+                      {i > 0 && <div className="h-3 w-px bg-zinc-700" />}
                       <div
-                        className={`relative h-12 rounded-lg bg-gradient-to-r ${colors[i]} transition-all duration-700 flex items-center justify-between px-4`}
+                        className={`h-12 rounded-lg bg-gradient-to-r ${colors[i]} transition-all duration-700 flex items-center justify-center`}
                         style={{ width: `${barWidth}%` }}
                       >
-                        <span className="text-xs font-semibold text-white truncate">{step.name}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-white">{step.value}</span>
-                          {i > 0 && (
-                            <span className="text-[10px] text-white/60">({convRate.toFixed(0)}%)</span>
-                          )}
-                        </div>
+                        <span className="text-sm font-bold text-white">{step.value}</span>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-              {funnelSteps[0].value === 0 && (
-                <p className="text-center text-sm text-zinc-500 py-4">No data yet</p>
-              )}
+                  );
+                })}
+              </div>
+
+              {/* Stats breakdown */}
+              <div className="flex-1 space-y-3 py-2">
+                {funnelSteps.map((step, i) => {
+                  const prev = i === 0 ? step.value : funnelSteps[i - 1].value;
+                  const dropoff = i === 0 ? 0 : prev > 0 ? ((prev - step.value) / prev * 100) : 0;
+                  const convRate = i === 0 ? 100 : funnelSteps[0].value > 0 ? (step.value / funnelSteps[0].value * 100) : 0;
+                  return (
+                    <div key={step.name} className="flex flex-col justify-center h-12">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-zinc-200">{step.name}</span>
+                        <span className="text-sm font-bold text-zinc-100">{step.value}</span>
+                      </div>
+                      {i > 0 && (
+                        <div className="flex items-center gap-3 mt-0.5">
+                          <span className="text-[11px] text-red-400">↓ {dropoff.toFixed(1)}% drop-off</span>
+                          <span className="text-[11px] text-zinc-500">{convRate.toFixed(0)}% of total</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+            {funnelSteps[0].value === 0 && (
+              <p className="text-center text-sm text-zinc-500 py-4">No data yet</p>
+            )}
           </div>
 
           {/* Manual Inputs */}

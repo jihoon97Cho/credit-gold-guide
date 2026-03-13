@@ -2,12 +2,14 @@ import { Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { COMPANY, SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
+import { COMPANY } from "@/lib/constants";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useRef } from "react";
 
 const Hero = () => {
   const isMobile = useIsMobile();
+  const { spotsRemaining, spotsMonth } = useSiteSettings();
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -92,7 +94,7 @@ const Hero = () => {
           transition={{ duration: dur, ease, delay: 0.7 }}
           className="mb-6 text-sm font-semibold text-primary"
         >
-          ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{SPOTS_REMAINING} spots remaining</span> for {SPOTS_MONTH}
+          ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemaining} spots remaining</span> for {spotsMonth}
         </motion.p>
 
         <motion.div

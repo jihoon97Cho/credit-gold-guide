@@ -133,6 +133,10 @@ const AdminDashboard = () => {
   const [adSpendInput, setAdSpendInput] = useState("");
   const [savingMetrics, setSavingMetrics] = useState(false);
 
+  const [spotsRemainingInput, setSpotsRemainingInput] = useState("3");
+  const [spotsMonthInput, setSpotsMonthInput] = useState("March");
+  const [savingSpots, setSavingSpots] = useState(false);
+
   const [showAddClient, setShowAddClient] = useState(false);
   const [newClientName, setNewClientName] = useState("");
   const [newClientPhone, setNewClientPhone] = useState("");
@@ -155,10 +159,11 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   const fetchData = useCallback(async () => {
-    const [eventsRes, metricsRes, pipelineRes] = await Promise.all([
+    const [eventsRes, metricsRes, pipelineRes, settingsRes] = await Promise.all([
       supabase.from("site_events").select("*").order("created_at", { ascending: false }).limit(1000),
       supabase.from("dashboard_metrics").select("*").eq("month_key", monthKey).maybeSingle(),
       supabase.from("client_pipeline").select("*").order("updated_at", { ascending: false }),
+      supabase.from("site_settings").select("key, value").in("key", ["spots_remaining", "spots_month"]),
     ]);
     setEvents(eventsRes.data || []);
     if (metricsRes.data) {
@@ -173,6 +178,11 @@ const AdminDashboard = () => {
       setBecameClientInput("0");
       setRevenueInput("0");
       setAdSpendInput("0");
+    }
+    if (settingsRes.data) {
+      const map = Object.fromEntries(settingsRes.data.map((r: any) => [r.key, r.value]));
+      if (map.spots_remaining) setSpotsRemainingInput(map.spots_remaining);
+      if (map.spots_month) setSpotsMonthInput(map.spots_month);
     }
     setPipeline((pipelineRes.data as any) || []);
     setLoading(false);
@@ -200,6 +210,16 @@ const AdminDashboard = () => {
     toast({ title: "Saved", description: "Dashboard metrics updated." });
     await fetchData();
     setSavingMetrics(false);
+  };
+
+  const saveSpots = async () => {
+    setSavingSpots(true);
+    await Promise.all([
+      supabase.from("site_settings").update({ value: spotsRemainingInput, updated_at: new Date().toISOString() }).eq("key", "spots_remaining"),
+      supabase.from("site_settings").update({ value: spotsMonthInput, updated_at: new Date().toISOString() }).eq("key", "spots_month"),
+    ]);
+    toast({ title: "Saved", description: "Spots & month updated on website." });
+    setSavingSpots(false);
   };
 
   const addClient = async () => {
@@ -621,7 +641,57 @@ const AdminDashboard = () => {
               {savingMetrics ? "Saving..." : "Save & Update"}
             </Button>
           </div>
-        </div>
+          </div>
+
+          {/* Website Spots Settings */}
+          <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5 lg:col-span-2">
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                <Target className="h-4 w-4 text-amber-500" /> Website Urgency Text
+              </h3>
+              <p className="text-xs text-zinc-500 mt-0.5">Controls "spots remaining" across the entire site</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label className="text-xs text-zinc-500 mb-1 block">Spots Remaining</label>
+                <Input
+                  type="number"
+                  value={spotsRemainingInput}
+                  onChange={(e) => setSpotsRemainingInput(e.target.value)}
+                  className="bg-zinc-800 border-zinc-700 text-zinc-200 placeholder:text-zinc-600 h-9"
+                  min="0"
+                  step="1"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-zinc-500 mb-1 block">Month</label>
+                <Select value={spotsMonthInput} onValueChange={setSpotsMonthInput}>
+                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-zinc-200 h-9">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["January","February","March","April","May","June","July","August","September","October","November","December"].map(m => (
+                      <SelectItem key={m} value={m}>{m}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="rounded-lg bg-zinc-800/50 border border-zinc-700/50 p-3 mb-4">
+              <p className="text-xs text-zinc-400">Preview:</p>
+              <p className="text-sm font-semibold text-amber-400 mt-1">
+                ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemainingInput} spots remaining</span> for {spotsMonthInput}
+              </p>
+            </div>
+            <Button
+              onClick={saveSpots}
+              disabled={savingSpots}
+              className="w-full gap-2 bg-amber-600 hover:bg-amber-500 text-white font-semibold h-10"
+            >
+              <Save className="h-4 w-4" />
+              {savingSpots ? "Saving..." : "Update Website"}
+            </Button>
+          </div>
 
         {/* ═══ BOOKED CALLS TREND ═══ */}
         <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">

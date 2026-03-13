@@ -121,9 +121,11 @@ const AdminDashboard = () => {
   const [pipeline, setPipeline] = useState<PipelineClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [funnelRange, setFunnelRange] = useState<string>("all");
-  const [funnelCustomDate, setFunnelCustomDate] = useState<Date | undefined>();
+  const [funnelDateFrom, setFunnelDateFrom] = useState<Date | undefined>();
+  const [funnelDateTo, setFunnelDateTo] = useState<Date | undefined>();
   const [heatmapRange, setHeatmapRange] = useState<string>("all");
-  const [heatmapCustomDate, setHeatmapCustomDate] = useState<Date | undefined>();
+  const [heatmapDateFrom, setHeatmapDateFrom] = useState<Date | undefined>();
+  const [heatmapDateTo, setHeatmapDateTo] = useState<Date | undefined>();
 
   const [showedUpInput, setShowedUpInput] = useState("");
   const [becameClientInput, setBecameClientInput] = useState("");

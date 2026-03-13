@@ -315,11 +315,13 @@ const AdminDashboard = () => {
   };
 
   // ─── Shared components ────────────────────────────────
-  const DateFilter = ({ value, onChange, customDate, onCustomDate }: {
+  const DateFilter = ({ value, onChange, dateFrom, dateTo, onDateFrom, onDateTo }: {
     value: string; onChange: (v: string) => void;
-    customDate?: Date; onCustomDate: (d: Date | undefined) => void;
+    dateFrom?: Date; dateTo?: Date;
+    onDateFrom: (d: Date | undefined) => void;
+    onDateTo: (d: Date | undefined) => void;
   }) => (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 flex-wrap">
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="h-8 w-[120px] text-xs bg-zinc-800 border-zinc-700 text-zinc-300">
           <SelectValue />
@@ -333,17 +335,31 @@ const AdminDashboard = () => {
         </SelectContent>
       </Select>
       {value === "custom" && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
-              <CalendarIcon className="h-3 w-3" />
-              {customDate ? format(customDate, "MMM d") : "Pick"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 z-[9999]" align="start">
-            <Calendar mode="single" selected={customDate} onSelect={onCustomDate} initialFocus className="p-3 pointer-events-auto" />
-          </PopoverContent>
-        </Popover>
+        <div className="flex items-center gap-1.5">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
+                <CalendarIcon className="h-3 w-3" />
+                {dateFrom ? format(dateFrom, "MMM d") : "From"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 z-[9999]" align="start">
+              <Calendar mode="single" selected={dateFrom} onSelect={onDateFrom} initialFocus className="p-3 pointer-events-auto" />
+            </PopoverContent>
+          </Popover>
+          <span className="text-xs text-zinc-600">→</span>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
+                <CalendarIcon className="h-3 w-3" />
+                {dateTo ? format(dateTo, "MMM d") : "To"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 z-[9999]" align="start">
+              <Calendar mode="single" selected={dateTo} onSelect={onDateTo} initialFocus className="p-3 pointer-events-auto" />
+            </PopoverContent>
+          </Popover>
+        </div>
       )}
     </div>
   );

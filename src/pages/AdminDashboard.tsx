@@ -2,9 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -15,14 +12,13 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer,
 } from "recharts";
 import {
-  LogOut, Users, TrendingUp, Activity, ExternalLink,
-  ArrowUpRight, ArrowDownRight, Clock, Target, DollarSign,
-  Phone, UserCheck, Percent, Filter, Trash2, CalendarIcon,
-  Plus, ChevronRight, Eye, GripVertical, X, Edit2, Save,
+  LogOut, Users, Activity, Target, DollarSign,
+  Phone, Percent, Filter, Trash2, CalendarIcon,
+  Plus, ChevronRight, Clock, Edit2, Save, X, TrendingUp,
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -60,66 +56,63 @@ interface PipelineClient {
 }
 
 const PIPELINE_STAGES = [
-  "New Lead",
-  "Call Scheduled",
-  "Call Completed",
-  "Closed",
-  "Active Client",
-  "Completed",
+  "New Lead", "Call Scheduled", "Call Completed", "Closed", "Active Client", "Completed",
 ];
 
 const STAGE_COLORS: Record<string, string> = {
-  "New Lead": "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "Call Scheduled": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-  "Call Completed": "bg-orange-500/20 text-orange-400 border-orange-500/30",
-  "Closed": "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "Active Client": "bg-primary/20 text-primary border-primary/30",
-  "Completed": "bg-green-500/20 text-green-400 border-green-500/30",
+  "New Lead": "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  "Call Scheduled": "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  "Call Completed": "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  "Closed": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  "Active Client": "bg-violet-500/10 text-violet-400 border-violet-500/20",
+  "Completed": "bg-green-500/10 text-green-400 border-green-500/20",
 };
 
 const MONTHLY_GOAL = 20000;
 
-// ─── Helpers ────────────────────────────────────────────
 const getCurrentMonthKey = () => {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 };
 
-const getStatusColor = (value: number, greenThreshold: number, yellowThreshold: number, inverse = false) => {
-  if (inverse) {
-    if (value <= greenThreshold) return "border-emerald-500/40 shadow-emerald-500/10";
-    if (value <= yellowThreshold) return "border-yellow-500/40 shadow-yellow-500/10";
-    return "border-red-500/40 shadow-red-500/10";
-  }
-  if (value >= greenThreshold) return "border-emerald-500/40 shadow-emerald-500/10";
-  if (value >= yellowThreshold) return "border-yellow-500/40 shadow-yellow-500/10";
-  return "border-red-500/40 shadow-red-500/10";
-};
-
-const getStatusDot = (value: number, greenThreshold: number, yellowThreshold: number, inverse = false) => {
-  if (inverse) {
-    if (value <= greenThreshold) return "bg-emerald-500";
-    if (value <= yellowThreshold) return "bg-yellow-500";
-    return "bg-red-500";
-  }
-  if (value >= greenThreshold) return "bg-emerald-500";
-  if (value >= yellowThreshold) return "bg-yellow-500";
-  return "bg-red-500";
+const statusColor = (val: number, good: number, mid: number, inverse = false) => {
+  const check = inverse ? (val <= good ? "green" : val <= mid ? "yellow" : "red") :
+    (val >= good ? "green" : val >= mid ? "yellow" : "red");
+  return {
+    green: { border: "border-emerald-500/30", dot: "bg-emerald-500", text: "text-emerald-400" },
+    yellow: { border: "border-amber-500/30", dot: "bg-amber-500", text: "text-amber-400" },
+    red: { border: "border-red-500/30", dot: "bg-red-500", text: "text-red-400" },
+  }[check];
 };
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-primary/20 bg-[hsl(222,33%,10%)] px-3 py-2 shadow-lg">
-      <p className="text-xs font-medium text-primary/70">{label}</p>
+    <div className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 shadow-xl">
+      <p className="text-xs text-zinc-400 mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
-        <p key={i} className="text-sm font-bold" style={{ color: entry.color }}>
+        <p key={i} className="text-sm font-semibold" style={{ color: entry.color }}>
           {entry.name}: {entry.value}
         </p>
       ))}
     </div>
   );
 };
+
+// ─── KPI Card ───────────────────────────────────────────
+const KPICard = ({ title, value, subtitle, status }: {
+  title: string; value: string; subtitle: string;
+  status: { border: string; dot: string; text: string };
+}) => (
+  <div className={`rounded-xl border ${status.border} bg-zinc-900/80 p-5`}>
+    <div className="flex items-center justify-between mb-3">
+      <span className="text-xs font-medium text-zinc-400 uppercase tracking-wide">{title}</span>
+      <div className={`h-2 w-2 rounded-full ${status.dot}`} />
+    </div>
+    <p className="text-2xl font-bold text-zinc-100">{value}</p>
+    <p className="text-xs text-zinc-500 mt-1">{subtitle}</p>
+  </div>
+);
 
 // ─── Main Component ─────────────────────────────────────
 const AdminDashboard = () => {
@@ -132,14 +125,12 @@ const AdminDashboard = () => {
   const [heatmapRange, setHeatmapRange] = useState<string>("all");
   const [heatmapCustomDate, setHeatmapCustomDate] = useState<Date | undefined>();
 
-  // Manual input state
   const [showedUpInput, setShowedUpInput] = useState("");
   const [becameClientInput, setBecameClientInput] = useState("");
   const [revenueInput, setRevenueInput] = useState("");
   const [adSpendInput, setAdSpendInput] = useState("");
   const [savingMetrics, setSavingMetrics] = useState(false);
 
-  // Pipeline add form
   const [showAddClient, setShowAddClient] = useState(false);
   const [newClientName, setNewClientName] = useState("");
   const [newClientPhone, setNewClientPhone] = useState("");
@@ -185,17 +176,10 @@ const AdminDashboard = () => {
     setLoading(false);
   }, [monthKey]);
 
-  useEffect(() => {
-    checkAuth();
-    fetchData();
-  }, [checkAuth, fetchData]);
+  useEffect(() => { checkAuth(); fetchData(); }, [checkAuth, fetchData]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/admin");
-  };
+  const handleLogout = async () => { await supabase.auth.signOut(); navigate("/admin"); };
 
-  // ─── Save manual metrics ──────────────────────────────
   const saveMetrics = async () => {
     setSavingMetrics(true);
     const data = {
@@ -206,18 +190,16 @@ const AdminDashboard = () => {
       ad_spend: parseFloat(adSpendInput) || 0,
       updated_at: new Date().toISOString(),
     };
-
     if (metrics) {
       await supabase.from("dashboard_metrics").update(data).eq("id", metrics.id);
     } else {
       await supabase.from("dashboard_metrics").insert(data);
     }
-    toast({ title: "Metrics saved!", description: "Dashboard updated with your latest numbers." });
+    toast({ title: "Saved", description: "Dashboard metrics updated." });
     await fetchData();
     setSavingMetrics(false);
   };
 
-  // ─── Pipeline operations ──────────────────────────────
   const addClient = async () => {
     if (!newClientName.trim()) return;
     await supabase.from("client_pipeline").insert({
@@ -226,41 +208,34 @@ const AdminDashboard = () => {
       email: newClientEmail.trim() || null,
       stage: "New Lead",
     });
-    setNewClientName("");
-    setNewClientPhone("");
-    setNewClientEmail("");
+    setNewClientName(""); setNewClientPhone(""); setNewClientEmail("");
     setShowAddClient(false);
     fetchData();
   };
 
-  const moveClient = async (clientId: string, newStage: string) => {
-    await supabase.from("client_pipeline").update({ stage: newStage, updated_at: new Date().toISOString() }).eq("id", clientId);
+  const moveClient = async (id: string, stage: string) => {
+    await supabase.from("client_pipeline").update({ stage, updated_at: new Date().toISOString() }).eq("id", id);
     fetchData();
   };
 
-  const deleteClient = async (clientId: string) => {
-    await supabase.from("client_pipeline").delete().eq("id", clientId);
+  const deleteClient = async (id: string) => {
+    await supabase.from("client_pipeline").delete().eq("id", id);
     fetchData();
   };
 
-  // ─── Funnel computations ──────────────────────────────
+  // ─── Funnel ───────────────────────────────────────────
   const filterByRange = (items: SiteEvent[], range: string, customDate?: Date) => {
     if (range === "all") return items;
     const now = new Date();
     let start: Date;
-    if (range === "today") {
-      start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    } else if (range === "week") {
-      start = new Date(Date.now() - 7 * 86400000);
-    } else if (range === "month") {
-      start = new Date(Date.now() - 30 * 86400000);
-    } else if (range === "custom" && customDate) {
+    if (range === "today") start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    else if (range === "week") start = new Date(Date.now() - 7 * 86400000);
+    else if (range === "month") start = new Date(Date.now() - 30 * 86400000);
+    else if (range === "custom" && customDate) {
       start = new Date(customDate.getFullYear(), customDate.getMonth(), customDate.getDate());
       const end = new Date(start.getTime() + 86400000);
       return items.filter((e) => { const d = new Date(e.created_at); return d >= start && d < end; });
-    } else {
-      return items;
-    }
+    } else return items;
     return items.filter((e) => new Date(e.created_at) >= start);
   };
 
@@ -287,7 +262,6 @@ const AdminDashboard = () => {
     { name: "Booked Call", value: bookedCallCount },
   ];
 
-  // Computed metrics
   const showedUp = metrics?.showed_up || 0;
   const becameClient = metrics?.became_client || 0;
   const revenueCollected = metrics?.revenue_collected || 0;
@@ -297,11 +271,10 @@ const AdminDashboard = () => {
   const closeRate = showedUp > 0 ? (becameClient / showedUp) * 100 : 0;
   const profit = revenueCollected - adSpend;
   const costPerBookedCall = bookedCallCount > 0 ? adSpend / bookedCallCount : 0;
-
   const goalProgress = Math.min((revenueCollected / MONTHLY_GOAL) * 100, 100);
   const goalRemaining = Math.max(MONTHLY_GOAL - revenueCollected, 0);
 
-  // Leads trend (booked calls per day over last 30 days)
+  // Trend data
   const last30Days = new Date(Date.now() - 30 * 86400000).toISOString();
   const dayMap: Record<string, number> = {};
   for (let i = 29; i >= 0; i--) {
@@ -310,10 +283,7 @@ const AdminDashboard = () => {
   }
   events
     .filter((e) => e.event_type === "page_view" && e.page === "/thank-you" && e.created_at >= last30Days)
-    .forEach((e) => {
-      const day = e.created_at.split("T")[0];
-      if (dayMap[day] !== undefined) dayMap[day]++;
-    });
+    .forEach((e) => { const day = e.created_at.split("T")[0]; if (dayMap[day] !== undefined) dayMap[day]++; });
   const bookedTrend = Object.entries(dayMap).map(([date, count]) => ({
     date: new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     count,
@@ -322,82 +292,73 @@ const AdminDashboard = () => {
   // Heatmap
   const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const heatmapGrid: number[][] = Array.from({ length: 7 }, () => new Array(24).fill(0));
-  heatmapEvents
-    .filter((e) => e.event_type === "page_view")
-    .forEach((e) => {
-      const d = new Date(e.created_at);
-      const estStr = d.toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short", hour: "2-digit", hour12: false });
-      const parts = estStr.split(", ");
-      const dayIdx = DAYS.indexOf(parts[0]);
-      const hr = parseInt(parts[1]);
-      if (dayIdx >= 0 && !isNaN(hr)) heatmapGrid[dayIdx][hr]++;
-    });
+  heatmapEvents.filter((e) => e.event_type === "page_view").forEach((e) => {
+    const d = new Date(e.created_at);
+    const estStr = d.toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short", hour: "2-digit", hour12: false });
+    const parts = estStr.split(", ");
+    const dayIdx = DAYS.indexOf(parts[0]);
+    const hr = parseInt(parts[1]);
+    if (dayIdx >= 0 && !isNaN(hr)) heatmapGrid[dayIdx][hr]++;
+  });
   const heatmapMax = Math.max(1, ...heatmapGrid.flat());
 
-  // Reset helpers
   const resetEvents = async (filter?: { event_type?: string }) => {
     let query = supabase.from("site_events").delete();
-    if (filter?.event_type) {
-      query = query.eq("event_type", filter.event_type);
-    } else {
-      query = query.neq("id", "00000000-0000-0000-0000-000000000000");
-    }
+    if (filter?.event_type) query = query.eq("event_type", filter.event_type);
+    else query = query.neq("id", "00000000-0000-0000-0000-000000000000");
     await query;
     fetchData();
   };
 
-  const DateRangeFilter = ({ value, onChange, customDate, onCustomDateChange }: {
+  // ─── Shared components ────────────────────────────────
+  const DateFilter = ({ value, onChange, customDate, onCustomDate }: {
     value: string; onChange: (v: string) => void;
-    customDate?: Date; onCustomDateChange: (d: Date | undefined) => void;
+    customDate?: Date; onCustomDate: (d: Date | undefined) => void;
   }) => (
     <div className="flex items-center gap-2">
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="h-8 w-[130px] text-xs bg-[hsl(222,30%,14%)] border-primary/20">
+        <SelectTrigger className="h-8 w-[120px] text-xs bg-zinc-800 border-zinc-700 text-zinc-300">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Time</SelectItem>
           <SelectItem value="today">Today</SelectItem>
-          <SelectItem value="week">Last 7 Days</SelectItem>
-          <SelectItem value="month">Last 30 Days</SelectItem>
-          <SelectItem value="custom">Specific Date</SelectItem>
+          <SelectItem value="week">7 Days</SelectItem>
+          <SelectItem value="month">30 Days</SelectItem>
+          <SelectItem value="custom">Custom</SelectItem>
         </SelectContent>
       </Select>
       {value === "custom" && (
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs">
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
               <CalendarIcon className="h-3 w-3" />
-              {customDate ? format(customDate, "MMM d, yyyy") : "Pick date"}
+              {customDate ? format(customDate, "MMM d") : "Pick"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 z-[9999]" align="start" side="bottom" sideOffset={8} avoidCollisions>
-            <Calendar mode="single" selected={customDate} onSelect={onCustomDateChange} initialFocus className="p-3 pointer-events-auto" />
+          <PopoverContent className="w-auto p-0 z-[9999]" align="start">
+            <Calendar mode="single" selected={customDate} onSelect={onCustomDate} initialFocus className="p-3 pointer-events-auto" />
           </PopoverContent>
         </Popover>
       )}
     </div>
   );
 
-  const ResetButton = ({ onConfirm, label }: { onConfirm: () => void; label: string }) => (
+  const ResetBtn = ({ onConfirm, label }: { onConfirm: () => void; label: string }) => (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10">
+        <Button variant="ghost" size="sm" className="h-7 text-xs text-zinc-500 hover:text-red-400 hover:bg-red-500/10 gap-1">
           <Trash2 className="h-3 w-3" /> Reset
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="bg-[hsl(222,30%,11%)] border-primary/20">
+      <AlertDialogContent className="bg-zinc-900 border-zinc-800">
         <AlertDialogHeader>
-          <AlertDialogTitle>Reset {label}?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This will permanently delete all {label.toLowerCase()} data. This action cannot be undone.
-          </AlertDialogDescription>
+          <AlertDialogTitle className="text-zinc-100">Reset {label}?</AlertDialogTitle>
+          <AlertDialogDescription>This will permanently delete all {label.toLowerCase()} data.</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} className="bg-red-600 hover:bg-red-700 text-white">
-            Delete All
-          </AlertDialogAction>
+          <AlertDialogCancel className="bg-zinc-800 border-zinc-700 text-zinc-300">Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm} className="bg-red-600 hover:bg-red-700 text-white">Delete All</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -405,169 +366,135 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[hsl(222,33%,8%)]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <p className="text-sm text-primary/60">Loading dashboard…</p>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-600 border-t-zinc-300" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(222,33%,8%)] text-[hsl(210,20%,92%)]">
-      {/* ── Header ─────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-primary/10 bg-[hsl(222,30%,10%)]/95 backdrop-blur">
-        <div className="container mx-auto flex h-14 items-center justify-between px-4">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b border-zinc-800/80 bg-zinc-950/95 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="Logo" className="h-8 w-auto" />
-            <div>
-              <span className="text-sm font-bold">Command Center</span>
-              <span className="ml-2 text-[10px] font-medium text-primary bg-primary/10 rounded-full px-2 py-0.5">Live</span>
-            </div>
+            <img src={logo} alt="Logo" className="h-7 w-auto" />
+            <span className="text-sm font-semibold text-zinc-200">Dashboard</span>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={fetchData} className="gap-1.5 text-xs border-primary/20 hover:bg-primary/10">
-              <Activity className="h-3 w-3" /> Refresh
+            <Button variant="ghost" size="sm" onClick={fetchData} className="h-8 gap-1.5 text-xs text-zinc-400 hover:text-zinc-200">
+              <Activity className="h-3.5 w-3.5" /> Refresh
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-1.5 text-xs text-primary/60 hover:text-primary">
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="h-8 text-zinc-500 hover:text-zinc-300">
               <LogOut className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 space-y-6 max-w-7xl">
-        {/* ══════════════ MONTHLY GOAL PROGRESS ══════════════ */}
-        <Card className="bg-[hsl(222,30%,11%)] border-primary/20 overflow-hidden">
-          <CardContent className="p-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-              <div className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                <h2 className="text-lg font-bold">Monthly Revenue Goal</h2>
-              </div>
-              <div className="flex items-center gap-4 text-sm">
-                <span className="text-primary font-bold text-xl">${revenueCollected.toLocaleString()}</span>
-                <span className="text-primary/40">/</span>
-                <span className="text-primary/60">${MONTHLY_GOAL.toLocaleString()}</span>
-              </div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        {/* ═══ REVENUE GOAL ═══ */}
+        <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div className="flex items-center gap-2">
+              <Target className="h-4 w-4 text-emerald-400" />
+              <span className="text-sm font-semibold text-zinc-200">Monthly Revenue Goal</span>
             </div>
-            <div className="relative">
-              <Progress value={goalProgress} className="h-4 bg-[hsl(222,25%,16%)]" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[11px] font-bold text-white drop-shadow">{goalProgress.toFixed(1)}%</span>
-              </div>
+            <div className="flex items-baseline gap-2 text-sm">
+              <span className="font-bold text-xl text-zinc-100">${revenueCollected.toLocaleString()}</span>
+              <span className="text-zinc-600">/</span>
+              <span className="text-zinc-500">${MONTHLY_GOAL.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between mt-2">
-              <span className="text-xs text-primary/50">{format(new Date(), "MMMM yyyy")}</span>
-              <span className="text-xs text-primary/50">${goalRemaining.toLocaleString()} remaining</span>
+          </div>
+          <div className="relative">
+            <div className="h-3 w-full rounded-full bg-zinc-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-700"
+                style={{ width: `${goalProgress}%` }}
+              />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* ══════════════ KPI CARDS ══════════════ */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
-          {/* Booked Calls */}
-          <Card className={`bg-[hsl(222,30%,11%)] border ${getStatusColor(bookedCallCount, 10, 5)} shadow-lg`}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium text-primary/60">Booked Calls</CardTitle>
-              <div className={`h-2 w-2 rounded-full ${getStatusDot(bookedCallCount, 10, 5)}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">{bookedCallCount}</div>
-              <p className="text-[11px] text-primary/40 mt-1">Thank You page visits</p>
-            </CardContent>
-          </Card>
-
-          {/* Show Rate */}
-          <Card className={`bg-[hsl(222,30%,11%)] border ${getStatusColor(showRate, 70, 50)} shadow-lg`}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium text-primary/60">Show Rate</CardTitle>
-              <div className={`h-2 w-2 rounded-full ${getStatusDot(showRate, 70, 50)}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">{showRate.toFixed(1)}%</div>
-              <p className="text-[11px] text-primary/40 mt-1">{showedUp} of {bookedCallCount} showed</p>
-            </CardContent>
-          </Card>
-
-          {/* Close Rate */}
-          <Card className={`bg-[hsl(222,30%,11%)] border ${getStatusColor(closeRate, 30, 15)} shadow-lg`}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium text-primary/60">Close Rate</CardTitle>
-              <div className={`h-2 w-2 rounded-full ${getStatusDot(closeRate, 30, 15)}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">{closeRate.toFixed(1)}%</div>
-              <p className="text-[11px] text-primary/40 mt-1">{becameClient} of {showedUp} closed</p>
-            </CardContent>
-          </Card>
-
-          {/* Revenue vs Ad Spend */}
-          <Card className={`bg-[hsl(222,30%,11%)] border ${getStatusColor(profit, 1, 0)} shadow-lg`}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium text-primary/60">Revenue / Ad Spend</CardTitle>
-              <div className={`h-2 w-2 rounded-full ${profit > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-emerald-400">${revenueCollected.toLocaleString()}</span>
-                <span className="text-primary/30">/</span>
-                <span className="text-lg font-semibold text-red-400">${adSpend.toLocaleString()}</span>
-              </div>
-              <p className={`text-[11px] mt-1 font-medium ${profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                {profit >= 0 ? '+' : '-'}${Math.abs(profit).toLocaleString()} profit
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Cost Per Booked Call */}
-          <Card className={`bg-[hsl(222,30%,11%)] border ${getStatusColor(costPerBookedCall, 50, 100, true)} shadow-lg`}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium text-primary/60">Cost / Booked Call</CardTitle>
-              <div className={`h-2 w-2 rounded-full ${getStatusDot(costPerBookedCall, 50, 100, true)}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">${costPerBookedCall.toFixed(2)}</div>
-              <p className="text-[11px] text-primary/40 mt-1">Ad spend ÷ booked calls</p>
-            </CardContent>
-          </Card>
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="text-xs text-zinc-500">{format(new Date(), "MMMM yyyy")}</span>
+            <span className="text-xs text-zinc-500">{goalProgress.toFixed(0)}% · ${goalRemaining.toLocaleString()} left</span>
+          </div>
         </div>
 
-        {/* ══════════════ FUNNEL + MANUAL INPUTS ══════════════ */}
+        {/* ═══ KPI CARDS ═══ */}
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
+          <KPICard
+            title="Booked Calls"
+            value={String(bookedCallCount)}
+            subtitle="Thank You page visits"
+            status={statusColor(bookedCallCount, 10, 5)}
+          />
+          <KPICard
+            title="Show Rate"
+            value={`${showRate.toFixed(1)}%`}
+            subtitle={`${showedUp} of ${bookedCallCount} showed`}
+            status={statusColor(showRate, 70, 50)}
+          />
+          <KPICard
+            title="Close Rate"
+            value={`${closeRate.toFixed(1)}%`}
+            subtitle={`${becameClient} of ${showedUp} closed`}
+            status={statusColor(closeRate, 30, 15)}
+          />
+          <div className={`rounded-xl border ${profit >= 0 ? 'border-emerald-500/30' : 'border-red-500/30'} bg-zinc-900/80 p-5`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-zinc-400 uppercase tracking-wide">Revenue / Spend</span>
+              <DollarSign className="h-3.5 w-3.5 text-zinc-500" />
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-lg font-bold text-emerald-400">${revenueCollected.toLocaleString()}</span>
+              <span className="text-zinc-600">/</span>
+              <span className="text-sm font-semibold text-red-400">${adSpend.toLocaleString()}</span>
+            </div>
+            <p className={`text-xs mt-1 font-medium ${profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {profit >= 0 ? '+' : '-'}${Math.abs(profit).toLocaleString()} profit
+            </p>
+          </div>
+          <KPICard
+            title="Cost / Call"
+            value={`$${costPerBookedCall.toFixed(2)}`}
+            subtitle="Ad spend ÷ booked"
+            status={statusColor(costPerBookedCall, 50, 100, true)}
+          />
+        </div>
+
+        {/* ═══ FUNNEL + MANUAL INPUTS ═══ */}
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Visitor Funnel */}
-          <Card className="bg-[hsl(222,30%,11%)] border-primary/20">
-            <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
+          {/* Funnel */}
+          <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Filter className="h-4 w-4 text-primary" /> Visitor Funnel
-                </CardTitle>
-                <CardDescription className="text-primary/40">Auto-tracked conversion stages</CardDescription>
+                <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                  <Filter className="h-4 w-4 text-zinc-500" /> Visitor Funnel
+                </h3>
+                <p className="text-xs text-zinc-500 mt-0.5">Auto-tracked stages</p>
               </div>
-              <DateRangeFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDateChange={setFunnelCustomDate} />
-            </CardHeader>
-            <CardContent className="space-y-3">
+              <DateFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDate={setFunnelCustomDate} />
+            </div>
+            <div className="space-y-2">
               {funnelSteps.map((step, i) => {
                 const prev = i === 0 ? step.value : funnelSteps[i - 1].value;
                 const dropoff = i === 0 ? 0 : prev > 0 ? ((prev - step.value) / prev * 100) : 0;
                 const barWidth = funnelSteps[0].value > 0 ? (step.value / funnelSteps[0].value * 100) : 0;
-
                 return (
                   <div key={step.name}>
                     {i > 0 && (
                       <div className="flex items-center gap-2 py-1 pl-4">
-                        <ChevronRight className="h-3 w-3 text-primary/30" />
-                        <span className="text-[11px] text-red-400/70">{dropoff.toFixed(1)}% drop-off</span>
+                        <ChevronRight className="h-3 w-3 text-zinc-700" />
+                        <span className="text-[11px] text-red-400/70">↓ {dropoff.toFixed(1)}% drop-off</span>
                       </div>
                     )}
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium">{step.name}</span>
-                      <span className="text-sm font-bold text-primary">{step.value}</span>
+                      <span className="text-sm text-zinc-300">{step.name}</span>
+                      <span className="text-sm font-bold text-zinc-100">{step.value}</span>
                     </div>
-                    <div className="h-2 bg-[hsl(222,25%,16%)] rounded-full overflow-hidden">
+                    <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-primary to-primary/60 rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500"
                         style={{ width: `${Math.max(barWidth, 0)}%` }}
                       />
                     </div>
@@ -575,285 +502,233 @@ const AdminDashboard = () => {
                 );
               })}
               {funnelSteps[0].value === 0 && (
-                <p className="text-center text-sm text-primary/40 py-4">No funnel data yet</p>
+                <p className="text-center text-sm text-zinc-500 py-4">No data yet</p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Manual Update Panel */}
-          <Card className="bg-[hsl(222,30%,11%)] border-primary/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Edit2 className="h-4 w-4 text-primary" /> Manual Update Panel
-              </CardTitle>
-              <CardDescription className="text-primary/40">Update after each call or payment — {format(new Date(), "MMMM yyyy")}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-primary/50 mb-1 block">Showed Up</label>
+          {/* Manual Inputs */}
+          <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                <Edit2 className="h-4 w-4 text-zinc-500" /> Manual Update
+              </h3>
+              <p className="text-xs text-zinc-500 mt-0.5">{format(new Date(), "MMMM yyyy")} — update after calls</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[
+                { label: "Showed Up", value: showedUpInput, set: setShowedUpInput, type: "number" },
+                { label: "Became Client", value: becameClientInput, set: setBecameClientInput, type: "number" },
+                { label: "Revenue ($)", value: revenueInput, set: setRevenueInput, type: "number" },
+                { label: "Ad Spend ($)", value: adSpendInput, set: setAdSpendInput, type: "number" },
+              ].map((field) => (
+                <div key={field.label}>
+                  <label className="text-xs text-zinc-500 mb-1 block">{field.label}</label>
                   <Input
-                    type="number"
-                    value={showedUpInput}
-                    onChange={(e) => setShowedUpInput(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
+                    type={field.type}
+                    value={field.value}
+                    onChange={(e) => field.set(e.target.value)}
+                    className="bg-zinc-800 border-zinc-700 text-zinc-200 placeholder:text-zinc-600 h-9"
                     min="0"
+                    step={field.label.includes("$") ? "0.01" : "1"}
                   />
                 </div>
-                <div>
-                  <label className="text-xs text-primary/50 mb-1 block">Became Client</label>
-                  <Input
-                    type="number"
-                    value={becameClientInput}
-                    onChange={(e) => setBecameClientInput(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
-                    min="0"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-primary/50 mb-1 block">Revenue Collected ($)</label>
-                  <Input
-                    type="number"
-                    value={revenueInput}
-                    onChange={(e) => setRevenueInput(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
-                    min="0"
-                    step="0.01"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-primary/50 mb-1 block">Ad Spend ($)</label>
-                  <Input
-                    type="number"
-                    value={adSpendInput}
-                    onChange={(e) => setAdSpendInput(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
-                    min="0"
-                    step="0.01"
-                  />
-                </div>
-              </div>
-              <Button
-                onClick={saveMetrics}
-                disabled={savingMetrics}
-                className="w-full gap-2 bg-primary hover:bg-primary/90 text-[hsl(222,33%,8%)] font-bold"
-              >
-                <Save className="h-4 w-4" />
-                {savingMetrics ? "Saving..." : "Save & Update Dashboard"}
-              </Button>
-            </CardContent>
-          </Card>
+              ))}
+            </div>
+            <Button
+              onClick={saveMetrics}
+              disabled={savingMetrics}
+              className="w-full gap-2 bg-zinc-100 hover:bg-white text-zinc-900 font-semibold h-10"
+            >
+              <Save className="h-4 w-4" />
+              {savingMetrics ? "Saving..." : "Save & Update"}
+            </Button>
+          </div>
         </div>
 
-        {/* ══════════════ BOOKED CALLS TREND ══════════════ */}
-        <Card className="bg-[hsl(222,30%,11%)] border-primary/20">
-          <CardHeader className="flex flex-row items-center justify-between">
+        {/* ═══ BOOKED CALLS TREND ═══ */}
+        <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <CardTitle className="text-base">Booked Calls — Last 30 Days</CardTitle>
-              <CardDescription className="text-primary/40">Daily Thank You page visits</CardDescription>
+              <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-zinc-500" /> Booked Calls — 30 Days
+              </h3>
             </div>
-            <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={bookedTrend}>
-                <defs>
-                  <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(42, 52%, 53%)" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="hsl(42, 52%, 53%)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(222, 20%, 20%)" />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(42, 52%, 53%, 0.5)" }} tickLine={false} axisLine={false} interval={Math.floor(bookedTrend.length / 7)} />
-                <YAxis tick={{ fontSize: 10, fill: "hsl(42, 52%, 53%, 0.5)" }} tickLine={false} axisLine={false} allowDecimals={false} />
-                <RechartsTooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="count" name="Booked Calls" stroke="hsl(42, 52%, 53%)" strokeWidth={2.5} fill="url(#goldGradient)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+            <ResetBtn onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
+          </div>
+          <ResponsiveContainer width="100%" height={240}>
+            <AreaChart data={bookedTrend}>
+              <defs>
+                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#71717a" }} tickLine={false} axisLine={false} interval={Math.floor(bookedTrend.length / 7)} />
+              <YAxis tick={{ fontSize: 10, fill: "#71717a" }} tickLine={false} axisLine={false} allowDecimals={false} />
+              <RechartsTooltip content={<CustomTooltip />} />
+              <Area type="monotone" dataKey="count" name="Booked Calls" stroke="#3b82f6" strokeWidth={2} fill="url(#areaGrad)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
 
-        {/* ══════════════ TRAFFIC HEATMAP ══════════════ */}
-        <Card className="bg-[hsl(222,30%,11%)] border-primary/20">
-          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
+        {/* ═══ TRAFFIC HEATMAP ═══ */}
+        <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
             <div>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Clock className="h-4 w-4 text-primary" /> Traffic Heatmap (EST)
-              </CardTitle>
-              <CardDescription className="text-primary/40">Page views by day &amp; hour</CardDescription>
+              <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                <Clock className="h-4 w-4 text-zinc-500" /> Traffic Heatmap (EST)
+              </h3>
+              <p className="text-xs text-zinc-500 mt-0.5">Page views by day & hour</p>
             </div>
             <div className="flex items-center gap-2">
-              <DateRangeFilter value={heatmapRange} onChange={setHeatmapRange} customDate={heatmapCustomDate} onCustomDateChange={setHeatmapCustomDate} />
-              <ResetButton onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
+              <DateFilter value={heatmapRange} onChange={setHeatmapRange} customDate={heatmapCustomDate} onCustomDate={setHeatmapCustomDate} />
+              <ResetBtn onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
             </div>
-          </CardHeader>
-          <CardContent className="overflow-x-auto">
+          </div>
+          <div className="overflow-x-auto">
             <div className="min-w-[640px]">
               <div className="mb-1 flex">
-                <div className="w-12 shrink-0" />
-                {Array.from({ length: 24 }, (_, h) => {
-                  const isPM = h >= 12;
-                  const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
-                  return (
-                    <div key={h} className="flex-1 text-center text-[9px] text-primary/30">
-                      {displayHour}{isPM ? 'p' : 'a'}
-                    </div>
-                  );
-                })}
+                <div className="w-10 shrink-0" />
+                {Array.from({ length: 24 }, (_, h) => (
+                  <div key={h} className="flex-1 text-center text-[9px] text-zinc-600">
+                    {h === 0 ? '12a' : h < 12 ? `${h}a` : h === 12 ? '12p' : `${h - 12}p`}
+                  </div>
+                ))}
               </div>
               {DAYS.map((day, di) => (
-                <div key={day} className="flex items-center gap-0">
-                  <div className="w-12 shrink-0 text-right pr-2 text-xs font-medium text-primary/40">{day}</div>
+                <div key={day} className="flex items-center">
+                  <div className="w-10 shrink-0 text-right pr-2 text-[11px] text-zinc-500">{day}</div>
                   {heatmapGrid[di].map((val, hi) => {
                     const intensity = val / heatmapMax;
-                    const hue = 120 * (1 - intensity);
                     return (
                       <div
                         key={hi}
-                        className="flex-1 aspect-square rounded-sm border border-primary/5 transition-colors"
+                        className="flex-1 aspect-square rounded-[3px] border border-zinc-800/50 m-[1px]"
                         style={{
                           backgroundColor: intensity > 0
-                            ? `hsl(${hue}, 70%, 45%, ${0.2 + intensity * 0.8})`
-                            : "hsl(222, 25%, 14%)",
+                            ? `rgba(59, 130, 246, ${0.15 + intensity * 0.75})`
+                            : "rgb(24, 24, 27)",
                         }}
-                        title={`${day} ${(() => { const isPM = hi >= 12; const dh = hi === 0 ? 12 : hi > 12 ? hi - 12 : hi; return `${dh}:00 ${isPM ? "PM" : "AM"}`; })()} EST — ${val} view${val !== 1 ? "s" : ""}`}
+                        title={`${day} ${h12(hi)} — ${val} view${val !== 1 ? 's' : ''}`}
                       />
                     );
                   })}
                 </div>
               ))}
-              <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-primary/30">
+              <div className="mt-2 flex items-center justify-end gap-1.5 text-[10px] text-zinc-500">
                 <span>Less</span>
-                {[0, 0.25, 0.5, 0.75, 1].map((v) => {
-                  const hue = 120 * (1 - v);
-                  return (
-                    <div key={v} className="h-3 w-3 rounded-sm border border-primary/10" style={{ backgroundColor: v > 0 ? `hsl(${hue}, 70%, 45%, ${0.2 + v * 0.8})` : "hsl(222, 25%, 14%)" }} />
-                  );
-                })}
+                {[0, 0.25, 0.5, 0.75, 1].map((v) => (
+                  <div key={v} className="h-3 w-3 rounded-[2px]" style={{ backgroundColor: v > 0 ? `rgba(59, 130, 246, ${0.15 + v * 0.75})` : "rgb(24, 24, 27)" }} />
+                ))}
                 <span>More</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* ══════════════ CLIENT PIPELINE ══════════════ */}
-        <Card className="bg-[hsl(222,30%,11%)] border-primary/20">
-          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
+        {/* ═══ CLIENT PIPELINE ═══ */}
+        <div className="rounded-xl bg-zinc-900 border border-zinc-800 p-5">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Users className="h-4 w-4 text-primary" /> Client Pipeline
-              </CardTitle>
-              <CardDescription className="text-primary/40">{pipeline.length} clients tracked</CardDescription>
+              <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
+                <Users className="h-4 w-4 text-zinc-500" /> Client Pipeline
+              </h3>
+              <p className="text-xs text-zinc-500 mt-0.5">{pipeline.length} clients</p>
             </div>
             <Button
               size="sm"
               onClick={() => setShowAddClient(!showAddClient)}
-              className="gap-1.5 bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20"
+              className="h-8 gap-1.5 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700"
             >
               <Plus className="h-3.5 w-3.5" /> Add Client
             </Button>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Add client form */}
-            {showAddClient && (
-              <div className="p-4 rounded-lg bg-[hsl(222,25%,14%)] border border-primary/10 space-y-3">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <Input
-                    placeholder="Client name *"
-                    value={newClientName}
-                    onChange={(e) => setNewClientName(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
-                  />
-                  <Input
-                    placeholder="Phone"
-                    value={newClientPhone}
-                    onChange={(e) => setNewClientPhone(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
-                  />
-                  <Input
-                    placeholder="Email"
-                    value={newClientEmail}
-                    onChange={(e) => setNewClientEmail(e.target.value)}
-                    className="bg-[hsl(222,25%,16%)] border-primary/20 text-primary placeholder:text-primary/30"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button onClick={addClient} disabled={!newClientName.trim()} size="sm" className="gap-1 bg-primary text-[hsl(222,33%,8%)] font-bold">
-                    <Plus className="h-3 w-3" /> Add
-                  </Button>
-                  <Button onClick={() => setShowAddClient(false)} variant="ghost" size="sm" className="text-primary/50">Cancel</Button>
-                </div>
-              </div>
-            )}
+          </div>
 
-            {/* Pipeline stages */}
+          {showAddClient && (
+            <div className="mb-4 p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <Input placeholder="Name *" value={newClientName} onChange={(e) => setNewClientName(e.target.value)} className="bg-zinc-800 border-zinc-700 text-zinc-200 h-9" />
+                <Input placeholder="Phone" value={newClientPhone} onChange={(e) => setNewClientPhone(e.target.value)} className="bg-zinc-800 border-zinc-700 text-zinc-200 h-9" />
+                <Input placeholder="Email" value={newClientEmail} onChange={(e) => setNewClientEmail(e.target.value)} className="bg-zinc-800 border-zinc-700 text-zinc-200 h-9" />
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={addClient} disabled={!newClientName.trim()} size="sm" className="bg-zinc-100 text-zinc-900 font-semibold gap-1">
+                  <Plus className="h-3 w-3" /> Add
+                </Button>
+                <Button onClick={() => setShowAddClient(false)} variant="ghost" size="sm" className="text-zinc-500">Cancel</Button>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
             {PIPELINE_STAGES.map((stage) => {
               const clients = pipeline.filter((c) => c.stage === stage);
-              if (clients.length === 0) return (
-                <div key={stage} className="py-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge className={`text-[11px] ${STAGE_COLORS[stage] || "bg-primary/20 text-primary"} border`}>
-                      {stage}
-                    </Badge>
-                    <span className="text-[11px] text-primary/30">0</span>
-                  </div>
-                </div>
-              );
               return (
-                <div key={stage} className="py-2">
+                <div key={stage}>
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge className={`text-[11px] ${STAGE_COLORS[stage] || "bg-primary/20 text-primary"} border`}>
+                    <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${STAGE_COLORS[stage]}`}>
                       {stage}
-                    </Badge>
-                    <span className="text-[11px] text-primary/30">{clients.length}</span>
+                    </span>
+                    <span className="text-[11px] text-zinc-600">{clients.length}</span>
                   </div>
-                  <div className="space-y-2">
-                    {clients.map((client) => (
-                      <div key={client.id} className="flex items-center gap-3 p-3 rounded-lg bg-[hsl(222,25%,14%)] border border-primary/10 group">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{client.name}</p>
-                          <p className="text-[11px] text-primary/40 truncate">
-                            {[client.phone, client.email].filter(Boolean).join(" · ") || "No contact info"}
-                          </p>
+                  {clients.length > 0 && (
+                    <div className="space-y-1.5 ml-1">
+                      {clients.map((client) => (
+                        <div key={client.id} className="flex items-center gap-3 p-3 rounded-lg bg-zinc-800/50 border border-zinc-800 group hover:border-zinc-700 transition-colors">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-zinc-200 truncate">{client.name}</p>
+                            <p className="text-[11px] text-zinc-500 truncate">
+                              {[client.phone, client.email].filter(Boolean).join(" · ") || "No contact info"}
+                            </p>
+                          </div>
+                          <Select value={client.stage} onValueChange={(v) => moveClient(client.id, v)}>
+                            <SelectTrigger className="h-7 w-[130px] text-[11px] bg-zinc-800 border-zinc-700 text-zinc-300">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {PIPELINE_STAGES.map((s) => (
+                                <SelectItem key={s} value={s}>{s}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-zinc-900 border-zinc-800">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-zinc-100">Remove {client.name}?</AlertDialogTitle>
+                                <AlertDialogDescription>This will permanently remove this client.</AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel className="bg-zinc-800 border-zinc-700 text-zinc-300">Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => deleteClient(client.id)} className="bg-red-600 hover:bg-red-700 text-white">Remove</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
-                        <Select value={client.stage} onValueChange={(v) => moveClient(client.id, v)}>
-                          <SelectTrigger className="h-7 w-[140px] text-[11px] bg-transparent border-primary/20">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PIPELINE_STAGES.map((s) => (
-                              <SelectItem key={s} value={s}>{s}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-red-400/50 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <X className="h-3 w-3" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className="bg-[hsl(222,30%,11%)] border-primary/20">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Remove {client.name}?</AlertDialogTitle>
-                              <AlertDialogDescription>This will permanently remove this client from your pipeline.</AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => deleteClient(client.id)} className="bg-red-600 hover:bg-red-700 text-white">Remove</AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </main>
     </div>
   );
+};
+
+// Helper for heatmap tooltip
+const h12 = (h: number) => {
+  const isPM = h >= 12;
+  const dh = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${dh}:00 ${isPM ? "PM" : "AM"}`;
 };
 
 export default AdminDashboard;

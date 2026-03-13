@@ -9,6 +9,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import Testimonials from "@/components/Testimonials";
 import ServiceAreas from "@/components/ServiceAreas";
 import FAQ from "@/components/FAQ";
+import FinalCTA from "@/components/FinalCTA";
 
 import Footer from "@/components/Footer";
 import MobileCTA from "@/components/MobileCTA";
@@ -27,6 +28,7 @@ const Index = () => (
       <Testimonials />
       <ServiceAreas />
       <FAQ />
+      <FinalCTA />
       
     </main>
     <Footer />

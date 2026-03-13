@@ -212,7 +212,16 @@ const AdminDashboard = () => {
     setSavingMetrics(false);
   };
 
-  const addClient = async () => {
+  const saveSpots = async () => {
+    setSavingSpots(true);
+    await Promise.all([
+      supabase.from("site_settings").update({ value: spotsRemainingInput, updated_at: new Date().toISOString() }).eq("key", "spots_remaining"),
+      supabase.from("site_settings").update({ value: spotsMonthInput, updated_at: new Date().toISOString() }).eq("key", "spots_month"),
+    ]);
+    toast({ title: "Saved", description: "Spots & month updated on website." });
+    setSavingSpots(false);
+  };
+
     if (!newClientName.trim()) return;
     await supabase.from("client_pipeline").insert({
       name: newClientName.trim(),

@@ -12,7 +12,7 @@ const Pricing = () => {
       <div className="container mx-auto px-4 text-center">
         <RevealItem>
           <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-            Simple, Transparent <span className="text-primary text-glow">Pricing</span>
+            Let's Build Your <span className="text-primary text-glow">Credit Repair Plan</span>
           </h2>
         </RevealItem>
         <RevealItem>

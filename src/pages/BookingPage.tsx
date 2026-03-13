@@ -23,6 +23,7 @@ const ScrollIndicator = () => (
 );
 
 const BookingPage = () => {
+  const { spotsRemaining, spotsMonth } = useSiteSettings();
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://link.msgsndr.com/js/form_embed.js";

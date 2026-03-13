@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { COMPANY } from "@/lib/constants";
+import { COMPANY, SPOTS_REMAINING, SPOTS_MONTH } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useRef } from "react";
 

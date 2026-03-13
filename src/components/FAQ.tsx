@@ -6,7 +6,7 @@ const faqs = [
   { q: "What if nothing gets removed?", a: "We offer a money-back guarantee. If we can't get a single negative removed in the first 30–120 days, you get your money back. No questions asked." },
   { q: "Do you work with bankruptcies?", a: "Yes! We specialize in helping clients with active and discharged bankruptcies. We create strategic rebuilding plans to help you recover your credit as fast as possible." },
   { q: "Is this legal?", a: "Absolutely. Credit repair is 100% legal and protected under the Credit Repair Organizations Act (CROA) and the Fair Credit Reporting Act (FCRA). You have the legal right to dispute any inaccurate, unfair, or unverifiable information on your credit report." },
-  { q: "How much does it cost?", a: "We offer two plans: a one-time payment of $799 or a flexible monthly plan at $125/month. No hidden fees, no surprise charges." },
+  
   { q: "Can you help me get business funding?", a: "Yes! Once your credit is in a strong position, we help you access business funding — including 0% interest options when qualified. Many of our clients use improved credit to launch or grow their businesses." },
 ];
 

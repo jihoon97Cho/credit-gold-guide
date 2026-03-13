@@ -5,6 +5,7 @@ import { useSiteSettings } from "@/hooks/use-site-settings";
 
 const AnnouncementBanner = () => {
   const [dismissed, setDismissed] = useState(false);
+  const { spotsRemaining, spotsMonth } = useSiteSettings();
 
   if (dismissed) return null;
 

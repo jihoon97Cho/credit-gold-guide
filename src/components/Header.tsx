@@ -59,8 +59,8 @@ const Header = () => {
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
           {!hideGetStarted && (
-            <Button onClick={() => scrollTo("#pricing")} className="rounded-full">
-              Get Started
+            <Button onClick={() => navigate("/book")} className="rounded-full">
+              Book a Call Now
             </Button>
           )}
         </div>

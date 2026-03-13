@@ -121,9 +121,11 @@ const AdminDashboard = () => {
   const [pipeline, setPipeline] = useState<PipelineClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [funnelRange, setFunnelRange] = useState<string>("all");
-  const [funnelCustomDate, setFunnelCustomDate] = useState<Date | undefined>();
+  const [funnelDateFrom, setFunnelDateFrom] = useState<Date | undefined>();
+  const [funnelDateTo, setFunnelDateTo] = useState<Date | undefined>();
   const [heatmapRange, setHeatmapRange] = useState<string>("all");
-  const [heatmapCustomDate, setHeatmapCustomDate] = useState<Date | undefined>();
+  const [heatmapDateFrom, setHeatmapDateFrom] = useState<Date | undefined>();
+  const [heatmapDateTo, setHeatmapDateTo] = useState<Date | undefined>();
 
   const [showedUpInput, setShowedUpInput] = useState("");
   const [becameClientInput, setBecameClientInput] = useState("");
@@ -224,23 +226,25 @@ const AdminDashboard = () => {
   };
 
   // ─── Funnel ───────────────────────────────────────────
-  const filterByRange = (items: SiteEvent[], range: string, customDate?: Date) => {
+  const filterByRange = (items: SiteEvent[], range: string, dateFrom?: Date, dateTo?: Date) => {
     if (range === "all") return items;
     const now = new Date();
     let start: Date;
+    let end: Date | undefined;
     if (range === "today") start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     else if (range === "week") start = new Date(Date.now() - 7 * 86400000);
     else if (range === "month") start = new Date(Date.now() - 30 * 86400000);
-    else if (range === "custom" && customDate) {
-      start = new Date(customDate.getFullYear(), customDate.getMonth(), customDate.getDate());
-      const end = new Date(start.getTime() + 86400000);
+    else if (range === "custom" && dateFrom) {
+      start = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate());
+      const to = dateTo || dateFrom;
+      end = new Date(to.getFullYear(), to.getMonth(), to.getDate() + 1);
       return items.filter((e) => { const d = new Date(e.created_at); return d >= start && d < end; });
     } else return items;
     return items.filter((e) => new Date(e.created_at) >= start);
   };
 
-  const funnelEvents = filterByRange(events, funnelRange, funnelCustomDate);
-  const heatmapEvents = filterByRange(events, heatmapRange, heatmapCustomDate);
+  const funnelEvents = filterByRange(events, funnelRange, funnelDateFrom, funnelDateTo);
+  const heatmapEvents = filterByRange(events, heatmapRange, heatmapDateFrom, heatmapDateTo);
 
   const funnelSessionMap = funnelEvents
     .filter((e) => e.event_type === "page_view")
@@ -311,11 +315,13 @@ const AdminDashboard = () => {
   };
 
   // ─── Shared components ────────────────────────────────
-  const DateFilter = ({ value, onChange, customDate, onCustomDate }: {
+  const DateFilter = ({ value, onChange, dateFrom, dateTo, onDateFrom, onDateTo }: {
     value: string; onChange: (v: string) => void;
-    customDate?: Date; onCustomDate: (d: Date | undefined) => void;
+    dateFrom?: Date; dateTo?: Date;
+    onDateFrom: (d: Date | undefined) => void;
+    onDateTo: (d: Date | undefined) => void;
   }) => (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 flex-wrap">
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="h-8 w-[120px] text-xs bg-zinc-800 border-zinc-700 text-zinc-300">
           <SelectValue />
@@ -329,17 +335,31 @@ const AdminDashboard = () => {
         </SelectContent>
       </Select>
       {value === "custom" && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
-              <CalendarIcon className="h-3 w-3" />
-              {customDate ? format(customDate, "MMM d") : "Pick"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 z-[9999]" align="start">
-            <Calendar mode="single" selected={customDate} onSelect={onCustomDate} initialFocus className="p-3 pointer-events-auto" />
-          </PopoverContent>
-        </Popover>
+        <div className="flex items-center gap-1.5">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
+                <CalendarIcon className="h-3 w-3" />
+                {dateFrom ? format(dateFrom, "MMM d") : "From"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 z-[9999]" align="start">
+              <Calendar mode="single" selected={dateFrom} onSelect={onDateFrom} initialFocus className="p-3 pointer-events-auto" />
+            </PopoverContent>
+          </Popover>
+          <span className="text-xs text-zinc-600">→</span>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs border-zinc-700 bg-zinc-800 text-zinc-300">
+                <CalendarIcon className="h-3 w-3" />
+                {dateTo ? format(dateTo, "MMM d") : "To"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 z-[9999]" align="start">
+              <Calendar mode="single" selected={dateTo} onSelect={onDateTo} initialFocus className="p-3 pointer-events-auto" />
+            </PopoverContent>
+          </Popover>
+        </div>
       )}
     </div>
   );
@@ -473,30 +493,40 @@ const AdminDashboard = () => {
                 </h3>
                 <p className="text-xs text-zinc-500 mt-0.5">Auto-tracked stages</p>
               </div>
-              <DateFilter value={funnelRange} onChange={setFunnelRange} customDate={funnelCustomDate} onCustomDate={setFunnelCustomDate} />
+              <DateFilter value={funnelRange} onChange={setFunnelRange} dateFrom={funnelDateFrom} dateTo={funnelDateTo} onDateFrom={setFunnelDateFrom} onDateTo={setFunnelDateTo} />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-0">
               {funnelSteps.map((step, i) => {
                 const prev = i === 0 ? step.value : funnelSteps[i - 1].value;
                 const dropoff = i === 0 ? 0 : prev > 0 ? ((prev - step.value) / prev * 100) : 0;
-                const barWidth = funnelSteps[0].value > 0 ? (step.value / funnelSteps[0].value * 100) : 0;
+                const convRate = i === 0 ? 100 : funnelSteps[0].value > 0 ? (step.value / funnelSteps[0].value * 100) : 0;
+                const barWidth = funnelSteps[0].value > 0 ? Math.max((step.value / funnelSteps[0].value * 100), 8) : (i === 0 ? 100 : 50);
+                const colors = ["from-blue-500 to-blue-400", "from-amber-500 to-amber-400", "from-emerald-500 to-emerald-400"];
+
                 return (
                   <div key={step.name}>
                     {i > 0 && (
-                      <div className="flex items-center gap-2 py-1 pl-4">
-                        <ChevronRight className="h-3 w-3 text-zinc-700" />
-                        <span className="text-[11px] text-red-400/70">↓ {dropoff.toFixed(1)}% drop-off</span>
+                      <div className="flex items-center justify-center py-1.5 gap-2">
+                        <div className="h-4 w-px bg-zinc-700" />
+                        <span className="text-[11px] font-medium text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">
+                          ↓ {dropoff.toFixed(1)}% drop-off
+                        </span>
+                        <div className="h-4 w-px bg-zinc-700" />
                       </div>
                     )}
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm text-zinc-300">{step.name}</span>
-                      <span className="text-sm font-bold text-zinc-100">{step.value}</span>
-                    </div>
-                    <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="flex flex-col items-center">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500"
-                        style={{ width: `${Math.max(barWidth, 0)}%` }}
-                      />
+                        className={`relative h-12 rounded-lg bg-gradient-to-r ${colors[i]} transition-all duration-700 flex items-center justify-between px-4`}
+                        style={{ width: `${barWidth}%` }}
+                      >
+                        <span className="text-xs font-semibold text-white truncate">{step.name}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-white">{step.value}</span>
+                          {i > 0 && (
+                            <span className="text-[10px] text-white/60">({convRate.toFixed(0)}%)</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
@@ -583,7 +613,7 @@ const AdminDashboard = () => {
               <p className="text-xs text-zinc-500 mt-0.5">Page views by day & hour</p>
             </div>
             <div className="flex items-center gap-2">
-              <DateFilter value={heatmapRange} onChange={setHeatmapRange} customDate={heatmapCustomDate} onCustomDate={setHeatmapCustomDate} />
+              <DateFilter value={heatmapRange} onChange={setHeatmapRange} dateFrom={heatmapDateFrom} dateTo={heatmapDateTo} onDateFrom={setHeatmapDateFrom} onDateTo={setHeatmapDateTo} />
               <ResetBtn onConfirm={() => resetEvents({ event_type: "page_view" })} label="Page Views" />
             </div>
           </div>

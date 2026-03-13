@@ -81,7 +81,7 @@ const Hero = () => {
         >
           <motion.div whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
             <Button asChild size="lg" className="rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-shadow">
-              <Link to="/book">Get Started</Link>
+              <Link to="/book">Book a Call Now</Link>
             </Button>
           </motion.div>
         </motion.div>

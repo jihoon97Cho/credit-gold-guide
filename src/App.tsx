@@ -26,6 +26,7 @@ const App = () => (
           <PageViewTracker />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/checklist" element={<LeadMagnetPage />} />
             
             <Route path="/book" element={<BookingPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />

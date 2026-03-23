@@ -24,9 +24,9 @@ const Pricing = () => {
         </RevealItem>
         <RevealItem>
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="mt-8">
-            <Button onClick={() => navigate("/book")} className="rounded-full py-6 px-10 text-lg font-bold gap-2">
-              <Phone className="h-5 w-5" />
-              Book a Call Now
+             <Button onClick={() => navigate("/book")} className="rounded-full py-6 px-10 text-lg font-bold gap-2">
+               <Phone className="h-5 w-5" />
+               Book Your Free Credit Review
             </Button>
           </motion.div>
           <p className="mt-4 text-sm font-semibold text-primary">

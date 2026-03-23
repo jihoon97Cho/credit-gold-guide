@@ -105,8 +105,8 @@ const Hero = () => {
         >
           <span>✓ No obligation</span>
           <span>✓ Free consultation</span>
-          <span>✓ Money-back guarantee</span>
-          <span>✓ We never share your info</span>
+          <span>✓ Money back guarantee</span>
+          <span>✓ Your information stays private</span>
         </motion.div>
       </motion.div>
     </section>

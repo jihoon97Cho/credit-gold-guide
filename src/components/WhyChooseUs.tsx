@@ -16,8 +16,8 @@ const WhyChooseUs = () => (
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <RevealItem>
-          <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-            Why Clients <span className="text-primary text-glow">Choose Us</span>
+           <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+             Why Clients <span className="text-primary text-glow">Trust Us</span>
           </h2>
         </RevealItem>
       </div>

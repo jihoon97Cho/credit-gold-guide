@@ -53,8 +53,7 @@ const Results = () => {
           </RevealItem>
           <RevealItem>
             <p className="mx-auto max-w-2xl text-muted-foreground">
-              See real improvements from real clients. Negative items removed,
-              scores improved, funding unlocked.
+               See how real clients removed negative items, raised their credit scores, and got closer to better approvals and more options.
             </p>
           </RevealItem>
         </div>

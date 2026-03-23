@@ -30,7 +30,7 @@ const Pricing = () => {
             </Button>
           </motion.div>
           <p className="mt-4 text-sm font-semibold text-primary">
-            ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemaining} spots remaining</span> for {spotsMonth}
+            We only take 10 new clients each month — <span className="font-extrabold">{spotsRemaining} spots left</span> for {spotsMonth}
           </p>
         </RevealItem>
       </div>

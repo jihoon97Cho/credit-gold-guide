@@ -18,8 +18,8 @@ const Services = () => (
           </h2>
         </RevealItem>
         <RevealItem>
-          <p className="mx-auto max-w-2xl text-muted-foreground">
-            A simple, proven process to repair your credit and unlock new opportunities.
+           <p className="mx-auto max-w-2xl text-muted-foreground">
+             A simple step by step plan to help improve your credit.
           </p>
         </RevealItem>
       </div>

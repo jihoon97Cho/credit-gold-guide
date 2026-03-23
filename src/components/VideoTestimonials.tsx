@@ -46,7 +46,7 @@ const VideoTestimonials = () => (
         </RevealItem>
         <RevealItem>
           <p className="mx-auto max-w-2xl text-muted-foreground">
-            Watch real client stories and see how we've helped transform their credit.
+            Watch real clients share how they improved their credit and moved forward.
           </p>
         </RevealItem>
       </div>

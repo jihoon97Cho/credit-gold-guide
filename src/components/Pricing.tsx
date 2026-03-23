@@ -18,8 +18,8 @@ const Pricing = () => {
           </h2>
         </RevealItem>
         <RevealItem>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Every client's situation is different. Book a free 15-minute credit analysis call and we'll build a custom plan for you — no obligation.
+           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+             Every credit situation is different. Book a free 15 minute call and we'll show you the best next steps.
           </p>
         </RevealItem>
         <RevealItem>

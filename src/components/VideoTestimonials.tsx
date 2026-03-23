@@ -40,8 +40,8 @@ const VideoTestimonials = () => (
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <RevealItem>
-          <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-            Hear It From <span className="text-primary text-glow">Our Clients</span>
+           <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+             See What Our <span className="text-primary text-glow">Clients Say</span>
           </h2>
         </RevealItem>
         <RevealItem>

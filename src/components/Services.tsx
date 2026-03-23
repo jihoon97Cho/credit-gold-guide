@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const steps = [
-  { num: "01", title: "Free Strategy Call", desc: "We review your credit reports, identify negative items, and build a personalized game plan." },
-  { num: "02", title: "Dispute & Remove", desc: "We aggressively dispute inaccurate, unfair, and unverifiable items across all 3 bureaus using proven strategies." },
-  { num: "03", title: "Build & Optimize", desc: "We help you optimize utilization and strengthen your overall credit profile." },
-  { num: "04", title: "Unlock Funding", desc: "With improved credit, we connect you to business funding opportunities — including 0% interest options when qualified." },
+  { num: "01", title: "Free Credit Review", desc: "We look at your credit, find what is hurting it, and show you the best next steps." },
+  { num: "02", title: "Dispute Negative Items", desc: "We work to remove inaccurate negative items from your credit report." },
+  { num: "03", title: "Build Better Credit Habits", desc: "We help you improve the things that can make your credit stronger over time." },
+  { num: "04", title: "Move Forward With Confidence", desc: "With better credit, you can have a better chance of getting approved and more options in front of you." },
 ];
 
 const Services = () => (

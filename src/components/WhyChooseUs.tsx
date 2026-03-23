@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 import { ScrollReveal, RevealItem } from "@/components/ScrollReveal";
 
 const items = [
-  { icon: Zap, title: "Fast Action Plan", desc: "Your personalized strategy within 24–48 hours." },
-  { icon: DollarSign, title: "Money Back Guarantee", desc: "If we can't remove at least one negative item in the first 30–60 days." },
-  { icon: MessageCircle, title: "Direct Communication", desc: "Talk to real people who care about your results." },
-  { icon: CheckCircle, title: "Proven Process", desc: "A step-by-step system trusted by hundreds of clients." },
+  { icon: Zap, title: "Fast Action Plan", desc: "Get a clear plan within 24 to 48 hours." },
+  { icon: DollarSign, title: "Money Back Guarantee", desc: "If we cannot remove at least one negative item in the first 30 to 60 days, our guarantee protects you." },
+  { icon: MessageCircle, title: "Direct Communication", desc: "Talk to real people who care about helping you improve your credit." },
+  { icon: CheckCircle, title: "Proven Process", desc: "A simple step by step process trusted by hundreds of clients." },
   { icon: ClipboardList, title: "Transparent Pricing", desc: "No hidden fees. No surprise charges. Ever." },
-  { icon: Globe, title: "Nationwide Service", desc: "Serving clients in all 50 states remotely." },
+  { icon: Globe, title: "Nationwide Service", desc: "We help clients in all 50 states from anywhere." },
 ];
 
 const WhyChooseUs = () => (

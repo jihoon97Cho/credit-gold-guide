@@ -94,7 +94,7 @@ const Hero = () => {
           transition={{ duration: dur, ease, delay: 0.7 }}
           className="mb-6 text-sm font-semibold text-primary"
         >
-          ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemaining} spots remaining</span> for {spotsMonth}
+          We only take 10 new clients each month — <span className="font-extrabold">{spotsRemaining} spots left</span> for {spotsMonth}
         </motion.p>
 
         <motion.div

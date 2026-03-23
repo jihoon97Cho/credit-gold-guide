@@ -72,7 +72,7 @@ const Hero = () => {
           transition={{ duration: dur, ease, delay: 0.45 }}
           className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl"
         >
-          We help remove negative items, improve your credit profile, and unlock real funding opportunities — backed by a money-back guarantee.
+          From negative items to missed approvals, we help you fix what is holding your credit back so you can move forward with more confidence and more options.
         </motion.p>
 
         <motion.div

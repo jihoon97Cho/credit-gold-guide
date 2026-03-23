@@ -62,8 +62,8 @@ const Hero = () => {
           transition={{ duration: isMobile ? 0.6 : 0.8, ease, delay: 0.3 }}
           className="mx-auto mb-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl"
         >
-          Take Control of Your Credit.{" "}
-          <span className="text-primary text-glow">Build the Future You Deserve.</span>
+          Bad Credit Keeps Closing Doors.{" "}
+          <span className="text-primary text-glow">We Help You Open Them Again.</span>
         </motion.h1>
 
         <motion.p

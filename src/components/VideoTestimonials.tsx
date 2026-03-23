@@ -40,13 +40,13 @@ const VideoTestimonials = () => (
     <div className="container mx-auto px-4">
       <div className="mb-12 text-center">
         <RevealItem>
-          <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
-            Hear It From <span className="text-primary text-glow">Our Clients</span>
+           <h2 className="mb-4 text-3xl font-extrabold text-foreground sm:text-4xl">
+             See What Our <span className="text-primary text-glow">Clients Say</span>
           </h2>
         </RevealItem>
         <RevealItem>
           <p className="mx-auto max-w-2xl text-muted-foreground">
-            Watch real client stories and see how we've helped transform their credit.
+            Watch real clients share how they improved their credit and moved forward.
           </p>
         </RevealItem>
       </div>

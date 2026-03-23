@@ -18,19 +18,19 @@ const Pricing = () => {
           </h2>
         </RevealItem>
         <RevealItem>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Every client's situation is different. Book a free 15-minute credit analysis call and we'll build a custom plan for you — no obligation.
+           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+             Every credit situation is different. Book a free 15 minute call and we'll show you the best next steps.
           </p>
         </RevealItem>
         <RevealItem>
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="mt-8">
-            <Button onClick={() => navigate("/book")} className="rounded-full py-6 px-10 text-lg font-bold gap-2">
-              <Phone className="h-5 w-5" />
-              Book a Call Now
+             <Button onClick={() => navigate("/book")} className="rounded-full py-6 px-10 text-lg font-bold gap-2">
+               <Phone className="h-5 w-5" />
+               Book Your Free Credit Review
             </Button>
           </motion.div>
           <p className="mt-4 text-sm font-semibold text-primary">
-            ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemaining} spots remaining</span> for {spotsMonth}
+            We only take 10 new clients each month — <span className="font-extrabold">{spotsRemaining} spots left</span> for {spotsMonth}
           </p>
         </RevealItem>
       </div>

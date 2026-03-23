@@ -62,8 +62,8 @@ const Hero = () => {
           transition={{ duration: isMobile ? 0.6 : 0.8, ease, delay: 0.3 }}
           className="mx-auto mb-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl"
         >
-          Take Control of Your Credit.{" "}
-          <span className="text-primary text-glow">Build the Future You Deserve.</span>
+          Bad Credit Keeps Closing Doors.{" "}
+          <span className="text-primary text-glow">We Help You Open Them Again.</span>
         </motion.h1>
 
         <motion.p
@@ -72,7 +72,7 @@ const Hero = () => {
           transition={{ duration: dur, ease, delay: 0.45 }}
           className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl"
         >
-          We help remove negative items, improve your credit profile, and unlock real funding opportunities — backed by a money-back guarantee.
+          From negative items to missed approvals, we help you fix what is holding your credit back so you can move forward with more confidence and more options.
         </motion.p>
 
         <motion.div
@@ -83,7 +83,7 @@ const Hero = () => {
         >
           <motion.div whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
             <Button asChild size="lg" className="rounded-full px-10 py-6 text-lg font-bold shadow-lg hover:shadow-xl transition-shadow">
-              <Link to="/book">Book a Call Now</Link>
+              <Link to="/book">Book Your Free Credit Strategy Call</Link>
             </Button>
           </motion.div>
         </motion.div>
@@ -94,7 +94,7 @@ const Hero = () => {
           transition={{ duration: dur, ease, delay: 0.7 }}
           className="mb-6 text-sm font-semibold text-primary"
         >
-          ⚠️ We only accept 10 new clients per month — <span className="font-extrabold">{spotsRemaining} spots remaining</span> for {spotsMonth}
+          We only take 10 new clients each month — <span className="font-extrabold">{spotsRemaining} spots left</span> for {spotsMonth}
         </motion.p>
 
         <motion.div
@@ -105,8 +105,8 @@ const Hero = () => {
         >
           <span>✓ No obligation</span>
           <span>✓ Free consultation</span>
-          <span>✓ Money-back guarantee</span>
-          <span>✓ We never share your info</span>
+          <span>✓ Money back guarantee</span>
+          <span>✓ Your information stays private</span>
         </motion.div>
       </motion.div>
     </section>

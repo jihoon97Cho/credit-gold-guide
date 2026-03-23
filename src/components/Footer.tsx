@@ -2,7 +2,7 @@ import { COMPANY } from "@/lib/constants";
 import logo from "@/assets/logo.png";
 
 const Footer = () => (
-  <footer className="border-t border-border bg-foreground py-12 text-background">
+  <footer className="border-t border-border bg-navy py-12 text-white">
     <div className="container mx-auto px-4">
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div>

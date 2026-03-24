@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Index from "./pages/Index";
 import LeadMagnetPage from "./pages/LeadMagnetPage";
-
+import BlueprintThankYouPage from "./pages/BlueprintThankYouPage";
 import ThankYouPage from "./pages/ThankYouPage";
 import BookingPage from "./pages/BookingPage";
 import AdminLogin from "./pages/AdminLogin";

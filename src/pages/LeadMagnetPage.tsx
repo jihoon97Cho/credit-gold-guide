@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useInView, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { COMPANY } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import logo from "@/assets/logo.png";
@@ -15,6 +16,7 @@ import {
   MessageSquareWarning,
   Zap,
   ShieldCheck,
+  Shield,
   Star,
   CheckCircle2,
   ArrowDown,
@@ -23,8 +25,12 @@ import {
   ClipboardCheck,
   ChevronUp,
   Phone,
+  FileText,
+  BarChart3,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 /* ─── Motion presets ─── */
 const ease = [0.25, 0.46, 0.45, 0.94] as [number, number, number, number];
@@ -65,8 +71,8 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToForm = () =>
-    document.getElementById("form-section")?.scrollIntoView({ behavior: "smooth" });
+  const scrollToHeroForm = () =>
+    document.getElementById("hero-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
 
   return (
     <AnimatePresence>
@@ -83,8 +89,8 @@ const Nav = () => {
               <img src={logo} alt={COMPANY.name} className="h-8 w-auto" />
             </Link>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Button onClick={scrollToForm} className="rounded-full font-bold">
-                Get the Free Checklist
+              <Button onClick={scrollToHeroForm} className="rounded-full font-bold">
+                Get the Free Blueprint
               </Button>
             </motion.div>
           </div>
@@ -146,42 +152,46 @@ const CountUp = ({ target, suffix = "" }: { target: number; suffix?: string }) =
   );
 };
 
-/* ─── Steps data ─── */
+/* ─── Steps data (6 steps) ─── */
 const steps = [
   {
     icon: FileSearch,
-    title: "Pull the Right Reports",
-    teaser: "Most people start with the wrong reports and never see the full picture.",
+    title: "Understand Your Credit Report",
+    teaser: "Learn how your score is calculated, what the 3 bureaus track, and which negative items are hurting you the most.",
+  },
+  {
+    icon: Shield,
+    title: "Set Up Credit Monitoring",
+    teaser: "Get full visibility into all 3 bureau reports so you know exactly what to dispute and can track every change in real time.",
   },
   {
     icon: Search,
-    title: "Find What Shouldn't Be There",
-    teaser: "Many files contain inaccurate, outdated, or questionable items that deserve a closer look.",
+    title: "The Inquiry Removal Playbook",
+    teaser: "4 proven methods to remove unauthorized hard inquiries — including direct bureau disputes, creditor contact, and the opt-out strategy.",
   },
   {
     icon: MessageSquareWarning,
-    title: "Dispute Smarter",
-    teaser: "The way you challenge information matters. Doing it wrong can waste time and delay results.",
+    title: "Dispute Negative Items Like a Pro",
+    teaser: "The exact step-by-step dispute process: when to send letters, how to escalate, and how to use the Method of Verification to force removals.",
+  },
+  {
+    icon: FileText,
+    title: "6 Ready-to-Use Dispute Letter Templates",
+    teaser: "Copy, customize, and send. Includes bureau dispute letters, inquiry removal letters, goodwill deletion requests, and pay-for-delete negotiation letters.",
   },
   {
     icon: Zap,
-    title: "Use the Hidden Score Boosters",
-    teaser: "There are overlooked moves that can improve your score faster when used correctly.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Protect the Progress",
-    teaser: "Raising your score is one thing. Keeping it stable is what creates long term results.",
+    title: "Advanced Hacks + 90-Day Action Plan",
+    teaser: "The authorized user strategy, the utilization trick, rapid rescoring, CFPB escalation — plus a week-by-week action plan to keep you on track.",
   },
 ];
 
 /* ─── Sticky steps (desktop) ─── */
 const StickySteps = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
   return (
-    <div ref={containerRef} className="relative hidden lg:grid lg:grid-cols-2 lg:gap-16">
+    <div className="relative hidden lg:grid lg:grid-cols-2 lg:gap-16">
       {/* Left sticky visual */}
       <div className="sticky top-32 self-start">
         <motion.div
@@ -192,7 +202,7 @@ const StickySteps = () => {
           transition={{ duration: 0.6, ease }}
         >
           <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">
-            Step {active + 1} of 5
+            Step {active + 1} of 6
           </p>
           <h3 className="mb-3 text-2xl font-extrabold text-foreground">{steps[active].title}</h3>
           <p className="text-muted-foreground">{steps[active].teaser}</p>
@@ -304,23 +314,110 @@ const testimonials = [
   },
 ];
 
+/* ─── Opt-in Form Component ─── */
+const OptInForm = ({ id, onSuccess }: { id?: string; onSuccess?: () => void }) => {
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firstName.trim() || !email.trim()) {
+      toast.error("Please enter your name and email.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      // Save lead to database
+      await supabase.from("leads").insert({
+        name: firstName.trim(),
+        email: email.trim(),
+        phone: phone.trim() || null,
+        source: "lead-magnet-blueprint",
+      });
+
+      // Send to GHL webhook
+      try {
+        await fetch(
+          "https://services.leadconnectorhq.com/hooks/bnmo2H6CkK9L4cUOXrpa/webhook-trigger/709947a3-1476-4c2c-8f10-d4d57aeac5b2",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: firstName.trim(),
+              email: email.trim(),
+              phone: phone.trim() || undefined,
+              source: "lead-magnet-blueprint",
+            }),
+            mode: "no-cors",
+          }
+        );
+      } catch {
+        // Webhook failure is non-blocking
+      }
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        navigate("/checklist/thank-you");
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form id={id} onSubmit={handleSubmit} className="space-y-3">
+      <Input
+        placeholder="First Name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        className="h-12 rounded-lg border-border bg-background"
+        required
+      />
+      <Input
+        type="email"
+        placeholder="Your Best Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="h-12 rounded-lg border-border bg-background"
+        required
+      />
+      <Input
+        type="tel"
+        placeholder="Phone Number (optional)"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="h-12 rounded-lg border-border bg-background"
+      />
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full rounded-full py-6 text-lg font-bold"
+          size="lg"
+        >
+          {submitting ? "Sending..." : "Send Me the Blueprint"}
+        </Button>
+      </motion.div>
+      <p className="text-center text-xs text-muted-foreground">
+        100% Free. No spam. Unsubscribe anytime.
+      </p>
+    </form>
+  );
+};
+
 /* ═══════════════════════ MAIN PAGE ═══════════════════════ */
 
 const LeadMagnetPage = () => {
   const isMobile = useIsMobile();
 
-  const scrollToForm = () =>
-    document.getElementById("form-section")?.scrollIntoView({ behavior: "smooth" });
-
-  /* Load GHL form script */
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]')) {
-      const s = document.createElement("script");
-      s.src = "https://link.msgsndr.com/js/form_embed.js";
-      s.async = true;
-      document.body.appendChild(s);
-    }
-  }, []);
+  const scrollToHeroForm = () =>
+    document.getElementById("hero-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -338,29 +435,45 @@ const LeadMagnetPage = () => {
               variants={stagger}
             >
               <motion.p variants={fadeUp} className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">
-                Free Credit Repair Checklist
+                Free Credit Repair Guide
               </motion.p>
               <motion.h1 variants={fadeUp} className="mb-5 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
-                Your Credit Score Can Be Fixed.{" "}
-                <span className="text-primary text-glow">Here's the Exact Checklist Most People Never See.</span>
+                Your Credit Score Can Be Fixed. Here's the{" "}
+                <span className="text-primary text-glow">Free Blueprint</span> to Do It Yourself.
               </motion.h1>
-              <motion.p variants={fadeUp} className="mb-4 text-lg text-muted-foreground">
-                Whether you've been denied a loan, rejected for an apartment, or feel stuck because of your credit, this free checklist shows you the next steps clearly.
+              <motion.p variants={fadeUp} className="mb-6 text-lg text-muted-foreground">
+                Whether you've been denied for a loan, rejected for an apartment, or feel stuck — this free guide gives you the exact dispute letters, inquiry removal methods, and step-by-step strategies to start removing negative items and raising your score.
               </motion.p>
-              <motion.p variants={fadeUp} className="mb-8 text-muted-foreground">
-                This checklist breaks down the 5 key steps people need to understand if they want to start improving their credit the right way.
-              </motion.p>
+
+              {/* Badges */}
+              <motion.div variants={fadeUp} className="mb-6 flex flex-wrap gap-2">
+                {["6 Dispute Letter Templates", "Inquiry Removal Playbook", "90-Day Action Plan"].map((badge) => (
+                  <span
+                    key={badge}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary"
+                  >
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    {badge}
+                  </span>
+                ))}
+              </motion.div>
+
               <motion.div variants={fadeUp}>
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button onClick={scrollToForm} size="lg" className="rounded-full px-10 py-6 text-lg font-bold gap-2">
-                    Unlock the Free Checklist
+                  <Button onClick={scrollToHeroForm} size="lg" className="rounded-full px-10 py-6 text-lg font-bold gap-2">
+                    Get the Free Blueprint
                     <ArrowDown className="h-5 w-5" />
                   </Button>
                 </motion.div>
               </motion.div>
+
+              {/* Hero opt-in form */}
+              <motion.div variants={fadeUp} className="mt-8 max-w-md">
+                <OptInForm id="hero-form" />
+              </motion.div>
             </motion.div>
 
-            {/* Checklist mockup */}
+            {/* Mockup image */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
@@ -369,7 +482,7 @@ const LeadMagnetPage = () => {
             >
               <motion.img
                 src={checklistMockup}
-                alt="The 5 Step Credit Comeback Checklist"
+                alt="The Credit Repair Blueprint"
                 className="w-full max-w-md drop-shadow-2xl"
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -399,17 +512,17 @@ const LeadMagnetPage = () => {
               {
                 icon: ShieldX,
                 title: "Denied Again?",
-                text: "Bad credit can affect approvals for loans, apartments, and more. Most people are never shown exactly what is hurting them.",
+                text: "Collections, late payments, and inquiries you didn't even know about could be tanking your score right now. Most people are never shown what's actually hurting them.",
               },
               {
                 icon: HelpCircle,
                 title: "Not Sure Where to Start?",
-                text: "The credit system is confusing on purpose. Most people waste time following the wrong advice.",
+                text: "There are 3 credit bureaus, dozens of negative item types, and confusing dispute processes. Without a clear system, most people give up before they see results.",
               },
               {
                 icon: Frown,
                 title: "Tired of Feeling Stuck?",
-                text: "Your score is not permanent. With the right steps in the right order, real progress is possible.",
+                text: "Your score is not permanent. With the right dispute letters and a proven step-by-step process, real progress is possible — often within 30-60 days.",
               },
             ].map((card, i) => (
               <motion.div key={i} variants={fadeUp}>
@@ -428,52 +541,7 @@ const LeadMagnetPage = () => {
         </div>
       </Reveal>
 
-      {/* ── WHAT'S INSIDE ── */}
-      <Reveal className="py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <motion.h2 variants={fadeUp} className="mb-4 text-center text-3xl font-extrabold sm:text-4xl">
-            What's Inside the <span className="text-primary text-glow">Free Checklist</span>
-          </motion.h2>
-          <motion.p variants={fadeUp} className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
-            Five clear steps that walk you through what to check, what to fix, and how to keep your score moving in the right direction.
-          </motion.p>
-          <StickySteps />
-          <MobileSteps />
-        </div>
-      </Reveal>
-
-      {/* ── WHY THIS MATTERS ── */}
-      <Reveal className="bg-secondary py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <motion.h2 variants={fadeUp} className="mb-4 text-center text-3xl font-extrabold sm:text-4xl">
-            Most People Either <span className="text-primary text-glow">Ignore Their Credit</span> or Pay Too Much for Basic Information
-          </motion.h2>
-          <motion.p variants={fadeUp} className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
-            This checklist helps simplify the process and gives you a clearer understanding of how to begin improving your credit profile.
-          </motion.p>
-          <div className="grid gap-6 sm:grid-cols-3">
-            {[
-              { icon: ClipboardCheck, title: "Clear Action Steps", text: "No guesswork. Each step tells you exactly what to do and why it matters." },
-              { icon: TrendingUp, title: "Built for Results", text: "Focused on the moves that actually impact your score, not filler content." },
-              { icon: Users, title: "Used by Real People", text: "Designed based on patterns from helping real clients improve their credit profiles." },
-            ].map((item, i) => (
-              <motion.div key={i} variants={fadeUp}>
-                <motion.div whileHover={cardHover} transition={{ duration: 0.25 }}>
-                  <Card className="h-full p-6 text-center">
-                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <item.icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-bold text-foreground">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.text}</p>
-                  </Card>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-
-      {/* ── SOCIAL PROOF ── */}
+      {/* ── SOCIAL PROOF (moved up) ── */}
       <Reveal className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <motion.h2 variants={fadeUp} className="mb-12 text-center text-3xl font-extrabold sm:text-4xl">
@@ -498,18 +566,63 @@ const LeadMagnetPage = () => {
             ))}
           </div>
 
-          {/* Stats */}
-          <div className="mt-12 grid grid-cols-3 gap-6 text-center">
+          {/* Stats — larger/bolder */}
+          <div className="mt-14 grid grid-cols-3 gap-6 text-center">
             {[
               { value: 500, suffix: "+", label: "Clients Helped" },
               { value: 120, suffix: "+", label: "Avg. Score Increase" },
-              { value: 5, suffix: "", label: "Step Action Plan" },
+              { value: 90, suffix: "", label: "Day Action Plan" },
             ].map((stat, i) => (
               <motion.div key={i} variants={fadeUp}>
-                <p className="text-3xl font-extrabold text-primary lg:text-4xl">
+                <p className="text-4xl font-extrabold text-primary lg:text-5xl">
                   <CountUp target={stat.value} suffix={stat.suffix} />
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{stat.label}</p>
+                <p className="mt-2 text-sm text-muted-foreground sm:text-base font-medium">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* ── WHAT'S INSIDE ── */}
+      <Reveal className="bg-secondary py-16 lg:py-24">
+        <div className="container mx-auto px-4">
+          <motion.h2 variants={fadeUp} className="mb-4 text-center text-3xl font-extrabold sm:text-4xl">
+            What's Inside the <span className="text-primary text-glow">Free Blueprint</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
+            Everything you need to start repairing your credit on your own — tools, templates, and a proven 90-day plan.
+          </motion.p>
+          <StickySteps />
+          <MobileSteps />
+        </div>
+      </Reveal>
+
+      {/* ── VALUE PROPOSITION ── */}
+      <Reveal className="py-16 lg:py-24">
+        <div className="container mx-auto px-4">
+          <motion.h2 variants={fadeUp} className="mb-4 text-center text-3xl font-extrabold sm:text-4xl">
+            Take Control of Your Credit — <span className="text-primary text-glow">Starting Today</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
+            This isn't generic advice you can Google. It's the exact system and tools our team uses with real clients — packaged into a free guide so you can start on your own.
+          </motion.p>
+          <div className="grid gap-6 sm:grid-cols-3">
+            {[
+              { icon: CheckCircle2, title: "Based on 500+ Client Cases", text: "Every strategy in this guide has been tested and refined through hundreds of real credit repair cases." },
+              { icon: BarChart3, title: "Covers All 3 Bureaus", text: "Equifax, Experian, and TransUnion — the guide walks you through disputing with each one." },
+              { icon: FileText, title: "Includes Ready-to-Send Letters", text: "6 professionally written dispute letter templates you can customize and mail today." },
+            ].map((item, i) => (
+              <motion.div key={i} variants={fadeUp}>
+                <motion.div whileHover={cardHover} transition={{ duration: 0.25 }}>
+                  <Card className="h-full p-6 text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <item.icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-bold text-foreground">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.text}</p>
+                  </Card>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -523,15 +636,15 @@ const LeadMagnetPage = () => {
             <img src={logo} alt={COMPANY.name} className="h-12 w-auto" />
           </motion.div>
           <motion.h2 variants={fadeUp} className="mb-4 text-2xl font-extrabold sm:text-3xl">
-            About <span className="text-primary">{COMPANY.name}</span>
+            About <span className="text-primary">Ascending Solutions</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="mb-8 text-muted-foreground">
-            We help people understand their credit, identify what may be hurting their profile, and create a clearer path toward improvement. This checklist is designed to give people a simple starting point before they take the next step.
+            We've helped over 500 people take control of their credit — removing collections, late payments, inquiries, and other negative items that hold scores back. This free guide is designed to give you a head start, whether you decide to work with us or go it alone.
           </motion.p>
           <motion.div variants={fadeUp}>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Button onClick={scrollToForm} className="rounded-full px-8 font-bold gap-2">
-                Get the Checklist
+              <Button onClick={scrollToHeroForm} className="rounded-full px-8 font-bold gap-2">
+                Get the Free Blueprint
                 <ArrowDown className="h-4 w-4" />
               </Button>
             </motion.div>
@@ -539,36 +652,20 @@ const LeadMagnetPage = () => {
         </div>
       </Reveal>
 
-      {/* ── FORM GATE ── */}
+      {/* ── FORM SECTION (secondary bottom form) ── */}
       <Reveal id="form-section" className="py-16 lg:py-24">
-        <div className="container mx-auto max-w-2xl px-4">
+        <div className="container mx-auto max-w-md px-4">
           <motion.h2 variants={fadeUp} className="mb-3 text-center text-3xl font-extrabold sm:text-4xl">
-            Enter Your Information to <span className="text-primary text-glow">Access the Free Checklist</span>
+            Get Your Free <span className="text-primary text-glow">Credit Repair Blueprint</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="mx-auto mb-8 max-w-lg text-center text-muted-foreground">
-            Complete the short form below to unlock the checklist and get the next steps sent to you.
+            Enter your info below and we'll send the full guide straight to your inbox — including all 6 dispute letter templates.
           </motion.p>
           <motion.div
             variants={fadeUp}
-            className="rounded-2xl border border-border bg-card p-4 gold-glow sm:p-6"
+            className="rounded-2xl border border-border bg-card p-6 gold-glow sm:p-8"
           >
-            <iframe
-              src="https://api.leadconnectorhq.com/widget/form/b2UZRHqrhGW9OKOyc3Tg"
-              style={{ width: "100%", height: "560px", border: "none", borderRadius: "12px" }}
-              id="popup-b2UZRHqrhGW9OKOyc3Tg"
-              data-layout='{"id":"POPUP"}'
-              data-trigger-type="alwaysShow"
-              data-trigger-value=""
-              data-activation-type="alwaysActivated"
-              data-activation-value=""
-              data-deactivation-type="neverDeactivate"
-              data-deactivation-value=""
-              data-form-name="Lead Magnet 1"
-              data-height="560"
-              data-layout-iframe-id="popup-b2UZRHqrhGW9OKOyc3Tg"
-              data-form-id="b2UZRHqrhGW9OKOyc3Tg"
-              title="Lead Magnet 1"
-            />
+            <OptInForm />
           </motion.div>
         </div>
       </Reveal>
@@ -580,23 +677,23 @@ const LeadMagnetPage = () => {
             <CheckCircle2 className="h-7 w-7" />
           </motion.div>
           <motion.h2 variants={fadeUp} className="mb-4 text-2xl font-extrabold sm:text-3xl">
-            Once You Submit, You'll Get Access to the Checklist
+            Your Blueprint Is On the Way!
           </motion.h2>
           <motion.p variants={fadeUp} className="mb-10 text-muted-foreground">
-            After completing the form, you'll be able to review the checklist and take the next step toward improving your credit.
+            Check your inbox (and spam folder) for the guide. While you wait...
           </motion.p>
           <motion.div variants={fadeUp} className="rounded-2xl border border-border bg-card p-8">
             <h3 className="mb-3 text-xl font-bold text-foreground">
-              Want Help Applying These Steps to Your Situation?
+              Want a Professional to Review Your Credit Report?
             </h3>
             <p className="mb-6 text-muted-foreground">
-              Book a free consultation and get personalized guidance on your credit journey.
+              Book a free credit analysis with our team. We'll pull up your report, identify the fastest path to your goal score, and build a custom strategy — no obligation.
             </p>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button asChild className="rounded-full px-8 py-6 text-lg font-bold gap-2">
                 <Link to="/book">
                   <Phone className="h-5 w-5" />
-                  Book a Free Consultation
+                  Book Your Free Credit Analysis
                 </Link>
               </Button>
             </motion.div>
@@ -605,7 +702,7 @@ const LeadMagnetPage = () => {
       </Reveal>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-border bg-foreground py-10 text-background">
+      <footer className="border-t border-border bg-navy py-10 text-white">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
@@ -628,7 +725,7 @@ const LeadMagnetPage = () => {
               <p className="text-sm opacity-70 hover:text-primary"><a href="#terms">Terms of Service</a></p>
             </div>
           </div>
-          <div className="mt-10 border-t border-background/20 pt-6">
+          <div className="mt-10 border-t border-white/20 pt-6">
             <p className="text-xs opacity-60">
               © 2025 {COMPANY.name}. All rights reserved. Credit repair services are provided in accordance with the Credit Repair Organizations Act (CROA). Results may vary.
             </p>

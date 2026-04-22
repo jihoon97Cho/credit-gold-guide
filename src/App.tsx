@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Index from "./pages/Index";
 import LeadMagnetPage from "./pages/LeadMagnetPage";
+import CreditBlueprintPage from "./pages/CreditBlueprintPage";
 import BlueprintThankYouPage from "./pages/BlueprintThankYouPage";
 import ThankYouPage from "./pages/ThankYouPage";
 import BookingPage from "./pages/BookingPage";
@@ -28,6 +29,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/checklist" element={<LeadMagnetPage />} />
             <Route path="/checklist/thank-you" element={<BlueprintThankYouPage />} />
+            <Route path="/blueprint" element={<CreditBlueprintPage />} />
+            <Route path="/credit-blueprint" element={<CreditBlueprintPage />} />
             <Route path="/book" element={<BookingPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/admin" element={<AdminLogin />} />

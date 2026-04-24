@@ -67,6 +67,39 @@ const CreditBlueprintPage = () => {
 
       {/* Content */}
       <article className="mx-auto -mt-10 max-w-3xl rounded-2xl bg-card px-6 py-12 shadow-xl md:px-12 md:py-16">
+
+        {/* ═══════════════ Pull Your Credit First ═══════════════ */}
+        <section className="mb-12 rounded-2xl border-2 border-primary/30 bg-primary/5 p-6 md:p-8">
+          <div className="flex items-start gap-4">
+            <BookOpen className="h-10 w-10 shrink-0 text-primary mt-1" />
+            <div className="flex-1">
+              <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                Step Zero
+              </div>
+              <h3 className="text-2xl font-extrabold mb-3">Pull Your Credit Report First</h3>
+              <p className="mb-4 text-base leading-relaxed">
+                You can't fix what you can't see. Before reading the rest of this guide,
+                pull your full 3-bureau report so you know what you're actually dealing
+                with. We use <strong>SmartCredit</strong> — pulls all 3 bureaus, shows FICO
+                scores, and updates in real time so you can track progress as the rounds go out.
+              </p>
+              <a
+                href="https://www.smartcredit.com/join/?pid=74943"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  Sign up for SmartCredit <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </a>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Takes 5 minutes. You'll want your report in hand before the rest of this
+                guide makes sense.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Before You Start */}
         <section>
           <h2 className="mb-5 text-3xl font-extrabold md:text-4xl">Before You Start</h2>

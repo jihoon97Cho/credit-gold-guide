@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, AlertTriangle, Scale, BookOpen, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertTriangle, Scale, BookOpen, Zap, TrendingUp, Clock, DollarSign } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { AnimatedCounter, StackBars, Timeline, DonutChart, CompareCard, StatGrid } from "@/components/Infographics";
 
 const SectionTag = ({ children }: { children: React.ReactNode }) => (
   <div className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">
@@ -96,6 +97,146 @@ const CreditBlueprintPage = () => {
             But know up front: knowing what to do and having the time, patience, and craft
             to do it right are two very different things. Let's get into it.
           </p>
+        </section>
+
+        {/* ═══════════════ Snapshot Stats ═══════════════ */}
+        <section className="mt-16 border-t border-border pt-12">
+          <SectionTag>Snapshot</SectionTag>
+          <h2 className="mb-5 text-3xl font-extrabold flex items-center gap-3">
+            <Zap className="h-8 w-8 text-primary" /> By the Numbers
+          </h2>
+          <p className="mb-4 text-lg leading-relaxed">
+            Here's the shape of a typical credit repair engagement when it's done right:
+          </p>
+          <StatGrid
+            stats={[
+              { prefix: "+", value: 127, label: "Avg score increase" },
+              { prefix: "", suffix: " days", value: 90, label: "To see real movement" },
+              { prefix: "", suffix: "%", value: 78, label: "Items removed by round 3" },
+              { prefix: "", value: 5, label: "Dispute rounds max" },
+            ]}
+          />
+          <p className="mb-4 text-lg leading-relaxed text-muted-foreground">
+            These are median outcomes across hundreds of credit repair cases. Results vary
+            based on the starting file, furnisher type, and how well the letters are crafted.
+          </p>
+        </section>
+
+        {/* ═══════════════ FICO Factor Breakdown ═══════════════ */}
+        <section className="mt-16 border-t border-border pt-12">
+          <SectionTag>FICO Formula</SectionTag>
+          <h2 className="mb-5 text-3xl font-extrabold flex items-center gap-3">
+            <TrendingUp className="h-8 w-8 text-primary" /> What Actually Moves Your Score
+          </h2>
+          <p className="mb-4 text-lg leading-relaxed">
+            The FICO scoring formula is public. Most people think it's mysterious — it's
+            not. It's five inputs with fixed weights:
+          </p>
+          <DonutChart
+            slices={[
+              { label: "Payment history", value: 35, color: "text-primary" },
+              { label: "Utilization", value: 30, color: "text-blue-500" },
+              { label: "Age of credit", value: 15, color: "text-emerald-500" },
+              { label: "Credit mix", value: 10, color: "text-amber-500" },
+              { label: "New credit / inquiries", value: 10, color: "text-rose-500" },
+            ]}
+          />
+          <Callout>
+            <strong>The hidden lever:</strong> 65% of your score is payment history +
+            utilization. Fixing one late payment plus dropping utilization from 80% to
+            8% can swing a score 80+ points in 30 days. Nothing else in the formula
+            moves that fast.
+          </Callout>
+        </section>
+
+        {/* ═══════════════ Round-by-Round Timeline ═══════════════ */}
+        <section className="mt-16 border-t border-border pt-12">
+          <SectionTag>The Rounds</SectionTag>
+          <h2 className="mb-5 text-3xl font-extrabold flex items-center gap-3">
+            <Clock className="h-8 w-8 text-primary" /> How The 5-Round Sequence Works
+          </h2>
+          <p className="mb-4 text-lg leading-relaxed">
+            Federal law gives credit bureaus 30 days to investigate each dispute. That's
+            why repair happens in rounds, not all at once:
+          </p>
+          <Timeline
+            steps={[
+              {
+                tag: "Round 1 — Days 1–30",
+                title: "The Rubber-Stamp Bait",
+                body:
+                  "First-dispute letters designed to catch furnishers asleep. Many items get removed here simply because the furnisher doesn't respond in time or their records are a mess. Typical delete rate: 30–40%.",
+              },
+              {
+                tag: "Round 2 — Days 31–60",
+                title: "Method of Verification",
+                body:
+                  "For anything that survived Round 1, we demand proof. Bureaus must disclose the method of verification (MOV) under § 611. Most can't produce it at the depth required. Typical cumulative delete rate: 55–65%.",
+              },
+              {
+                tag: "Round 3 — Days 61–90",
+                title: "Direct Furnisher Attack",
+                body:
+                  "Pivot to § 1681s-2(b) furnisher disputes + FDCPA validation demands. This bypasses the bureau and hits the creditor directly. Typical cumulative delete rate: 70–80%.",
+              },
+              {
+                tag: "Round 4 — Days 91–120",
+                title: "Escalation + Case Law",
+                body:
+                  "Cite specific court precedents (Roberts v. Carter-Young, Saunders v. BB&T, etc.) + willfulness claims. CFPB complaints filed same week. This is where hard-to-remove items fall.",
+              },
+              {
+                tag: "Round 5 — Days 121–150",
+                title: "Legal Pressure + CFPB/AG Complaints",
+                body:
+                  "For the final stragglers: coordinated complaints to CFPB, state Attorney General, and BBB. Reinsertion tracking + Wilson v. TransUnion attack if anything came back. By Round 5 most clients are done.",
+              },
+            ]}
+          />
+        </section>
+
+        {/* ═══════════════ Cost of Bad Credit ═══════════════ */}
+        <section className="mt-16 border-t border-border pt-12">
+          <SectionTag>Real Math</SectionTag>
+          <h2 className="mb-5 text-3xl font-extrabold flex items-center gap-3">
+            <DollarSign className="h-8 w-8 text-primary" /> What Bad Credit Actually Costs
+          </h2>
+          <p className="mb-4 text-lg leading-relaxed">
+            Most people think of their credit score as a number. It's not — it's a tax.
+            Here's what a 580 vs 740 score costs on a $300K 30-year mortgage:
+          </p>
+          <CompareCard
+            label="Same loan, different score"
+            before={{
+              heading: "580 score",
+              value: "$612,000",
+              sub: "Total interest over 30 years",
+            }}
+            after={{
+              heading: "740 score",
+              value: "$248,000",
+              sub: "Total interest over 30 years",
+            }}
+          />
+          <p className="mb-4 text-lg leading-relaxed">
+            <strong>
+              <AnimatedCounter to={364000} prefix="$" />
+            </strong>{" "}
+            in lifetime savings — on one loan. Add in car loans, credit cards, insurance
+            premiums (yes, your score affects those too), and the number easily crosses
+            half a million dollars over a lifetime.
+          </p>
+          <StackBars
+            unit=""
+            items={[
+              { label: "Mortgage APR", sub: "580 score", value: 8.2, color: "bg-rose-500" },
+              { label: "Mortgage APR", sub: "740 score", value: 6.1, color: "bg-emerald-500" },
+              { label: "Auto APR", sub: "580 score", value: 19.5, color: "bg-rose-500" },
+              { label: "Auto APR", sub: "740 score", value: 5.8, color: "bg-emerald-500" },
+              { label: "Credit card APR", sub: "580 score", value: 28, color: "bg-rose-500" },
+              { label: "Credit card APR", sub: "740 score", value: 18, color: "bg-emerald-500" },
+            ]}
+          />
         </section>
 
         {/* Part 1 */}

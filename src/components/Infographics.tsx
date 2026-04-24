@@ -253,13 +253,13 @@ export const StatGrid = ({
 }: {
   stats: { value: number; prefix?: string; suffix?: string; label: string; decimals?: number }[];
 }) => (
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-10">
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 my-10">
     {stats.map((s) => (
       <div
         key={s.label}
-        className="rounded-2xl bg-gradient-to-br from-slate-900 to-blue-950 p-6 text-white text-center"
+        className="rounded-2xl bg-gradient-to-br from-slate-900 to-blue-950 p-4 md:p-5 text-white text-center overflow-hidden"
       >
-        <div className="text-3xl md:text-4xl font-extrabold mb-1 tabular-nums">
+        <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold mb-1 tabular-nums whitespace-nowrap">
           <AnimatedCounter
             to={s.value}
             prefix={s.prefix}
@@ -267,7 +267,9 @@ export const StatGrid = ({
             decimals={s.decimals ?? 0}
           />
         </div>
-        <div className="text-xs uppercase tracking-wider text-blue-300">{s.label}</div>
+        <div className="text-[10px] md:text-xs uppercase tracking-wider text-blue-300 leading-tight">
+          {s.label}
+        </div>
       </div>
     ))}
   </div>
